@@ -1,5 +1,5 @@
-#ifndef LIQUID_HOOK_HPP
-#define LIQUID_HOOK_HPP
+#ifndef LIQUID_PRIMITIVE_HPP
+#define LIQUID_PRIMITIVE_HPP
 
 #include <unordered_map>
 
