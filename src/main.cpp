@@ -1,7 +1,11 @@
-#include <stdio.h>
+#include <string>
+
+#include "liquid.hpp"
+#include "HomePage.hpp"
 
 int main()
 {
-    printf("Hello, World!\n");
+    const auto page = HomePage();
+    page();
     return 0;
 }
