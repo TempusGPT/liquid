@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.23)
+project(liquid)
+set(CMAKE_CXX_STANDARD 11)
+add_executable(liquid ../src/main.cpp)
+include_directories(liquid)
+
+set(CURSES_NEED_NCURSES TRUE)
+set(CURSES_NEED_WIDE TRUE)
+find_package(Curses)
+target_include_directories(liquid PUBLIC ${CURSES_INCLUDE_DIR})
+target_link_libraries(liquid ${CURSES_LIBRARIES})
