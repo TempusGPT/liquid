@@ -12,7 +12,7 @@ using Element = std::function<void()>;
 
 Element text(const std::string &value)
 {
-    return [&]()
+    return [=]()
     {
         printw("%s", value.c_str());
     };

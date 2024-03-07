@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include <ncurses.h>
 
-#define INPUT(key, codeblock) Liquid::inputCallbacks.insert({key, [=]() mutable codeblock});
+#define INPUT(key, codeblock) Liquid::inputCallbacks.insert({key, [=]() mutable codeblock})
 
 enum class Key
 {

@@ -4,7 +4,7 @@
 #include "element.hpp"
 
 #define FOR(collection, item, index) \
-    [&]()                             \
+    [=]() mutable                    \
     {                                 \
         auto index = -1;              \
         for (const auto &item : collection) \
@@ -13,7 +13,7 @@
             Liquid::execute({
 
 #define IF(condition) \
-    [&]()               \
+    [=]() mutable     \
     {                   \
     if (condition)      \
     {                   \
@@ -27,10 +27,10 @@
     Liquid::execute({
 
 #define ELSE \
-    });           \
-    }             \
-    else          \
-    {             \
+    });      \
+    }        \
+    else     \
+    {        \
     Liquid::execute({
 
 #define END \

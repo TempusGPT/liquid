@@ -20,8 +20,19 @@ Element MainMenu()
         exitApp();
     });
 
-    setInterval(1000, [=]() mutable
-                { elapsed.set(elapsed() + 1); });
+    EFFECT({
+        if (number() < 0)
+        {
+            number.set(0);
+        }
+    });
+
+    setInterval(
+        1000,
+        [=]() mutable
+        {
+            elapsed.set(elapsed() + 1);
+        });
 
     return FRAGMENT({
         text("TIMER: " + std::to_string(elapsed()) + " Seconds\n"),
