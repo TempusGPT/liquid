@@ -10,6 +10,7 @@
 #include "element.hpp"
 #include "reactive.hpp"
 #include "input.hpp"
+#include "timer.hpp"
 
 namespace Liquid
 {
@@ -50,6 +51,7 @@ namespace Liquid
                 try
                 {
                     processInput();
+                    processTimer();
 
                     if (isDirty)
                     {

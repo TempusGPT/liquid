@@ -4,6 +4,7 @@ Element MainMenu()
 {
     const auto numbers = std::vector<int>{1, 2, 3};
 
+    auto elapsed = SIGNAL(0);
     auto number = SIGNAL(0);
     auto doubled = DERIVED(number() * 2);
 
@@ -19,7 +20,11 @@ Element MainMenu()
         exitApp();
     });
 
+    setInterval(1000, [=]() mutable
+                { elapsed.set(elapsed() + 1); });
+
     return FRAGMENT({
+        text("TIMER: " + std::to_string(elapsed()) + " Seconds\n"),
         text("TEXT: Number is " + std::to_string(number()) + "\n"),
         text("TEXT: Doubled is " + std::to_string(doubled()) + "\n"),
 

@@ -54,6 +54,9 @@
         "algorithm": "cpp",
         "functional": "cpp",
         "__memory": "cpp",
-        "thread": "cpp"
+        "thread": "cpp",
+        "unordered_set": "cpp",
+        "deque": "cpp",
+        "queue": "cpp"
     }
 }

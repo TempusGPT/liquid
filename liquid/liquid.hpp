@@ -6,5 +6,6 @@
 #include "core/element.hpp"
 #include "core/input.hpp"
 #include "core/reactive.hpp"
+#include "core/timer.hpp"
 
 #endif
