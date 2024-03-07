@@ -1,3 +1,4 @@
+#include <clocale>
 #include <string>
 
 #include "liquid.hpp"
@@ -11,7 +12,7 @@ Element Example()
     auto doubled = COMPUTED(global() * 2);
 
     EFFECT({
-        printf("EFFECT: Global is %d\n", global());
+        printw("EFFECT: Global is %d\n", global());
     });
 
     return FRAGMENT({
@@ -36,6 +37,10 @@ Element Example()
 
 int main()
 {
+    setlocale(LC_ALL, "");
+    initscr();
+    clear();
+
     const auto example = Example();
 
     example();
@@ -44,5 +49,9 @@ int main()
     global.set(2);
     example();
 
+    refresh();
+
+    getch();
+    endwin();
     return 0;
 }

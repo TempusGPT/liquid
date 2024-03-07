@@ -5,6 +5,8 @@
 #include <functional>
 #include <string>
 
+#include "ncurses.h"
+
 #define FRAGMENT(elements...) [=]() mutable { Liquid::execute(elements); }
 
 using Element = std::function<void()>;
@@ -13,7 +15,7 @@ Element text(const std::string &value)
 {
     return [&]()
     {
-        printf("%s", value.c_str());
+        printw("%s", value.c_str());
     };
 }
 
