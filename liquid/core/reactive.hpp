@@ -4,7 +4,7 @@
 #include <unordered_map>
 
 #define SIGNAL(value) Liquid::Signal<decltype(value)>(value)
-#define COMPUTED(expression) [=]() mutable { return expression; }
+#define DERIVED(expression) [=]() mutable { return expression; }
 
 #define EFFECT(codeblock)                  \
     const auto function = [&]() codeblock; \

@@ -5,7 +5,7 @@ Element MainMenu()
     const auto numbers = std::vector<int>{1, 2, 3};
 
     auto number = SIGNAL(0);
-    auto doubled = COMPUTED(number() * 2);
+    auto doubled = DERIVED(number() * 2);
 
     INPUT(Key::UpArrow, {
         number.set(number() + 1);
