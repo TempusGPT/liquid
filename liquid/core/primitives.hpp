@@ -3,10 +3,10 @@
 
 #include <unordered_map>
 
-#define signal(value) Liquid::Signal<decltype(value)>(value)
-#define memo(expression) [=]() mutable { return expression; }
+#define SIGNAL(value) Liquid::Signal<decltype(value)>(value)
+#define COMPUTED(expression) [=]() mutable { return expression; }
 
-#define effect(codeblock)                 \
+#define EFFECT(codeblock)                 \
     auto function = [&]() codeblock;      \
     Liquid::currentDependency = function; \
     function();                           \

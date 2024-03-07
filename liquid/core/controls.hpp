@@ -3,23 +3,35 @@
 
 #include "elements.hpp"
 
-#define WHEN(condition) \
-    [&]() { if (condition) { Liquid::execute({
+#define FOR(collection, item, index) \
+    [&]()                             \
+    {                                 \
+        auto index = -1;              \
+        for (const auto &item : collection) \
+        {                             \
+            index += 1;               \
+            Liquid::execute({
 
-#define THEN(condition) \
+#define IF(condition) \
+    [&]()               \
+    {                   \
+    if (condition)      \
+    {                   \
+    Liquid::execute({
+
+#define ELIF(condition) \
     });                 \
     }                   \
     else if (condition) \
-    { Liquid::execute({
+    {                   \
+    Liquid::execute({
 
-#define OTHERWISE \
+#define ELSE \
     });           \
     }             \
     else          \
-    { Liquid::execute({
-
-#define EACH(items, item, index) \
-    [&]() { auto index = -1; for (const auto &item : items) { index += 1; Liquid::execute({
+    {             \
+    Liquid::execute({
 
 #define END \
     });     \

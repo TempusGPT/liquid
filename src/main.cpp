@@ -1,31 +1,33 @@
 #include <string>
+
 #include "liquid.hpp"
 
-auto global = signal(0);
+auto global = SIGNAL(0);
 
 Element Example()
 {
-    auto doubled = memo(global() * 2);
-    auto numbers = std::vector<int>{1, 2, 3};
+    const auto numbers = std::vector<int>{1, 2, 3};
 
-    effect({
+    auto doubled = COMPUTED(global() * 2);
+
+    EFFECT({
         printf("EFFECT: Global is %d\n", global());
     });
 
-    return fragment({
+    return FRAGMENT({
         text("TEXT: Global is " + std::to_string(global()) + "\n"),
         text("TEXT: Doubled is " + std::to_string(doubled()) + "\n"),
 
-        WHEN(global() == 0)
-            text("WHEN: Global is zero\n"),
-        THEN(global() == 1)
-            text("WHEN: Global is one\n"),
-        OTHERWISE
-            text("WHEN: Global is large\n"),
+        IF(global() == 0)
+            text("IF: Global is zero\n"),
+        ELIF(global() == 1)
+            text("IF: Global is one\n"),
+        ELSE
+            text("IF: Global is large\n"),
         END,
 
-        EACH(numbers, n, i)
-            text("EACH: Number[" + std::to_string(i) + "] is " + std::to_string(n) + "\n"),
+        FOR(numbers, n, i)
+            text("FOR: Number[" + std::to_string(i) + "] is " + std::to_string(n) + "\n"),
         END,
 
         text("\n"),

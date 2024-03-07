@@ -5,7 +5,7 @@
 #include <functional>
 #include <string>
 
-#define fragment(elements...) [=]() mutable { Liquid::execute(elements); }
+#define FRAGMENT(elements...) [=]() mutable { Liquid::execute(elements); }
 
 using Element = std::function<void()>;
 
