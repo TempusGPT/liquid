@@ -31,5 +31,7 @@ Element Example()
 
 int main()
 {
-    return createApp().start(Example());
+    return createApp()
+        .route("example", Example)
+        .run("example");
 }

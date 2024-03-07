@@ -4,6 +4,7 @@
 #include <clocale>
 #include <functional>
 #include <thread>
+#include <unordered_map>
 
 #include "ncurses.h"
 #include "elements.hpp"
@@ -11,6 +12,13 @@
 
 namespace Liquid
 {
+    struct ExitAppException
+    {
+    };
+
+    Element currentPage;
+    std::unordered_map<std::string, std::function<Element()>> routes;
+
     class App
     {
     public:
@@ -19,48 +27,71 @@ namespace Liquid
             setlocale(LC_ALL, "");
             initscr();
 
-            // input
             keypad(stdscr, true);
             nodelay(stdscr, true);
             curs_set(0);
             noecho();
         }
 
-        int start(const Element &page)
+        ~App()
         {
-            currentPage = page;
+            endwin();
+        }
+
+        App &route(const std::string &id, const std::function<Element()> &page)
+        {
+            routes[id] = page;
+            return *this;
+        }
+
+        int run(const std::string &pageId)
+        {
+            currentPage = routes[pageId]();
 
             while (true)
             {
-                if (hasChanged)
+                try
                 {
-                    clear();
-                    currentPage();
-                    refresh();
-                    hasChanged = false;
-                }
-                std::this_thread::yield();
+                    if (getch() == 'q')
+                    {
+                        break;
+                    }
 
-                if (getch() == 'q')
+                    if (isDirty)
+                    {
+                        isDirty = false;
+                        clear();
+                        currentPage();
+                        refresh();
+                    }
+                }
+                catch (const ExitAppException &exitApp)
                 {
                     break;
                 }
+
+                std::this_thread::yield();
             }
 
-            endwin();
-            delete this;
             return 0;
         }
-
-    private:
-        Element currentPage;
     };
 }
 
-Liquid::App &createApp()
+Liquid::App createApp()
 {
-    const auto app = std::make_shared<Liquid::App>();
-    return *app;
+    return Liquid::App();
+}
+
+void exitApp()
+{
+    throw Liquid::ExitAppException{};
+}
+
+void loadPage(const std::string &pageId)
+{
+    Liquid::currentPage = Liquid::routes[pageId]();
+    Liquid::isDirty = true;
 }
 
 #endif

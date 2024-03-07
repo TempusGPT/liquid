@@ -17,7 +17,7 @@ namespace Liquid
 {
     std::function<void()> currentDep = nullptr;
     int currentDepId = 0;
-    bool hasChanged = true;
+    bool isDirty = true;
 
     template <typename T>
     class Signal
@@ -37,8 +37,8 @@ namespace Liquid
 
         void set(const T &newValue)
         {
+            isDirty = true;
             *value = newValue;
-            hasChanged = true;
 
             for (auto dep : deps)
             {
