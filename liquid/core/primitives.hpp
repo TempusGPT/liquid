@@ -6,17 +6,18 @@
 #define SIGNAL(value) Liquid::Signal<decltype(value)>(value)
 #define COMPUTED(expression) [=]() mutable { return expression; }
 
-#define EFFECT(codeblock)                 \
-    auto function = [&]() codeblock;      \
-    Liquid::currentDependency = function; \
-    function();                           \
-    Liquid::currentDependency = nullptr;  \
-    Liquid::currentDependencyId += 1
+#define EFFECT(codeblock)            \
+    auto function = [&]() codeblock; \
+    Liquid::currentDep = function;   \
+    function();                      \
+    Liquid::currentDep = nullptr;    \
+    Liquid::currentDepId += 1
 
 namespace Liquid
 {
-    std::function<void()> currentDependency = nullptr;
-    int currentDependencyId = 0;
+    std::function<void()> currentDep = nullptr;
+    int currentDepId = 0;
+    bool hasChanged = true;
 
     template <typename T>
     class Signal
@@ -26,9 +27,9 @@ namespace Liquid
 
         T operator()()
         {
-            if (currentDependency && dependencies.find(currentDependencyId) == dependencies.end())
+            if (currentDep && deps.find(currentDepId) == deps.end())
             {
-                dependencies[currentDependencyId] = currentDependency;
+                deps[currentDepId] = currentDep;
             }
 
             return *value;
@@ -37,15 +38,17 @@ namespace Liquid
         void set(const T &newValue)
         {
             *value = newValue;
-            for (auto function : dependencies)
+            hasChanged = true;
+
+            for (auto dep : deps)
             {
-                function.second();
+                dep.second();
             }
         }
 
     private:
         std::shared_ptr<T> value;
-        std::unordered_map<int, std::function<void()>> dependencies;
+        std::unordered_map<int, std::function<void()>> deps;
     };
 }
 

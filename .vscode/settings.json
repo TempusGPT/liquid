@@ -53,6 +53,7 @@
         "variant": "cpp",
         "algorithm": "cpp",
         "functional": "cpp",
-        "__memory": "cpp"
+        "__memory": "cpp",
+        "thread": "cpp"
     }
 }

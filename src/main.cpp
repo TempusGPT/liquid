@@ -1,30 +1,24 @@
-#include <clocale>
 #include <string>
 
 #include "liquid.hpp"
-
-auto global = SIGNAL(0);
 
 Element Example()
 {
     const auto numbers = std::vector<int>{1, 2, 3};
 
-    auto doubled = COMPUTED(global() * 2);
-
-    EFFECT({
-        printw("EFFECT: Global is %d\n", global());
-    });
+    auto number = SIGNAL(0);
+    auto doubled = COMPUTED(number() * 2);
 
     return FRAGMENT({
-        text("TEXT: Global is " + std::to_string(global()) + "\n"),
+        text("TEXT: Number is " + std::to_string(number()) + "\n"),
         text("TEXT: Doubled is " + std::to_string(doubled()) + "\n"),
 
-        IF(global() == 0)
-            text("IF: Global is zero\n"),
-        ELIF(global() == 1)
-            text("IF: Global is one\n"),
+        IF(number() == 0)
+            text("IF: Number is zero\n"),
+        ELIF(number() == 1)
+            text("IF: Number is one\n"),
         ELSE
-            text("IF: Global is large\n"),
+            text("IF: Number is large\n"),
         END,
 
         FOR(numbers, n, i)
@@ -37,21 +31,5 @@ Element Example()
 
 int main()
 {
-    setlocale(LC_ALL, "");
-    initscr();
-    clear();
-
-    const auto example = Example();
-
-    example();
-    global.set(1);
-    example();
-    global.set(2);
-    example();
-
-    refresh();
-
-    getch();
-    endwin();
-    return 0;
+    return createApp().start(Example());
 }
