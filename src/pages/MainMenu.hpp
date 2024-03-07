@@ -1,31 +1,34 @@
 #include "liquid.hpp"
 
-Element MainMenu()
-{
+Element MainMenu() {
     const auto numbers = std::vector<int>{1, 2, 3};
 
     auto elapsed = SIGNAL(0);
     auto number = SIGNAL(0);
     auto doubled = DERIVED(number() * 2);
 
-    INPUT(Key::UpArrow, {
+    EFFECT({
+        const auto id = setInterval(1000, [=]() mutable {
+            elapsed.set(elapsed() + 1);
+        });
+
+        // TODO: Implement cleaup
+        return [=]() {
+            clearTimer(id);
+        };
+    });
+
+    onInput(Key::UpArrow, [=]() mutable {
         number.set(number() + 1);
     });
 
-    INPUT(Key::DownArrow, {
+    onInput(Key::DownArrow, [=]() mutable {
         number.set(number() - 1);
     });
 
-    INPUT(Key::Enter, {
+    onInput(Key::Enter, [=]() {
         exitApp();
     });
-
-    setInterval(
-        1000,
-        [=]() mutable
-        {
-            elapsed.set(elapsed() + 1);
-        });
 
     return FRAGMENT({
         text("TIMER: " + std::to_string(elapsed()) + " Seconds\n"),

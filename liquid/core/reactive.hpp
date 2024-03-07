@@ -12,35 +12,29 @@
     Liquid::currentDep = nullptr;                 \
     Liquid::currentDepId += 1
 
-namespace Liquid
-{
+namespace Liquid {
     std::function<void()> currentDep = nullptr;
     int currentDepId = 0;
     bool isDirty = true;
 
     template <typename T>
-    class Signal
-    {
+    class Signal {
     public:
         Signal(const T &value) : value(std::make_shared<T>(value)) {}
 
-        T operator()()
-        {
-            if (currentDep && deps.find(currentDepId) == deps.end())
-            {
+        T operator()() {
+            if (currentDep && deps.find(currentDepId) == deps.end()) {
                 deps[currentDepId] = currentDep;
             }
 
             return *value;
         }
 
-        void set(const T &newValue)
-        {
+        void set(const T &newValue) {
             isDirty = true;
             *value = newValue;
 
-            for (auto dep : deps)
-            {
+            for (auto dep : deps) {
                 dep.second();
             }
         }

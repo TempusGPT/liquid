@@ -3,8 +3,7 @@
 #include "liquid.hpp"
 #include "pages/MainMenu.hpp"
 
-int main()
-{
+int main() {
     return createApp()
         .route("MainMenu", MainMenu)
         .run("MainMenu");

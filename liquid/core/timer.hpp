@@ -9,10 +9,8 @@
 
 #undef timeout
 
-namespace Liquid
-{
-    struct Timer
-    {
+namespace Liquid {
+    struct Timer {
     public:
         int id;
         bool isInterval;
@@ -20,8 +18,7 @@ namespace Liquid
         std::chrono::milliseconds delay;
         std::chrono::steady_clock::time_point invokeAt;
 
-        static Timer timeout(const int delay, const std::function<void()> &callback)
-        {
+        static Timer timeout(const int delay, const std::function<void()> &callback) {
             const auto id = newID++;
             const auto chronoDelay = std::chrono::milliseconds(delay);
 
@@ -34,8 +31,7 @@ namespace Liquid
             };
         }
 
-        static Timer interval(const int delay, const std::function<void()> &callback)
-        {
+        static Timer interval(const int delay, const std::function<void()> &callback) {
             const auto id = newID++;
             const auto chronoDelay = std::chrono::milliseconds(delay);
 
@@ -48,10 +44,8 @@ namespace Liquid
             };
         }
 
-        struct Comparator
-        {
-            bool operator()(const Timer &lhs, const Timer &rhs) const
-            {
+        struct Comparator {
+            bool operator()(const Timer &lhs, const Timer &rhs) const {
                 return lhs.invokeAt > rhs.invokeAt;
             }
         };
@@ -64,48 +58,41 @@ namespace Liquid
     std::priority_queue<Timer, std::vector<Timer>, Timer::Comparator> timerQueue;
     std::unordered_set<int> timerIds;
 
-    void processTimer()
-    {
+    void processTimer() {
         const auto &now = std::chrono::steady_clock::now();
-        if (timerQueue.empty() || timerQueue.top().invokeAt > now)
-        {
+        if (timerQueue.empty() || timerQueue.top().invokeAt > now) {
             return;
         }
 
         auto timer = timerQueue.top();
         timerQueue.pop();
-        if (timerIds.count(timer.id) == 0)
-        {
+        if (timerIds.count(timer.id) == 0) {
             return;
         }
 
         timer.callback();
-        if (timer.isInterval)
-        {
+        if (timer.isInterval) {
             timer.invokeAt += timer.delay;
             timerQueue.push(timer);
         }
     }
 }
 
-int setTimeout(const int delay, const std::function<void()> &callback)
-{
+int setTimeout(const int delay, const std::function<void()> &callback) {
     const auto &timer = Liquid::Timer::timeout(delay, callback);
     Liquid::timerQueue.push(timer);
     Liquid::timerIds.insert(timer.id);
     return timer.id;
 }
 
-int setInterval(const int delay, const std::function<void()> &callback)
-{
+int setInterval(const int delay, const std::function<void()> &callback) {
     const auto &timer = Liquid::Timer::interval(delay, callback);
     Liquid::timerQueue.push(timer);
     Liquid::timerIds.insert(timer.id);
     return timer.id;
 }
 
-void clearTimer(const int id)
-{
+void clearTimer(const int id) {
     Liquid::timerIds.erase(id);
 }
 

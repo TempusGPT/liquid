@@ -3,66 +3,53 @@
 
 #include <clocale>
 #include <functional>
+#include <ncurses.h>
 #include <thread>
 #include <unordered_map>
-#include <ncurses.h>
 
 #include "element.hpp"
-#include "reactive.hpp"
 #include "input.hpp"
+#include "reactive.hpp"
 #include "timer.hpp"
 
-namespace Liquid
-{
-    struct ExitAppException
-    {
-    };
+namespace Liquid {
+    struct ExitAppException {};
 
     Element currentPage;
     std::unordered_map<std::string, std::function<Element()>> routes;
 
-    class App
-    {
+    class App {
     public:
-        App()
-        {
+        App() {
             setlocale(LC_ALL, "");
             initscr();
             initInput();
         }
 
-        ~App()
-        {
+        ~App() {
             endwin();
         }
 
-        App &route(const std::string &id, const std::function<Element()> &page)
-        {
+        App &route(const std::string &id, const std::function<Element()> &page) {
             routes[id] = page;
             return *this;
         }
 
-        int run(const std::string &pageId)
-        {
+        int run(const std::string &pageId) {
             currentPage = routes[pageId]();
 
-            while (true)
-            {
-                try
-                {
+            while (true) {
+                try {
                     processInput();
                     processTimer();
 
-                    if (isDirty)
-                    {
+                    if (isDirty) {
                         isDirty = false;
                         clear();
                         currentPage();
                         refresh();
                     }
-                }
-                catch (const ExitAppException &exitApp)
-                {
+                } catch (const ExitAppException &exitApp) {
                     break;
                 }
 
@@ -74,18 +61,15 @@ namespace Liquid
     };
 }
 
-Liquid::App createApp()
-{
+Liquid::App createApp() {
     return Liquid::App();
 }
 
-void exitApp()
-{
+void exitApp() {
     throw Liquid::ExitAppException{};
 }
 
-void loadPage(const std::string &pageId)
-{
+void loadPage(const std::string &pageId) {
     Liquid::currentPage = Liquid::routes[pageId]();
     Liquid::isDirty = true;
 }

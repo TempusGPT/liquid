@@ -2,13 +2,10 @@
 #define LIQUID_INPUT_HPP
 
 #include <functional>
-#include <unordered_map>
 #include <ncurses.h>
+#include <unordered_map>
 
-#define INPUT(key, codeblock) Liquid::inputCallbacks.insert({key, [=]() mutable codeblock})
-
-enum class Key
-{
+enum class Key {
     None,
     A,
     B,
@@ -85,31 +82,25 @@ enum class Key
     RightArrow,
 };
 
-namespace Liquid
-{
+namespace Liquid {
     std::unordered_multimap<Key, std::function<void()>> inputCallbacks;
 
-    void initInput()
-    {
+    void initInput() {
         keypad(stdscr, true);
         nodelay(stdscr, true);
         curs_set(0);
         noecho();
     }
 
-    void notifyInput(const Key key)
-    {
-        for (const auto &callback : inputCallbacks)
-        {
-            if (callback.first == key)
-            {
+    void notifyInput(const Key key) {
+        for (const auto &callback : inputCallbacks) {
+            if (callback.first == key) {
                 callback.second();
             }
         }
     }
 
-    void processInput()
-    {
+    void processInput() {
         static std::unordered_map<int, Key> keyMap = {
             {'a', Key::A},
             {'A', Key::A},
@@ -245,6 +236,10 @@ namespace Liquid
         const auto key = iter != keyMap.end() ? iter->second : Key::None;
         notifyInput(key);
     }
+}
+
+void onInput(Key key, std::function<void()> callback) {
+    Liquid::inputCallbacks.insert({key, callback});
 }
 
 #endif
