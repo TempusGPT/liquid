@@ -4,19 +4,26 @@
 #include "elements.hpp"
 
 #define WHEN(condition) \
-    [&]() { if (condition) Liquid::execute({
+    [&]() { if (condition) { Liquid::execute({
 
 #define THEN(condition) \
-    }); else if (condition) Liquid::execute({
+    });                 \
+    }                   \
+    else if (condition) \
+    { Liquid::execute({
 
 #define OTHERWISE \
-    }); else Liquid::execute({
+    });           \
+    }             \
+    else          \
+    { Liquid::execute({
 
-#define EACH(items, i) \
-    [&]() { for (const auto &i : items) Liquid::execute({
+#define EACH(items, item, index) \
+    [&]() { auto index = -1; for (const auto &item : items) { index += 1; Liquid::execute({
 
 #define END \
     });     \
+    }       \
     }
 
 #endif
