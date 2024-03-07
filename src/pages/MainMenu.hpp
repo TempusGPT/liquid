@@ -7,26 +7,17 @@ Element MainMenu()
     auto number = SIGNAL(0);
     auto doubled = COMPUTED(number() * 2);
 
-    onInput(
-        Key::UpArrow,
-        [=]() mutable
-        {
-            number.set(number() + 1);
-        });
+    INPUT(Key::UpArrow, {
+        number.set(number() + 1);
+    });
 
-    onInput(
-        Key::DownArrow,
-        [=]() mutable
-        {
-            number.set(number() - 1);
-        });
+    INPUT(Key::DownArrow, {
+        number.set(number() - 1);
+    });
 
-    onInput(
-        Key::Enter,
-        [=]() mutable
-        {
-            exitApp();
-        });
+    INPUT(Key::Enter, {
+        exitApp();
+    });
 
     return FRAGMENT({
         text("TEXT: Number is " + std::to_string(number()) + "\n"),

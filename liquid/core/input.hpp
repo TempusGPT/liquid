@@ -5,6 +5,8 @@
 #include <unordered_map>
 #include <ncurses.h>
 
+#define INPUT(key, codeblock) Liquid::inputCallbacks.insert({key, [=]() mutable codeblock});
+
 enum class Key
 {
     None,
@@ -85,7 +87,7 @@ enum class Key
 
 namespace Liquid
 {
-    std::unordered_map<int, std::function<void(const Key)>> inputCallbacks;
+    std::unordered_multimap<Key, std::function<void()>> inputCallbacks;
 
     void initInput()
     {
@@ -99,7 +101,10 @@ namespace Liquid
     {
         for (const auto &callback : inputCallbacks)
         {
-            callback.second(key);
+            if (callback.first == key)
+            {
+                callback.second();
+            }
         }
     }
 
@@ -240,27 +245,6 @@ namespace Liquid
         const auto key = iter != keyMap.end() ? iter->second : Key::None;
         notifyInput(key);
     }
-}
-
-int onInput(const Key key, const std::function<void()> &callback)
-{
-    static auto newID = 0;
-    const auto id = newID++;
-
-    Liquid::inputCallbacks[id] = [=](const Key keyCode)
-    {
-        if (key == keyCode)
-        {
-            callback();
-        }
-    };
-
-    return id;
-};
-
-void clearInput(const int id)
-{
-    Liquid::inputCallbacks.erase(id);
 }
 
 #endif
