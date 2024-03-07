@@ -1,16 +1,16 @@
-#ifndef LIQUID_PRIMITIVES_HPP
-#define LIQUID_PRIMITIVES_HPP
+#ifndef LIQUID_REACTIVE_HPP
+#define LIQUID_REACTIVE_HPP
 
 #include <unordered_map>
 
 #define SIGNAL(value) Liquid::Signal<decltype(value)>(value)
 #define COMPUTED(expression) [=]() mutable { return expression; }
 
-#define EFFECT(codeblock)            \
-    auto function = [&]() codeblock; \
-    Liquid::currentDep = function;   \
-    function();                      \
-    Liquid::currentDep = nullptr;    \
+#define EFFECT(codeblock)                  \
+    const auto function = [&]() codeblock; \
+    Liquid::currentDep = function;         \
+    function();                            \
+    Liquid::currentDep = nullptr;          \
     Liquid::currentDepId += 1
 
 namespace Liquid

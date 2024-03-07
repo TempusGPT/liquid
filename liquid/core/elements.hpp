@@ -4,8 +4,7 @@
 #include <initializer_list>
 #include <functional>
 #include <string>
-
-#include "ncurses.h"
+#include <ncurses.h>
 
 #define FRAGMENT(elements...) [=]() mutable { Liquid::execute(elements); }
 

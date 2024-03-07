@@ -4,6 +4,7 @@
 #include "core/app.hpp"
 #include "core/controls.hpp"
 #include "core/elements.hpp"
-#include "core/primitives.hpp"
+#include "core/input.hpp"
+#include "core/reactive.hpp"
 
 #endif

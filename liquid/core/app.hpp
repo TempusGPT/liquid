@@ -5,10 +5,11 @@
 #include <functional>
 #include <thread>
 #include <unordered_map>
+#include <ncurses.h>
 
-#include "ncurses.h"
 #include "elements.hpp"
-#include "primitives.hpp"
+#include "reactive.hpp"
+#include "input.hpp"
 
 namespace Liquid
 {
@@ -26,11 +27,7 @@ namespace Liquid
         {
             setlocale(LC_ALL, "");
             initscr();
-
-            keypad(stdscr, true);
-            nodelay(stdscr, true);
-            curs_set(0);
-            noecho();
+            initInput();
         }
 
         ~App()
@@ -52,10 +49,7 @@ namespace Liquid
             {
                 try
                 {
-                    if (getch() == 'q')
-                    {
-                        break;
-                    }
+                    processInput();
 
                     if (isDirty)
                     {

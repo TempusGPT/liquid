@@ -7,16 +7,37 @@ Element MainMenu()
     auto number = SIGNAL(0);
     auto doubled = COMPUTED(number() * 2);
 
+    onInput(
+        Key::UpArrow,
+        [=]() mutable
+        {
+            number.set(number() + 1);
+        });
+
+    onInput(
+        Key::DownArrow,
+        [=]() mutable
+        {
+            number.set(number() - 1);
+        });
+
+    onInput(
+        Key::Enter,
+        [=]() mutable
+        {
+            exitApp();
+        });
+
     return FRAGMENT({
         text("TEXT: Number is " + std::to_string(number()) + "\n"),
         text("TEXT: Doubled is " + std::to_string(doubled()) + "\n"),
 
-        IF(number() == 0)
-            text("IF: Number is zero\n"),
-        ELIF(number() == 1)
-            text("IF: Number is one\n"),
+        IF(number() < 0)
+            text("IF: Number is negative\n"),
+        ELIF(number() > 0)
+            text("IF: Number is positive\n"),
         ELSE
-            text("IF: Number is large\n"),
+            text("IF: Number is zero\n"),
         END,
 
         FOR(numbers, n, i)
