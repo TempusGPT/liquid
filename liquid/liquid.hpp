@@ -1,7 +1,8 @@
 #ifndef LIQUID_HPP
 #define LIQUID_HPP
 
-#include "core/element.hpp"
-#include "core/primitive.hpp"
+#include "core/controls.hpp"
+#include "core/elements.hpp"
+#include "core/primitives.hpp"
 
 #endif

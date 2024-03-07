@@ -1,5 +1,5 @@
-#ifndef LIQUID_COMPONENT_HPP
-#define LIQUID_COMPONENT_HPP
+#ifndef LIQUID_ELEMENTS_HPP
+#define LIQUID_ELEMENTS_HPP
 
 #include <initializer_list>
 #include <functional>
@@ -23,7 +23,10 @@ namespace Liquid
     {
         for (const auto &fn : fns)
         {
-            fn();
+            if (fn)
+            {
+                fn();
+            }
         }
     }
 }
