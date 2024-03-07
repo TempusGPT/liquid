@@ -6,11 +6,10 @@
 #define SIGNAL(value) Liquid::Signal<decltype(value)>(value)
 #define DERIVED(expression) [=]() mutable { return expression; }
 
-#define EFFECT(codeblock)                    \
-    auto function = [=]() mutable codeblock; \
-    Liquid::currentDep = function;           \
-    function();                              \
-    Liquid::currentDep = nullptr;            \
+#define EFFECT(codeblock)                         \
+    Liquid::currentDep = [=]() mutable codeblock; \
+    Liquid::currentDep();                         \
+    Liquid::currentDep = nullptr;                 \
     Liquid::currentDepId += 1
 
 namespace Liquid

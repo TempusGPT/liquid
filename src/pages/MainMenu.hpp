@@ -20,13 +20,6 @@ Element MainMenu()
         exitApp();
     });
 
-    EFFECT({
-        if (number() < 0)
-        {
-            number.set(0);
-        }
-    });
-
     setInterval(
         1000,
         [=]() mutable
