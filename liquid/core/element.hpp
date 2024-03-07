@@ -1,5 +1,5 @@
-#ifndef LIQUID_ELEMENTS_HPP
-#define LIQUID_ELEMENTS_HPP
+#ifndef LIQUID_ELEMENT_HPP
+#define LIQUID_ELEMENT_HPP
 
 #include <initializer_list>
 #include <functional>
