@@ -22,7 +22,7 @@ namespace Liquid {
             const auto id = newID++;
             const auto chronoDelay = std::chrono::milliseconds(delay);
 
-            return Timer{
+            return Timer {
                 .id = id,
                 .isInterval = false,
                 .callback = callback,
@@ -35,7 +35,7 @@ namespace Liquid {
             const auto id = newID++;
             const auto chronoDelay = std::chrono::milliseconds(delay);
 
-            return Timer{
+            return Timer {
                 .id = id,
                 .isInterval = true,
                 .callback = callback,

@@ -66,7 +66,7 @@ Liquid::App createApp() {
 }
 
 void exitApp() {
-    throw Liquid::ExitAppException{};
+    throw Liquid::ExitAppException();
 }
 
 void loadPage(const std::string &pageId) {

@@ -9,18 +9,18 @@
             Liquid::execute(
 
 #define WHEN(condition) \
-    [=]() mutable {   \
-    if (condition)    \
+    [=]() mutable {     \
+    if (condition)      \
     Liquid::execute(
 
-#define OR(condition) \
+#define OR(condition)   \
     );                  \
-    else if (condition)  \
+    else if (condition) \
     Liquid::execute(
 
 #define OTHERWISE \
-    );       \
-    else     \
+    );            \
+    else          \
     Liquid::execute(
 
 #define END \
