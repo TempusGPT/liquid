@@ -11,34 +11,36 @@ namespace std {
     }
 }
 
-void replaceAll(std::string &str, const std::string &oldValue, const std::string &newValue) {
-    if (oldValue.empty()) {
-        return;
+namespace Liquid {
+    void replaceAll(std::string &str, const std::string &oldValue, const std::string &newValue) {
+        if (oldValue.empty()) {
+            return;
+        }
+
+        auto pos = str.find(oldValue, 0);
+        while (pos != std::string::npos) {
+            str.replace(pos, oldValue.length(), newValue);
+            pos += newValue.length();
+            pos = str.find(oldValue, pos);
+        }
     }
 
-    auto pos = str.find(oldValue, 0);
-    while (pos != std::string::npos) {
-        str.replace(pos, oldValue.length(), newValue);
-        pos += newValue.length();
-        pos = str.find(oldValue, pos);
+    void formatString(std::string &str, int index) {}
+
+    template <typename T, typename... TArgs>
+    void formatString(std::string &str, int index, const T &value, const TArgs &...args) {
+        auto oldValue = "{" + std::to_string(index) + "}";
+        auto newValue = (std::ostringstream() << value).str();
+        replaceAll(str, oldValue, newValue);
+        formatString(str, index + 1, args...);
     }
 }
 
 template <typename... TArgs>
 std::string f(const std::string &fmt, const TArgs &...args) {
     auto result = fmt;
-    auto index = 0;
-
-    for (const auto &value : { args... }) {
-        auto placeholder = "{" + std::to_string(index) + "}";
-        replaceAll(result, placeholder, std::to_string(value));
-        index += 1;
-    }
-
+    Liquid::formatString(result, 0, args...);
     return result;
 }
-
-#define _F f(
-#define F_ )
 
 #endif
