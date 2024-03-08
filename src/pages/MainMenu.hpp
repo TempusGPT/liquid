@@ -1,7 +1,7 @@
 #include "liquid.hpp"
 
 Element MainMenu() {
-    const auto numbers = std::vector<int> {1, 2, 3};
+    const auto numbers = std::vector<int> {2, 4, 8, 16};
 
     auto elapsed = createSignal(0);
     auto signal = createSignal(0);
@@ -29,20 +29,19 @@ Element MainMenu() {
     });
 
     RETURN {
-        text(f("{0} Seconds\n", elapsed())),
+        text(f("{0} Seconds\n\n", elapsed())),
         text(f("Signal is {0}\n", signal())),
 
-        WHEN(signal() < 0) {
-            text("Signal is negative\n"),
-        } OR(signal() > 0) {
-            text("Signal is positive\n"),
-        } OTHERWISE {
-            text("Signal is zero\n"),
+        IF(signal() < 0) {
+            text("Signal is negative\n\n"),
+        } ELIF(signal() > 0) {
+            text("Signal is positive\n\n"),
+        } ELSE {
+            text("Signal is zero\n\n"),
         } END,
 
-        text("Numbers: "),
-        EACH(numbers, n) {
-            text(f("{0}, ", n)),
+        FOR(numbers, n, i) {
+            text(f("{0}th number is {1}\n", i, n)),
         } END,
         text("\n"),
     } END;
