@@ -30,20 +30,20 @@ Element MainMenu() {
     });
 
     return fragment({
-        Timer(FN title() END),
-        text(FN f("Signal is {0}\n", signal()) END),
+        Timer(FN title() X),
+        text(FN f("Signal is {0}\n", signal()) X),
 
         WHEN(signal() < 0) {
-            text(FN "Signal is negative\n\n" END),
+            text(FN "Signal is negative\n\n" X),
         } OR(signal() > 0) {
-            text(FN "Signal is positive\n\n" END),
+            text(FN "Signal is positive\n\n" X),
         } OTHERWISE {
-            text(FN "Signal is zero\n\n" END),
-        } END,
+            text(FN "Signal is zero\n\n" X),
+        } X,
 
         EACH(numbers, n, i) {
-            text(FN f("{0}th number is {1}\n", i, n) END),
-        } END,
-        text(FN "\n" END),
+            text(FN f("{0}th number is {1}\n", i, n) X),
+        } X,
+        text(FN "\n" X),
     });
 }

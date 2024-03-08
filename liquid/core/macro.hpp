@@ -26,7 +26,7 @@
     else          \
     Liquid::render(
 
-#define END \
+#define X \
     );      \
     }
 
