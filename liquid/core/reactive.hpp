@@ -3,28 +3,21 @@
 
 #include <unordered_map>
 
-#define SIGNAL(value) Liquid::Signal<decltype(value)>(value)
-#define DERIVED(expression) [=]() mutable { return expression; }
-
-#define EFFECT(codeblock)                         \
-    Liquid::currentDep = [=]() mutable codeblock; \
-    Liquid::currentDep();                         \
-    Liquid::currentDep = nullptr;                 \
-    Liquid::currentDepId += 1
-
 namespace Liquid {
-    std::function<void()> currentDep = nullptr;
-    int currentDepId = 0;
     bool isDirty = true;
+    std::function<void()> effectCallback = nullptr;
+    int effectCallbackId = 0;
 
     template <typename T>
     class Signal {
     public:
-        Signal(const T &value) : value(std::make_shared<T>(value)) {}
+        Signal(const T &value)
+            : value(std::make_shared<T>(value)),
+              effects(std::make_shared<std::unordered_map<int, std::function<void()>>>()) {}
 
         T operator()() {
-            if (currentDep && deps.find(currentDepId) == deps.end()) {
-                deps[currentDepId] = currentDep;
+            if (effectCallback && effects->find(effectCallbackId) == effects->end()) {
+                effects->insert({effectCallbackId, effectCallback});
             }
 
             return *value;
@@ -34,15 +27,27 @@ namespace Liquid {
             isDirty = true;
             *value = newValue;
 
-            for (auto dep : deps) {
-                dep.second();
+            for (auto effect : *effects) {
+                effect.second();
             }
         }
 
     private:
         std::shared_ptr<T> value;
-        std::unordered_map<int, std::function<void()>> deps;
+        std::shared_ptr<std::unordered_map<int, std::function<void()>>> effects;
     };
+}
+
+template <typename T>
+Liquid::Signal<T> createSignal(const T &value) {
+    return Liquid::Signal<T>(value);
+}
+
+void createEffect(const std::function<void()> &callback) {
+    Liquid::effectCallback = callback;
+    Liquid::effectCallback();
+    Liquid::effectCallback = nullptr;
+    Liquid::effectCallbackId += 1;
 }
 
 #endif

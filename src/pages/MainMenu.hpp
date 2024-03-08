@@ -1,27 +1,16 @@
 #include "liquid.hpp"
 
-class Snippet {
-public:
-    Snippet(const std::initializer_list<Element> &elements) {
-    }
-};
-
 Element MainMenu() {
-    const auto numbers = std::vector<int>{1, 2, 3};
+    const auto numbers = std::vector<int> {1, 2, 3};
 
-    auto elapsed = SIGNAL(0);
-    auto number = SIGNAL(0);
-    auto doubled = DERIVED(number() * 2);
+    auto elapsed = createSignal(0);
+    auto number = createSignal(0);
+    auto doubled = [=]() mutable { return number() * 2; };
 
-    EFFECT({
-        const auto id = setInterval(1000, [=]() mutable {
-            elapsed.set(elapsed() + 1);
-        });
-
-        // TODO: Implement cleaup
-        return [=]() {
-            clearTimer(id);
-        };
+    createEffect([=]() mutable {
+        if (number() == 0) {
+            beep();
+        }
     });
 
     onInput(Key::UpArrow, [=]() mutable {
@@ -34,6 +23,10 @@ Element MainMenu() {
 
     onInput(Key::Enter, []() {
         exitApp();
+    });
+
+    setInterval(1000, [=]() mutable {
+        elapsed.set(elapsed() + 1);
     });
 
     return FRAGMENT(

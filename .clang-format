@@ -1,15 +1,15 @@
-{
-    "BasedOnStyle": "LLVM",
-    "UseTab": "Never",
-    "IndentWidth": 4,
-    "TabWidth": 4,
-    "BreakBeforeBraces": "Attach",
-    "AllowShortIfStatementsOnASingleLine": true,
-    "ColumnLimit": 0,
-    "AccessModifierOffset": -4,
-    "NamespaceIndentation": "All",
-    "FixNamespaceComments": false,
-    "AlignAfterOpenBracket": "BlockIndent",
-    "BinPackArguments": false,
-    "BinPackParameters": false
-}
+---
+BasedOnStyle: LLVM
+UseTab: Never
+IndentWidth: 4
+TabWidth: 4
+BreakBeforeBraces: Attach
+AllowShortIfStatementsOnASingleLine: true
+ColumnLimit: 0
+AccessModifierOffset: -4
+NamespaceIndentation: All
+FixNamespaceComments: false
+AlignAfterOpenBracket: BlockIndent
+BinPackArguments: false
+BinPackParameters: false
+SpaceBeforeCpp11BracedList: true
