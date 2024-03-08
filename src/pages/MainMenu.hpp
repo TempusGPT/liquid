@@ -1,5 +1,11 @@
 #include "liquid.hpp"
 
+class Snippet {
+public:
+    Snippet(const std::initializer_list<Element> &elements) {
+    }
+};
+
 Element MainMenu() {
     const auto numbers = std::vector<int>{1, 2, 3};
 
@@ -26,27 +32,27 @@ Element MainMenu() {
         number.set(number() - 1);
     });
 
-    onInput(Key::Enter, [=]() {
+    onInput(Key::Enter, []() {
         exitApp();
     });
 
-    return FRAGMENT({
-        text(f("TIMER: {0} Seconds\n", elapsed())),
-        text(f("TEXT: Number is {0}\n", number())),
-        text(f("TEXT: Doubled is {0}\n", doubled())),
+    return FRAGMENT(
+        text(f("{0} Seconds\n", elapsed())),
+        text(f("Number is {0}\n", number())),
+        text(f("Doubled is {0}\n", doubled())),
 
         IF(number() < 0)
-            text("IF: Number is negative\n"),
+            text("Number is negative\n"),
         ELIF(number() > 0)
-            text("IF: Number is positive\n"),
+            text("Number is positive\n"),
         ELSE
-            text("IF: Number is zero\n"),
+            text("Number is zero\n"),
         END,
 
         FOR(numbers, n, i)
-            text(f("FOR: Number[{0}] is {1}\n", i, n)),
+            text(f("Number[{0}] is {1}\n", i, n)),
         END,
 
         text("\n"),
-    });
+    );
 }

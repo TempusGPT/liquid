@@ -6,7 +6,7 @@
 #include <ncurses.h>
 #include <string>
 
-#define FRAGMENT(elements...) [=]() mutable { Liquid::execute(elements); }
+#define FRAGMENT(elements...) [=]() mutable { Liquid::execute({elements}); }
 
 using Element = std::function<void()>;
 
@@ -17,10 +17,10 @@ Element text(const std::string &value) {
 }
 
 namespace Liquid {
-    void execute(const std::initializer_list<std::function<void()>> &fns) {
-        for (const auto &fn : fns) {
-            if (fn) {
-                fn();
+    void execute(const std::initializer_list<Element> &elements) {
+        for (const auto &element : elements) {
+            if (element) {
+                element();
             }
         }
     }
