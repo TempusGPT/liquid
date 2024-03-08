@@ -4,21 +4,20 @@ Element MainMenu() {
     const auto numbers = std::vector<int> {1, 2, 3};
 
     auto elapsed = createSignal(0);
-    auto number = createSignal(0);
-    auto doubled = [=]() mutable { return number() * 2; };
+    auto signal = createSignal(0);
 
     createEffect([=]() mutable {
-        if (number() == 0) {
+        if (signal() == 0) {
             beep();
         }
     });
 
     onInput(Key::UpArrow, [=]() mutable {
-        number.set(number() + 1);
+        signal.set(signal() + 1);
     });
 
     onInput(Key::DownArrow, [=]() mutable {
-        number.set(number() - 1);
+        signal.set(signal() - 1);
     });
 
     onInput(Key::Enter, []() {
@@ -31,21 +30,20 @@ Element MainMenu() {
 
     return FRAGMENT(
         text(f("{0} Seconds\n", elapsed())),
-        text(f("Number is {0}\n", number())),
-        text(f("Doubled is {0}\n", doubled())),
+        text(f("Signal is {0}\n", signal())),
 
-        IF(number() < 0)
-            text("Number is negative\n"),
-        ELIF(number() > 0)
-            text("Number is positive\n"),
-        ELSE
-            text("Number is zero\n"),
-        END,
+        WHEN(signal() < 0) {
+            text("Signal is negative\n"),
+        } OR(signal() > 0) {
+            text("Signal is positive\n"),
+        } OTHERWISE {
+            text("Signal is zero\n"),
+        } END,
 
-        FOR(numbers, n, i)
-            text(f("Number[{0}] is {1}\n", i, n)),
-        END,
-
+        text("Numbers: "),
+        EACH(numbers, n) {
+            text(f("{0}, ", n)),
+        } END,
         text("\n"),
     );
 }

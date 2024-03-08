@@ -3,33 +3,28 @@
 
 #include "element.hpp"
 
-#define FOR(collection, item, index) \
-    [=]() mutable {                           \
-        auto index = -1;                      \
-        for (const auto &item : collection) { \
-            index += 1;                       \
-            Liquid::execute({
+#define EACH(collection, item) \
+    [=]() mutable {                         \
+        for (const auto &item : collection) \
+            Liquid::execute(
 
-#define IF(condition) \
+#define WHEN(condition) \
     [=]() mutable {   \
-    if (condition) {  \
-    Liquid::execute({
+    if (condition)    \
+    Liquid::execute(
 
-#define ELIF(condition)   \
-    });                   \
-    }                     \
-    else if (condition) { \
-    Liquid::execute({
+#define OR(condition) \
+    );                  \
+    else if (condition)  \
+    Liquid::execute(
 
-#define ELSE \
-    });      \
-    }        \
-    else {   \
-    Liquid::execute({
+#define OTHERWISE \
+    );       \
+    else     \
+    Liquid::execute(
 
 #define END \
-    });     \
-    }       \
+    );      \
     }
 
 #endif
