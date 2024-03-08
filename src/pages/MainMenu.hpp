@@ -31,9 +31,9 @@ Element MainMenu() {
     });
 
     return FRAGMENT({
-        text("TIMER: " + std::to_string(elapsed()) + " Seconds\n"),
-        text("TEXT: Number is " + std::to_string(number()) + "\n"),
-        text("TEXT: Doubled is " + std::to_string(doubled()) + "\n"),
+        text(f("TIMER: {0} Seconds\n", elapsed())),
+        text(f("TEXT: Number is {0}\n", number())),
+        text(f("TEXT: Doubled is {0}\n", doubled())),
 
         IF(number() < 0)
             text("IF: Number is negative\n"),
@@ -44,7 +44,7 @@ Element MainMenu() {
         END,
 
         FOR(numbers, n, i)
-            text("FOR: Number[" + std::to_string(i) + "] is " + std::to_string(n) + "\n"),
+            text(f("FOR: Number[{0}] is {1}\n", i, n)),
         END,
 
         text("\n"),

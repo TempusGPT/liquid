@@ -7,5 +7,6 @@
 #include "core/input.hpp"
 #include "core/reactive.hpp"
 #include "core/timer.hpp"
+#include "core/utility.hpp"
 
 #endif
