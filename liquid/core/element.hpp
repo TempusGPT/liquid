@@ -6,7 +6,7 @@
 #include <ncurses.h>
 #include <string>
 
-#define FRAGMENT(elements...) [=]() mutable { Liquid::execute({elements}); }
+#define RETURN return [=]() mutable { Liquid::execute(
 
 using Element = std::function<void()>;
 

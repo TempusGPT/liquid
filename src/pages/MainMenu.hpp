@@ -28,7 +28,7 @@ Element MainMenu() {
         elapsed.set(elapsed() + 1);
     });
 
-    return FRAGMENT(
+    RETURN {
         text(f("{0} Seconds\n", elapsed())),
         text(f("Signal is {0}\n", signal())),
 
@@ -45,5 +45,5 @@ Element MainMenu() {
             text(f("{0}, ", n)),
         } END,
         text("\n"),
-    );
+    } END;
 }
