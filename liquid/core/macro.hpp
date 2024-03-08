@@ -5,34 +5,32 @@
 
 #define FN \
     {      \
-        [=]() mutable { return (
+        [=]() mutable { \
+        return (
 
 #define EACH(collection, item, index) \
     {                                 \
-        [=]() mutable {                         \
-            auto index = 0;                      \
-            for (const auto &item : collection) \
-                index = Liquid::renderAndIncreaseIndex(index,
+        [=]() mutable {                     \
+        auto index = 0;                     \
+        for (const auto &item : collection) \
+            index = Liquid::renderAndIncreaseIndex(index,
 
 #define WHEN(condition) \
     {                   \
-        [=]() mutable {     \
-    if (condition)      \
-    Liquid::render(
+        [=]() mutable { \
+        if (condition) Liquid::render(
 
-#define OR(condition)   \
-    );                  \
-    else if (condition) \
-    Liquid::render(
+#define OR(condition) \
+        );            \
+        else if (condition) Liquid::render(
 
 #define OTHERWISE \
-    );            \
-    else          \
-    Liquid::render(
+        );        \
+        else Liquid::render(
 
-#define X \
-    );    \
-    }     \
+#define X  \
+        ); \
+    }      \
     }
 
 namespace Liquid {
