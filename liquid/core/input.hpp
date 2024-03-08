@@ -238,7 +238,7 @@ namespace Liquid {
     }
 }
 
-void onInput(std::initializer_list<Key> keys, std::function<void()> callback) {
+void onInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback) {
     for (const auto &key : keys) {
         Liquid::inputCallbacks.insert({ key, callback });
     }
