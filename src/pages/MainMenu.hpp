@@ -2,7 +2,7 @@
 #include "liquid.hpp"
 
 Element MainMenu() {
-    const auto numbers = std::vector<int> {2, 4, 8, 16};
+    const auto numbers = std::vector<int> { 2, 4, 8, 16 };
 
     auto signal = createSignal(0);
     auto title = createSignal("MainMenu");
@@ -13,19 +13,19 @@ Element MainMenu() {
         }
     });
 
-    onInput(Key::UpArrow, [=]() mutable {
+    onInput({ Key::UpArrow }, [=]() mutable {
         signal.set(signal() + 1);
     });
 
-    onInput(Key::DownArrow, [=]() mutable {
+    onInput({ Key::DownArrow }, [=]() mutable {
         signal.set(signal() - 1);
     });
 
-    onInput(Key::Space, [=]() mutable {
+    onInput({ Key::Space }, [=]() mutable {
         title.set(title() + "!");
     });
 
-    onInput(Key::Enter, []() {
+    onInput({ Key::Q, Key::Enter }, []() {
         exitApp();
     });
 

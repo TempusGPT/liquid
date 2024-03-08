@@ -13,3 +13,4 @@ AlignAfterOpenBracket: BlockIndent
 BinPackArguments: false
 BinPackParameters: false
 SpaceBeforeCpp11BracedList: true
+Cpp11BracedListStyle: false

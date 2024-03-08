@@ -29,7 +29,7 @@ std::string f(const std::string &fmt, const TArgs &...args) {
     auto result = fmt;
     auto index = 0;
 
-    for (const auto &value : {args...}) {
+    for (const auto &value : { args... }) {
         auto placeholder = "{" + std::to_string(index) + "}";
         replaceAll(result, placeholder, std::to_string(value));
         index += 1;

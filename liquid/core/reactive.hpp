@@ -17,7 +17,7 @@ namespace Liquid {
 
         T operator()() {
             if (effectCallback && effects->find(effectCallbackId) == effects->end()) {
-                effects->insert({effectCallbackId, effectCallback});
+                effects->insert({ effectCallbackId, effectCallback });
             }
 
             return *value;
