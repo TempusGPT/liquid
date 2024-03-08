@@ -3,25 +3,25 @@
 
 #include "element.hpp"
 
-#define RETURN return [=]() mutable { Liquid::render(
+#define FN [=]() mutable { return (
 
-#define FOR(collection, item, index) \
+#define EACH(collection, item, index) \
     [=]() mutable {                         \
         auto index = 0;                      \
         for (const auto &item : collection) \
             index = Liquid::renderAndIncreaseIndex(index,
 
-#define IF(condition) \
+#define WHEN(condition) \
     [=]() mutable {     \
     if (condition)      \
     Liquid::render(
 
-#define ELIF(condition)   \
+#define OR(condition)   \
     );                  \
     else if (condition) \
     Liquid::render(
 
-#define ELSE \
+#define OTHERWISE \
     );            \
     else          \
     Liquid::render(

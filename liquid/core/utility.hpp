@@ -38,4 +38,7 @@ std::string f(const std::string &fmt, const TArgs &...args) {
     return result;
 }
 
+#define _F f(
+#define F_ )
+
 #endif

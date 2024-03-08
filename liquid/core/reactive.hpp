@@ -43,6 +43,10 @@ Liquid::Signal<T> createSignal(const T &value) {
     return Liquid::Signal<T>(value);
 }
 
+Liquid::Signal<std::string> createSignal(const char *value) {
+    return Liquid::Signal<std::string>(value);
+}
+
 void createEffect(const std::function<void()> &callback) {
     Liquid::effectCallback = callback;
     Liquid::effectCallback();

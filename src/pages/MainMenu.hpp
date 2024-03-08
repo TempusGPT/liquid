@@ -1,10 +1,11 @@
+#include "../components/Timer.hpp"
 #include "liquid.hpp"
 
 Element MainMenu() {
     const auto numbers = std::vector<int> {2, 4, 8, 16};
 
-    auto elapsed = createSignal(0);
     auto signal = createSignal(0);
+    auto title = createSignal("MainMenu");
 
     createEffect([=]() mutable {
         if (signal() == 0) {
@@ -20,29 +21,29 @@ Element MainMenu() {
         signal.set(signal() - 1);
     });
 
+    onInput(Key::Space, [=]() mutable {
+        title.set(title() + "!");
+    });
+
     onInput(Key::Enter, []() {
         exitApp();
     });
 
-    setInterval(1000, [=]() mutable {
-        elapsed.set(elapsed() + 1);
+    return fragment({
+        Timer(FN title() END),
+        text(FN f("Signal is {0}\n", signal()) END),
+
+        WHEN(signal() < 0) {
+            text(FN "Signal is negative\n\n" END),
+        } OR(signal() > 0) {
+            text(FN "Signal is positive\n\n" END),
+        } OTHERWISE {
+            text(FN "Signal is zero\n\n" END),
+        } END,
+
+        EACH(numbers, n, i) {
+            text(FN f("{0}th number is {1}\n", i, n) END),
+        } END,
+        text(FN "\n" END),
     });
-
-    RETURN {
-        text(f("{0} Seconds\n\n", elapsed())),
-        text(f("Signal is {0}\n", signal())),
-
-        IF(signal() < 0) {
-            text("Signal is negative\n\n"),
-        } ELIF(signal() > 0) {
-            text("Signal is positive\n\n"),
-        } ELSE {
-            text("Signal is zero\n\n"),
-        } END,
-
-        FOR(numbers, n, i) {
-            text(f("{0}th number is {1}\n", i, n)),
-        } END,
-        text("\n"),
-    } END;
 }
