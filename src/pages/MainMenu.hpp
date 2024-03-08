@@ -34,16 +34,16 @@ Element MainMenu() {
         text(FN f("Signal is {0}\n", signal()) X),
 
         WHEN(signal() < 0) {
-            text(FN "Signal is negative\n\n" X),
+            text("Signal is negative\n\n"),
         } OR(signal() > 0) {
-            text(FN "Signal is positive\n\n" X),
+            text("Signal is positive\n\n"),
         } OTHERWISE {
-            text(FN "Signal is zero\n\n" X),
+            text("Signal is zero\n\n"),
         } X,
 
         EACH(numbers, n, i) {
             text(FN f("{0}th number is {1}\n", i, n) X),
         } X,
-        text(FN "\n" X),
+        text("\n"),
     });
 }

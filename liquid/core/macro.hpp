@@ -3,16 +3,20 @@
 
 #include "element.hpp"
 
-#define FN [=]() mutable { return (
+#define FN \
+    {      \
+        [=]() mutable { return (
 
 #define EACH(collection, item, index) \
-    [=]() mutable {                         \
-        auto index = 0;                      \
-        for (const auto &item : collection) \
-            index = Liquid::renderAndIncreaseIndex(index,
+    {                                 \
+        [=]() mutable {                         \
+            auto index = 0;                      \
+            for (const auto &item : collection) \
+                index = Liquid::renderAndIncreaseIndex(index,
 
 #define WHEN(condition) \
-    [=]() mutable {     \
+    {                   \
+        [=]() mutable {     \
     if (condition)      \
     Liquid::render(
 
@@ -27,15 +31,14 @@
     Liquid::render(
 
 #define X \
-    );      \
+    );    \
+    }     \
     }
 
 namespace Liquid {
     void render(const std::initializer_list<Element> &elements) {
         for (const auto &element : elements) {
-            if (element) {
-                element();
-            }
+            element();
         }
     }
 
