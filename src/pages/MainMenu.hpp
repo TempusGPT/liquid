@@ -42,7 +42,7 @@ Element MainMenu() {
         } X,
 
         EACH(numbers, n, i) {
-            text(FN f("{0}th number is {1}\n", i, n) X),
+            text(f("{0}th number is {1}\n", i, n)),
         } X,
         text("\n"),
     });
