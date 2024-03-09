@@ -12,6 +12,7 @@ add_executable(
     build.out
     src/main.cpp
     liquid/src/app.cpp
+    liquid/src/color.cpp
     liquid/src/component.cpp
     liquid/src/input.cpp
     liquid/src/macro.cpp

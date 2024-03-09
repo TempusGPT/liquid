@@ -1,5 +1,6 @@
 #include "include/app.hpp"
 
+#include "include/color.hpp"
 #include "include/component.hpp"
 #include "include/input.hpp"
 #include "include/reactive.hpp"
@@ -20,6 +21,7 @@ App::App() {
     setlocale(LC_ALL, "");
     initscr();
     Liquid::initInput();
+    Liquid::initColor();
 }
 
 App::~App() {
