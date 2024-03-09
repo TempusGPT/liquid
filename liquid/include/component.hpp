@@ -36,8 +36,9 @@ template <typename... Args>
 using Component = std::function<Element(Args...)>;
 using Page = Component<>;
 
-Element fragment(const std::vector<Element> &elements);
-Element text(
+Element Div(const std::vector<Element> &elements);
+
+Element Text(
     const Prop<std::string> &value,
     const Prop<Color> &foreground = Color::White,
     const Prop<Color> &background = Color::Black

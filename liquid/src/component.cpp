@@ -9,7 +9,7 @@ void Element::render() const {
     renderer();
 }
 
-Element fragment(const std::vector<Element> &elements) {
+Element Div(const std::vector<Element> &elements) {
     return {
         [=]() {
             for (auto &element : elements) {
@@ -19,7 +19,7 @@ Element fragment(const std::vector<Element> &elements) {
     };
 }
 
-Element text(
+Element Text(
     const Prop<std::string> &value,
     const Prop<Color> &foreground,
     const Prop<Color> &background

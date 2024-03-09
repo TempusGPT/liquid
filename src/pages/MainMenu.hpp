@@ -32,22 +32,22 @@ Element MainMenu() {
         exitApp();
     });
 
-    return fragment({
+    return Div({
         Timer(FN title() X),
-        text(FN f("Signal is {0}\n", signal()) X),
+        Text(FN f("Signal is {0}\n", signal()) X),
 
         WHEN(signal() < 0) {
-            text("Signal is negative\n\n"),
+            Text("Signal is negative\n\n"),
         } OR(signal() > 0) {
-            text("Signal is positive\n\n"),
+            Text("Signal is positive\n\n"),
         } OTHERWISE {
-            text("Signal is zero\n\n"),
+            Text("Signal is zero\n\n"),
         } X,
 
         EACH(numbers, n, i) {
-            text(f("{0}th number is {1}\n", i, n)),
+            Text(f("{0}th number is {1}\n", i, n)),
         } X,
-        text("\n"),
+        Text("--\n"),
     });
 }
 
