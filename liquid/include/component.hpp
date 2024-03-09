@@ -1,6 +1,8 @@
 #ifndef LIQUID_COMPONENT_HPP
 #define LIQUID_COMPONENT_HPP
 
+#include "color.hpp"
+
 #include <functional>
 #include <string>
 #include <vector>
@@ -35,6 +37,10 @@ using Component = std::function<Element(Args...)>;
 using Page = Component<>;
 
 Element fragment(const std::vector<Element> &elements);
-Element text(const Prop<std::string> &value);
+Element text(
+    const Prop<std::string> &value,
+    const Prop<Color> &foreground = Color::White,
+    const Prop<Color> &background = Color::Black
+);
 
 #endif

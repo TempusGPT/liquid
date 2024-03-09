@@ -19,10 +19,16 @@ Element fragment(const std::vector<Element> &elements) {
     };
 }
 
-Element text(const Prop<std::string> &value) {
+Element text(
+    const Prop<std::string> &value,
+    const Prop<Color> &foreground,
+    const Prop<Color> &background
+) {
     return {
         [=]() {
+            Liquid::enableColor(foreground(), background());
             printw("%s", value().c_str());
+            Liquid::disableColor(foreground(), background());
         }
     };
 }
