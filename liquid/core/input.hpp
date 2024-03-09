@@ -6,7 +6,6 @@
 #include <unordered_map>
 
 enum class Key {
-    None,
     A,
     B,
     C,
@@ -101,7 +100,7 @@ namespace Liquid {
     }
 
     void processInput() {
-        static std::unordered_map<int, Key> keyMap = {
+        static const std::unordered_map<int, Key> keyMap = {
             { 'a', Key::A },
             { 'A', Key::A },
             { 'b', Key::B },
@@ -233,8 +232,9 @@ namespace Liquid {
         };
 
         const auto iter = keyMap.find(getch());
-        const auto key = iter != keyMap.end() ? iter->second : Key::None;
-        notifyInput(key);
+        if (iter != keyMap.end()) {
+            notifyInput(iter->second);
+        }
     }
 }
 

@@ -5,42 +5,31 @@
 #include <sstream>
 #include <string>
 
-namespace std {
-    std::string to_string(const std::string &value) {
-        return value;
-    }
-}
-
 namespace Liquid {
     void replaceAll(std::string &str, const std::string &oldValue, const std::string &newValue) {
-        if (oldValue.empty()) {
-            return;
-        }
-
-        auto pos = str.find(oldValue, 0);
-        while (pos != std::string::npos) {
+        auto pos = 0;
+        while (std::string::npos != (pos = str.find(oldValue, pos))) {
             str.replace(pos, oldValue.length(), newValue);
             pos += newValue.length();
-            pos = str.find(oldValue, pos);
         }
     }
 
-    void formatString(std::string &str, int index) {}
+    void formatString(std::string &fmt, int index) {}
 
     template <typename T, typename... TArgs>
-    void formatString(std::string &str, int index, const T &value, const TArgs &...args) {
+    void formatString(std::string &fmt, int index, const T &value, const TArgs &...args) {
         auto oldValue = "{" + std::to_string(index) + "}";
         auto newValue = (std::ostringstream() << value).str();
-        replaceAll(str, oldValue, newValue);
-        formatString(str, index + 1, args...);
+        replaceAll(fmt, oldValue, newValue);
+        formatString(fmt, index + 1, args...);
     }
 }
 
 template <typename... TArgs>
 std::string f(const std::string &fmt, const TArgs &...args) {
-    auto result = fmt;
-    Liquid::formatString(result, 0, args...);
-    return result;
+    auto mutableFmt = fmt;
+    Liquid::formatString(mutableFmt, 0, args...);
+    return mutableFmt;
 }
 
 #endif

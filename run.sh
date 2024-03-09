@@ -1,2 +1,1 @@
-cmake --build .
-./dist.exe
+cmake --build . && ./dist.exe

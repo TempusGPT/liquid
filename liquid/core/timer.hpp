@@ -10,38 +10,25 @@
 #undef timeout
 
 namespace Liquid {
-    struct Timer {
+    enum class TimerType {
+        Timeout,
+        Interval
+    };
+
+    class Timer {
     public:
         int id;
-        bool isInterval;
+        TimerType type;
         std::function<void()> callback;
         std::chrono::milliseconds delay;
         std::chrono::steady_clock::time_point invokeAt;
 
-        static Timer timeout(const int delay, const std::function<void()> &callback) {
-            const auto id = newID++;
+        Timer(const TimerType type, const int delay, const std::function<void()> &callback)
+            : id(newId++), type(type), callback(callback) {
+            const auto now = std::chrono::steady_clock::now();
             const auto chronoDelay = std::chrono::milliseconds(delay);
-
-            return Timer {
-                .id = id,
-                .isInterval = false,
-                .callback = callback,
-                .delay = chronoDelay,
-                .invokeAt = std::chrono::steady_clock::now() + chronoDelay,
-            };
-        }
-
-        static Timer interval(const int delay, const std::function<void()> &callback) {
-            const auto id = newID++;
-            const auto chronoDelay = std::chrono::milliseconds(delay);
-
-            return Timer {
-                .id = id,
-                .isInterval = true,
-                .callback = callback,
-                .delay = chronoDelay,
-                .invokeAt = std::chrono::steady_clock::now() + chronoDelay,
-            };
+            this->delay = chronoDelay;
+            this->invokeAt = now + chronoDelay;
         }
 
         struct Comparator {
@@ -51,15 +38,15 @@ namespace Liquid {
         };
 
     private:
-        static int newID;
+        static int newId;
     };
 
-    int Timer::newID = 0;
-    std::priority_queue<Timer, std::vector<Timer>, Timer::Comparator> timerQueue;
+    int Timer::newId = 0;
     std::unordered_set<int> timerIds;
+    std::priority_queue<Timer, std::vector<Timer>, Timer::Comparator> timerQueue;
 
     void processTimer() {
-        const auto &now = std::chrono::steady_clock::now();
+        const auto now = std::chrono::steady_clock::now();
         if (timerQueue.empty() || timerQueue.top().invokeAt > now) {
             return;
         }
@@ -71,7 +58,7 @@ namespace Liquid {
         }
 
         timer.callback();
-        if (timer.isInterval) {
+        if (timer.type == TimerType::Interval) {
             timer.invokeAt += timer.delay;
             timerQueue.push(timer);
         }
@@ -79,14 +66,14 @@ namespace Liquid {
 }
 
 int setTimeout(const int delay, const std::function<void()> &callback) {
-    const auto &timer = Liquid::Timer::timeout(delay, callback);
+    const auto timer = Liquid::Timer(Liquid::TimerType::Timeout, delay, callback);
     Liquid::timerQueue.push(timer);
     Liquid::timerIds.insert(timer.id);
     return timer.id;
 }
 
 int setInterval(const int delay, const std::function<void()> &callback) {
-    const auto &timer = Liquid::Timer::interval(delay, callback);
+    const auto timer = Liquid::Timer(Liquid::TimerType::Interval, delay, callback);
     Liquid::timerQueue.push(timer);
     Liquid::timerIds.insert(timer.id);
     return timer.id;

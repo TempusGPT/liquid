@@ -18,15 +18,15 @@
 #define WHEN(condition) \
     {                   \
         [=]() mutable { \
-        if (condition) Liquid::render(
+        if (condition) Liquid::renderElements(
 
 #define OR(condition) \
         );            \
-        else if (condition) Liquid::render(
+        else if (condition) Liquid::renderElements(
 
 #define OTHERWISE \
         );        \
-        else Liquid::render(
+        else Liquid::renderElements(
 
 #define X  \
         ); \
@@ -34,14 +34,14 @@
     }
 
 namespace Liquid {
-    void render(const std::initializer_list<Element> &elements) {
+    void renderElements(const std::initializer_list<Element> &elements) {
         for (const auto &element : elements) {
             element();
         }
     }
 
     int renderAndIncreaseIndex(const int index, const std::initializer_list<Element> &elements) {
-        render(elements);
+        renderElements(elements);
         return index + 1;
     }
 }

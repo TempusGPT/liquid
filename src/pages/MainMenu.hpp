@@ -1,3 +1,6 @@
+#ifndef MAINMENU_HPP
+#define MAINMENU_HPP
+
 #include "../components/Timer.hpp"
 #include "liquid.hpp"
 
@@ -47,3 +50,5 @@ Element MainMenu() {
         text("\n"),
     });
 }
+
+#endif
