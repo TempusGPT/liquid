@@ -11,7 +11,7 @@ Element MainMenu() {
     auto title = createSignal("MainMenu");
 
     createEffect([=]() mutable {
-        if (signal() == 0) {
+        if (signal() == 0 && untrack(title) == "MainMenu!!!!!") {
             playBeep();
         }
     });

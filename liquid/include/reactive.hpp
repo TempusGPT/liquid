@@ -23,8 +23,14 @@ Signal<std::string> createSignal(const char *value);
 void createEffect(const std::function<void()> &callback);
 
 template <typename T>
+T untrack(const Signal<T> &signal) {
+    return *signal.value;
+}
+
+template <typename T>
 class Signal {
 public:
+    friend T untrack<T>(const Signal<T> &signal);
     friend Signal<T> createSignal<T>(const T &value);
     friend Signal<std::string> createSignal(const char *value);
 
