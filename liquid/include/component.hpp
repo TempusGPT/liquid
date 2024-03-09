@@ -7,6 +7,16 @@
 #include <string>
 #include <vector>
 
+#define FN \
+    {      \
+        [=]() mutable { \
+        return (
+
+#define ENDFN  \
+        ); \
+    }      \
+    }
+
 class Element {
 public:
     Element();

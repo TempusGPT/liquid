@@ -1,5 +1,4 @@
 #include "include/app.hpp"
-
 #include "include/color.hpp"
 #include "include/component.hpp"
 #include "include/input.hpp"

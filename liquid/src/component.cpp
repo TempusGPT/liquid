@@ -6,7 +6,9 @@ Element::Element() : renderer([]() {}) {}
 Element::Element(const std::function<void()> &renderer) : renderer(renderer) {}
 
 void Element::render() const {
-    renderer();
+    if (renderer) {
+        renderer();
+    }
 }
 
 Element Div(const std::vector<Element> &elements) {
