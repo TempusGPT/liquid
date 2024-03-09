@@ -1,1 +1,1 @@
-cmake --build . && ./dist.exe
+cmake --build . && ./build.out

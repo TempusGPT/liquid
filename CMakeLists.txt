@@ -1,11 +1,25 @@
 cmake_minimum_required(VERSION 3.23)
 project(liquid)
-set(CMAKE_CXX_STANDARD 11)
-add_executable(dist.exe src/main.cpp)
-include_directories(liquid)
 
+set(CMAKE_CXX_STANDARD 11)
 set(CURSES_NEED_NCURSES TRUE)
 set(CURSES_NEED_WIDE TRUE)
+
+include_directories(liquid)
+include_directories(src)
+
+add_executable(
+    build.out
+    src/main.cpp
+    liquid/src/app.cpp
+    liquid/src/component.cpp
+    liquid/src/input.cpp
+    liquid/src/macro.cpp
+    liquid/src/reactive.cpp
+    liquid/src/timer.cpp
+    liquid/src/utility.cpp
+)
+
 find_package(Curses)
-target_include_directories(dist.exe PUBLIC ${CURSES_INCLUDE_DIR})
-target_link_libraries(dist.exe ${CURSES_LIBRARIES})
+target_include_directories(build.out PUBLIC ${CURSES_INCLUDE_DIR})
+target_link_libraries(build.out ${CURSES_LIBRARIES})

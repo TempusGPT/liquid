@@ -1,7 +1,9 @@
 #ifndef LIQUID_MACRO_HPP
 #define LIQUID_MACRO_HPP
 
-#include "element.hpp"
+#include "component.hpp"
+
+#include <initializer_list>
 
 #define FN \
     {      \
@@ -34,16 +36,8 @@
     }
 
 namespace Liquid {
-    void renderElements(const std::initializer_list<Element> &elements) {
-        for (const auto &element : elements) {
-            element();
-        }
-    }
-
-    int renderAndIncreaseIndex(const int index, const std::initializer_list<Element> &elements) {
-        renderElements(elements);
-        return index + 1;
-    }
+    void renderElements(const std::initializer_list<Element> &elements);
+    int renderAndIncreaseIndex(const int index, const std::initializer_list<Element> &elements);
 }
 
 #endif

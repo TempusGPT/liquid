@@ -1,7 +1,7 @@
-#ifndef MAINMENU_HPP
-#define MAINMENU_HPP
+#ifndef PAGES_MAINMENU_HPP
+#define PAGES_MAINMENU_HPP
 
-#include "../components/Timer.hpp"
+#include "components/Timer.hpp"
 #include "liquid.hpp"
 
 Element MainMenu() {
@@ -12,7 +12,7 @@ Element MainMenu() {
 
     createEffect([=]() mutable {
         if (signal() == 0) {
-            beep();
+            playBeep();
         }
     });
 

@@ -1,3 +1,6 @@
+#ifndef COMPONENTS_TIMER_HPP
+#define COMPONENTS_TIMER_HPP
+
 #include "liquid.hpp"
 
 Element Timer(const Prop<std::string> &title) {
@@ -9,3 +12,5 @@ Element Timer(const Prop<std::string> &title) {
 
     return text(FN f("{0}s in {1}\n", elapsed(), title()) X);
 }
+
+#endif

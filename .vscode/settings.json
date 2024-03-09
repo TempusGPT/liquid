@@ -58,6 +58,7 @@
         "unordered_set": "cpp",
         "deque": "cpp",
         "queue": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "type_traits": "cpp"
     }
 }

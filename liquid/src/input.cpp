@@ -1,102 +1,30 @@
-#ifndef LIQUID_INPUT_HPP
-#define LIQUID_INPUT_HPP
+#include "include/input.hpp"
 
-#include <functional>
 #include <ncurses.h>
 #include <unordered_map>
 
-enum class Key {
-    A,
-    B,
-    C,
-    D,
-    E,
-    F,
-    G,
-    H,
-    I,
-    J,
-    K,
-    L,
-    M,
-    N,
-    O,
-    P,
-    Q,
-    R,
-    S,
-    T,
-    U,
-    V,
-    W,
-    X,
-    Y,
-    Z,
-    Number0,
-    Number1,
-    Number2,
-    Number3,
-    Number4,
-    Number5,
-    Number6,
-    Number7,
-    Number8,
-    Number9,
-    Backtick,
-    Hyphen,
-    Equal,
-    LeftBracket,
-    RightBracket,
-    Backslash,
-    Semicolon,
-    Apostrophe,
-    Comma,
-    Period,
-    Slash,
-    Space,
-    F1,
-    F2,
-    F3,
-    F4,
-    F5,
-    F6,
-    F7,
-    F8,
-    F9,
-    F10,
-    F11,
-    F12,
-    Tab,
-    Backspace,
-    Enter,
-    Insert,
-    Delete,
-    Home,
-    End,
-    PageUp,
-    PageDown,
-    UpArrow,
-    DownArrow,
-    LeftArrow,
-    RightArrow,
-};
+std::unordered_multimap<Key, std::function<void()>> inputCallbacks;
+
+void notifyInput(const Key key) {
+    for (const auto &callback : inputCallbacks) {
+        if (callback.first == key) {
+            callback.second();
+        }
+    }
+}
+
+void onInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback) {
+    for (const auto &key : keys) {
+        inputCallbacks.insert({ key, callback });
+    }
+}
 
 namespace Liquid {
-    std::unordered_multimap<Key, std::function<void()>> inputCallbacks;
-
     void initInput() {
         keypad(stdscr, true);
         nodelay(stdscr, true);
         curs_set(0);
         noecho();
-    }
-
-    void notifyInput(const Key key) {
-        for (const auto &callback : inputCallbacks) {
-            if (callback.first == key) {
-                callback.second();
-            }
-        }
     }
 
     void processInput() {
@@ -237,11 +165,3 @@ namespace Liquid {
         }
     }
 }
-
-void onInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback) {
-    for (const auto &key : keys) {
-        Liquid::inputCallbacks.insert({ key, callback });
-    }
-}
-
-#endif
