@@ -85,6 +85,6 @@ namespace Liquid {
     void processInput();
 }
 
-void onInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback);
+void bindInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback);
 
 #endif

@@ -16,19 +16,19 @@ Element MainMenu() {
         }
     });
 
-    onInput({ Key::UpArrow }, [=]() mutable {
+    bindInput({ Key::UpArrow }, [=]() mutable {
         signal.set(signal() + 1);
     });
 
-    onInput({ Key::DownArrow }, [=]() mutable {
+    bindInput({ Key::DownArrow }, [=]() mutable {
         signal.set(signal() - 1);
     });
 
-    onInput({ Key::Space }, [=]() mutable {
+    bindInput({ Key::Space }, [=]() mutable {
         title.set(title() + "!");
     });
 
-    onInput({ Key::Q, Key::Enter }, []() {
+    bindInput({ Key::Q, Key::Enter }, []() {
         exitApp();
     });
 

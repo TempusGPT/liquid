@@ -13,7 +13,7 @@ void notifyInput(const Key key) {
     }
 }
 
-void onInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback) {
+void bindInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback) {
     for (const auto &key : keys) {
         inputCallbacks.insert({ key, callback });
     }
