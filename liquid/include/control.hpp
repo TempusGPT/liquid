@@ -8,25 +8,66 @@
 #include <vector>
 
 #define WHEN(condition) \
-    Liquid::When({              \
-        { FN condition X_FN, FN std::vector<Element>
+    [=]() mutable {                                                                         \
+        auto isFirst = createSignal(true);                                                  \
+        auto elements = createSignal<std::vector<Element>>({});                             \
+        const auto args = std::vector<std::tuple<Prop<bool>, Prop<std::vector<Element>>>> { \
+            {                                                                               \
+                { [=]() mutable { return condition; } },                                    \
+                { [=]() mutable { return std::vector<Element>
 
-#define OR(condition) \
-    X_FN             \
-    }                 \
-    , {               \
-        FN condition X_FN, FN std::vector<Element>
+#define OR(condition)                        \
+    ;                                            \
+    }                                            \
+    }                                            \
+    }                                            \
+    ,                                            \
+    {                                            \
+        { [=]() mutable { return condition; } }, \
+        {                                        \
+            [=]() mutable { return std::vector<Element>
 
 #define OTHERWISE \
-    X_FN         \
-    }             \
-    , {           \
-        true, FN std::vector<Element>
+    ;                 \
+    }                 \
+    }                 \
+    }                 \
+    ,                 \
+    {                 \
+        true,         \
+        {             \
+            [=]() mutable { return std::vector<Element>
 
-#define X_WHEN \
-    X_FN   \
-    }       \
-    } )
+#define END_WHEN                                     \
+    ;                                                \
+    }                                                \
+    }                                                \
+    }                                                \
+    }                                                \
+    ;                                                \
+    createEffect([=]() mutable {                     \
+        if (untrack(isFirst)) {                      \
+            isFirst.set(false);                      \
+            for (const auto &arg : args) {           \
+                std::get<0>(arg)();                  \
+            }                                        \
+        }                                            \
+        for (const auto &arg : args) {               \
+            if (std::get<0>(arg)()) {                \
+                elements.set(std::get<1>(arg)());    \
+                return;                              \
+            }                                        \
+        }                                            \
+    });                                              \
+    return Element {                                 \
+        [=]() mutable {                              \
+            for (const auto &element : elements()) { \
+                element.render();                    \
+            }                                        \
+        }                                            \
+    };                                               \
+    }                                                \
+    ()
 
 #define EACH(collection, item, index) \
     [=]() mutable {                                                               \
@@ -35,7 +76,7 @@
         const auto transform = [](decltype(items())::value_type item, const int index) { \
             return std::vector<Element>
 
-#define X_EACH                                                         \
+#define END_EACH                                                       \
     ;                                                                  \
     }                                                                  \
     ;                                                                  \
@@ -58,17 +99,5 @@
     };                                                                 \
     }                                                                  \
     ()
-
-namespace Liquid {
-    void renderElements(const std::initializer_list<Element> &elements);
-    int renderAndIncreaseIndex(const int index, const std::initializer_list<Element> &elements);
-
-    struct WhenArg {
-        const Prop<bool> condition;
-        const Prop<std::vector<Element>> elements;
-    };
-
-    Element When(const std::vector<WhenArg> &whenArg);
-}
 
 #endif

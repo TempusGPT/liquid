@@ -7,14 +7,9 @@
 #include <string>
 #include <vector>
 
-#define FN \
-    {      \
-        [=]() mutable { \
-        return (
-
-#define X_FN \
-        );    \
-    }         \
+#define FN(expression)                     \
+    {                                        \
+        [=]() mutable { return expression; } \
     }
 
 class Element {

@@ -10,11 +10,7 @@ Element Timer(const Prop<std::string> &title) {
         elapsed.set(elapsed() + 1);
     });
 
-    return Text(
-        FN f("{0}s in {1}\n", elapsed(), title()) X_FN,
-        FN Color::Black X_FN,
-        FN Color::White X_FN
-    );
+    return Text(FN(f("{0}s in {1}\n", elapsed(), title())), Color::Black, Color::White);
 }
 
 #endif

@@ -39,8 +39,8 @@ Element MainMenu() {
     });
 
     return Div({
-        Timer(FN title() X_FN),
-        Text(FN f("Signal is {0}\n", signal()) X_FN),
+        Timer(FN(title())),
+        Text(FN(f("Signal is {0}\n", signal()))),
 
         WHEN(signal() < 0) {
             Text("Signal is negative\n"),
@@ -48,12 +48,12 @@ Element MainMenu() {
             Text("Signal is positive\n"),
         } OTHERWISE {
             Text("Signal is zero\n"),
-        } X_WHEN,
+        } END_WHEN,
 
         Text("\n"),
         EACH(numbers(), n, i) {
             Text(f("{0}th Number is {1}\n", i, n)),
-        } X_EACH,
+        } END_EACH,
     });
 }
 
