@@ -1,5 +1,4 @@
 #include "include/control.hpp"
-#include "include/reactive.hpp"
 
 namespace Liquid {
     void renderElements(const std::initializer_list<Element> &elements) {

@@ -12,9 +12,9 @@
         [=]() mutable { \
         return (
 
-#define ENDFN  \
-        ); \
-    }      \
+#define ENDFN \
+        );    \
+    }         \
     }
 
 class Element {
@@ -42,8 +42,8 @@ private:
     const std::function<T()> getter;
 };
 
-template <typename... Args>
-using Component = std::function<Element(Args...)>;
+template <typename... Props>
+using Component = std::function<Element(Props...)>;
 using Page = Component<>;
 
 Element Div(const std::vector<Element> &elements);
@@ -53,5 +53,12 @@ Element Text(
     const Prop<Color> &foreground = Color::White,
     const Prop<Color> &background = Color::Black
 );
+
+namespace Liquid {
+    template <typename T>
+    Prop<T> createProp(const T &value) {
+        return Prop<T>(value);
+    }
+}
 
 #endif

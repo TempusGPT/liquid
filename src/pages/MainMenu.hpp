@@ -5,10 +5,9 @@
 #include "liquid.hpp"
 
 Element MainMenu() {
-    const auto numbers = std::vector<int> { 2, 4, 8, 16 };
-
     auto signal = createSignal(0);
     auto title = createSignal("MainMenu");
+    auto numbers = createSignal(std::vector<int> { 1, 2 });
 
     createEffect([=]() mutable {
         if (signal() == 0 && untrack(title) == "MainMenu!!!!!") {
@@ -24,8 +23,15 @@ Element MainMenu() {
         signal.set(signal() - 1);
     });
 
-    bindInput({ Key::Space }, [=]() mutable {
+    bindInput({ Key::LeftArrow }, [=]() mutable {
         title.set(title() + "!");
+    });
+
+    bindInput({ Key::RightArrow }, [=]() mutable {
+        const auto last = numbers()[numbers().size() - 1];
+        auto newValue = numbers();
+        newValue.push_back(last * 2);
+        numbers.set(newValue);
     });
 
     bindInput({ Key::Q, Key::Enter }, []() {
@@ -33,19 +39,21 @@ Element MainMenu() {
     });
 
     return Div({
+        Timer(FN title() ENDFN),
         Text(FN f("Signal is {0}\n", signal()) ENDFN),
 
         WHEN(signal() < 0) {
-            Timer("Signal is negative"),
+            Text(FN "Signal is negative\n" ENDFN),
         } OR(signal() > 0) {
-            Timer("Signal is positive"),
+            Text(FN "Signal is positive\n" ENDFN),
         } OTHERWISE {
-            Timer("Signal is zero"),
+            Text(FN "Signal is zero\n" ENDFN),
         } END,
 
-        // EACH(numbers, n, i) {
-        //     Text(f("{0}th number is {1}\n", i, n)),
-        // } X,
+        Text("\n"),
+        EACH(numbers(), n, i) {
+            Text(f("{0}th Number is {1}\n", i, n)),
+        } ENDEACH,
     });
 }
 

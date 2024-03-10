@@ -2,6 +2,7 @@
 #define LIQUID_CONTROL_HPP
 
 #include "component.hpp"
+#include "reactive.hpp"
 
 #include <initializer_list>
 #include <vector>
@@ -28,11 +29,35 @@
     } )
 
 #define EACH(collection, item, index) \
-    {                                 \
-        [=]() mutable {                     \
-        auto index = 0;                     \
-        for (const auto &item : collection) \
-            index = Liquid::renderAndIncreaseIndex(index,
+    [=]() mutable {                                                               \
+        auto elements = createSignal<std::vector<Element>>({});                   \
+        auto items = [=]() mutable { return collection; };                        \
+        const auto transform = [](decltype(items())::value_type item, const int index) { \
+            return std::vector<Element>
+
+#define ENDEACH                                                        \
+    ;                                                                  \
+    }                                                                  \
+    ;                                                                  \
+    createEffect([=]() mutable {                                       \
+        auto newElements = std::vector<Element>({});                   \
+        auto index = 0;                                                \
+        for (const auto &item : items()) {                             \
+            auto t = transform(item, index);                           \
+            newElements.insert(newElements.end(), t.begin(), t.end()); \
+            index += 1;                                                \
+        }                                                              \
+        elements.set(newElements);                                     \
+    });                                                                \
+    return Element {                                                   \
+        [=]() mutable {                                                \
+            for (const auto &element : elements()) {                   \
+                element.render();                                      \
+            }                                                          \
+        }                                                              \
+    };                                                                 \
+    }                                                                  \
+    ()
 
 namespace Liquid {
     void renderElements(const std::initializer_list<Element> &elements);
