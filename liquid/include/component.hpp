@@ -49,11 +49,4 @@ Element Text(
     const Prop<Color> &background = Color::Black
 );
 
-namespace Liquid {
-    template <typename T>
-    Prop<T> createProp(const T &value) {
-        return Prop<T>(value);
-    }
-}
-
 #endif
