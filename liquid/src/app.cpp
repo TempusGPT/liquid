@@ -2,7 +2,6 @@
 #include "include/color.hpp"
 #include "include/component.hpp"
 #include "include/input.hpp"
-#include "include/reactive.hpp"
 #include "include/timer.hpp"
 
 #include <clocale>
@@ -13,8 +12,10 @@
 
 struct ExitAppException {};
 
-Element pageElement;
-std::unordered_map<std::string, Page> routes;
+static Element pageElement;
+static std::unordered_map<std::string, Page> routes;
+
+bool App::isDirty = false;
 
 App::App() {
     setlocale(LC_ALL, "");
@@ -50,8 +51,8 @@ void App::process() {
             Liquid::processInput();
             Liquid::processTimer();
 
-            if (Liquid::isDirty) {
-                Liquid::isDirty = false;
+            if (isDirty) {
+                isDirty = false;
                 render();
             }
         } catch (const ExitAppException &exitApp) {
@@ -72,7 +73,7 @@ void exitApp() {
 
 void loadPage(const std::string &pageId) {
     pageElement = routes[pageId]();
-    Liquid::isDirty = true;
+    App::isDirty = true;
 }
 
 void playBeep() {

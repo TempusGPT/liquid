@@ -7,8 +7,11 @@
 
 class App {
 public:
+    static bool isDirty;
+
     App();
     ~App();
+
     App &route(const std::string &id, const Page &page);
     int run(const std::string &pageId);
 

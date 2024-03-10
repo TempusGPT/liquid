@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#define FN(expression)                     \
+#define FN(expression)                       \
     {                                        \
         [=]() mutable { return expression; } \
     }

@@ -2,21 +2,20 @@
 #define LIQUID_CONTROL_HPP
 
 #include "component.hpp"
-#include "reactive.hpp"
+#include "reactivity.hpp"
 
 #include <initializer_list>
 #include <vector>
 
 #define WHEN(condition) \
     [=]() mutable {                                                                         \
-        auto isFirst = createSignal(true);                                                  \
         auto elements = createSignal<std::vector<Element>>({});                             \
         const auto args = std::vector<std::tuple<Prop<bool>, Prop<std::vector<Element>>>> { \
             {                                                                               \
                 { [=]() mutable { return condition; } },                                    \
                 { [=]() mutable { return std::vector<Element>
 
-#define OR(condition)                        \
+#define OR(condition)                            \
     ;                                            \
     }                                            \
     }                                            \
@@ -28,14 +27,14 @@
             [=]() mutable { return std::vector<Element>
 
 #define OTHERWISE \
-    ;                 \
-    }                 \
-    }                 \
-    }                 \
-    ,                 \
-    {                 \
-        true,         \
-        {             \
+    ;             \
+    }             \
+    }             \
+    }             \
+    ,             \
+    {             \
+        true,     \
+        {         \
             [=]() mutable { return std::vector<Element>
 
 #define END_WHEN                                     \
@@ -46,12 +45,6 @@
     }                                                \
     ;                                                \
     createEffect([=]() mutable {                     \
-        if (untrack(isFirst)) {                      \
-            isFirst.set(false);                      \
-            for (const auto &arg : args) {           \
-                std::get<0>(arg)();                  \
-            }                                        \
-        }                                            \
         for (const auto &arg : args) {               \
             if (std::get<0>(arg)()) {                \
                 elements.set(std::get<1>(arg)());    \

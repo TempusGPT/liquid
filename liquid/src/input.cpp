@@ -3,7 +3,7 @@
 #include <ncurses.h>
 #include <unordered_map>
 
-std::unordered_multimap<Key, std::function<void()>> inputCallbacks;
+static std::unordered_multimap<Key, std::function<void()>> inputCallbacks;
 
 void notifyInput(const Key key) {
     for (const auto &callback : inputCallbacks) {

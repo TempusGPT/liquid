@@ -60,6 +60,8 @@
         "queue": "cpp",
         "iostream": "cpp",
         "type_traits": "cpp",
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "__tree": "cpp",
+        "set": "cpp"
     }
 }

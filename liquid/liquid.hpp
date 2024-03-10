@@ -6,7 +6,7 @@
 #include "include/component.hpp"
 #include "include/control.hpp"
 #include "include/input.hpp"
-#include "include/reactive.hpp"
+#include "include/reactivity.hpp"
 #include "include/timer.hpp"
 #include "include/utility.hpp"
 
