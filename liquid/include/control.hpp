@@ -9,22 +9,22 @@
 
 #define WHEN(condition) \
     Liquid::When({              \
-        { FN condition ENDFN, FN std::vector<Element>
+        { FN condition X_FN, FN std::vector<Element>
 
 #define OR(condition) \
-    ENDFN             \
+    X_FN             \
     }                 \
     , {               \
-        FN condition ENDFN, FN std::vector<Element>
+        FN condition X_FN, FN std::vector<Element>
 
 #define OTHERWISE \
-    ENDFN         \
+    X_FN         \
     }             \
     , {           \
         true, FN std::vector<Element>
 
-#define END \
-    ENDFN   \
+#define X_WHEN \
+    X_FN   \
     }       \
     } )
 
@@ -35,7 +35,7 @@
         const auto transform = [](decltype(items())::value_type item, const int index) { \
             return std::vector<Element>
 
-#define ENDEACH                                                        \
+#define X_EACH                                                         \
     ;                                                                  \
     }                                                                  \
     ;                                                                  \

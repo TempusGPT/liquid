@@ -39,21 +39,21 @@ Element MainMenu() {
     });
 
     return Div({
-        Timer(FN title() ENDFN),
-        Text(FN f("Signal is {0}\n", signal()) ENDFN),
+        Timer(FN title() X_FN),
+        Text(FN f("Signal is {0}\n", signal()) X_FN),
 
         WHEN(signal() < 0) {
-            Text(FN "Signal is negative\n" ENDFN),
+            Text("Signal is negative\n"),
         } OR(signal() > 0) {
-            Text(FN "Signal is positive\n" ENDFN),
+            Text("Signal is positive\n"),
         } OTHERWISE {
-            Text(FN "Signal is zero\n" ENDFN),
-        } END,
+            Text("Signal is zero\n"),
+        } X_WHEN,
 
         Text("\n"),
         EACH(numbers(), n, i) {
             Text(f("{0}th Number is {1}\n", i, n)),
-        } ENDEACH,
+        } X_EACH,
     });
 }
 

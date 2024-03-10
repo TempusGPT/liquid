@@ -12,7 +12,7 @@
         [=]() mutable { \
         return (
 
-#define ENDFN \
+#define X_FN \
         );    \
     }         \
     }
