@@ -13,7 +13,7 @@ enum class Color {
 };
 
 namespace Liquid {
-    void initColor();
+    void initializeColor();
     void enableColor(const Color foreground, const Color background);
     void disableColor(const Color foreground, const Color background);
 }

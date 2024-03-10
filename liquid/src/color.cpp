@@ -9,7 +9,7 @@ short colorAttribute(const Color foreground, const Color background) {
 }
 
 namespace Liquid {
-    void initColor() {
+    void initializeColor() {
         start_color();
 
         for (auto foreground = 0; foreground < 8; foreground++) {

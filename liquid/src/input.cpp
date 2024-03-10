@@ -20,7 +20,7 @@ void bindInput(const std::initializer_list<Key> &keys, const std::function<void(
 }
 
 namespace Liquid {
-    void initInput() {
+    void initializeInput() {
         keypad(stdscr, true);
         nodelay(stdscr, true);
         curs_set(0);

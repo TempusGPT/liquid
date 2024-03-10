@@ -4,7 +4,7 @@
 #include "pages/MainMenu.hpp"
 
 int main() {
-    return createApp()
+    return initializeApp()
         .route("MainMenu", MainMenu)
         .run("MainMenu");
 }

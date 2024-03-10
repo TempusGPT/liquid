@@ -5,22 +5,27 @@
 
 #include <string>
 
+class App;
+
+App &initializeApp();
+
 class App {
+    friend App &initializeApp();
+
 public:
     static bool isDirty;
-
-    App();
-    ~App();
 
     App &route(const std::string &id, const Page &page);
     int run(const std::string &pageId);
 
 private:
+    App();
+    ~App();
+
     void render();
     void process();
 };
 
-App createApp();
 void exitApp();
 void loadPage(const std::string &pageId);
 void playBeep();

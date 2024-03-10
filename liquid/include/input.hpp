@@ -81,7 +81,7 @@ enum class Key {
 };
 
 namespace Liquid {
-    void initInput();
+    void initializeInput();
     void processInput();
 }
 

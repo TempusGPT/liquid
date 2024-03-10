@@ -20,8 +20,8 @@ bool App::isDirty = false;
 App::App() {
     setlocale(LC_ALL, "");
     initscr();
-    Liquid::initInput();
-    Liquid::initColor();
+    Liquid::initializeInput();
+    Liquid::initializeColor();
 }
 
 App::~App() {
@@ -63,8 +63,9 @@ void App::process() {
     }
 }
 
-App createApp() {
-    return App();
+App &initializeApp() {
+    static App app;
+    return app;
 }
 
 void exitApp() {
