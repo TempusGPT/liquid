@@ -11,10 +11,10 @@ void Element::render() const {
     }
 }
 
-Element Div(const std::vector<Element> &elements) {
+Element Div(const Prop<std::vector<Element>> &elements) {
     return {
         [=]() {
-            for (auto &element : elements) {
+            for (auto &element : elements()) {
                 element.render();
             }
         }

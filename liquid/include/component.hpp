@@ -41,7 +41,7 @@ template <typename... Props>
 using Component = std::function<Element(Props...)>;
 using Page = Component<>;
 
-Element Div(const std::vector<Element> &elements);
+Element Div(const Prop<std::vector<Element>> &elements);
 
 Element Text(
     const Prop<std::string> &value,

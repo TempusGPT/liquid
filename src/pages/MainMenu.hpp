@@ -38,7 +38,7 @@ Element MainMenu() {
         exitApp();
     });
 
-    return Div({
+    return Div({ {
         Timer(FN(title())),
         Text(FN(f("Signal is {0}\n", signal()))),
 
@@ -54,7 +54,7 @@ Element MainMenu() {
         EACH(numbers(), n, i) {
             Text(f("{0}th Number is {1}\n", i, n)),
         } END_EACH,
-    });
+    } });   
 }
 
 #endif
