@@ -29,9 +29,8 @@ Element MainMenu() {
 
     bindInput({ Key::RightArrow }, [=]() mutable {
         const auto last = numbers()[numbers().size() - 1];
-        auto newValue = numbers();
-        newValue.push_back(last * 2);
-        numbers.set(newValue);
+        numbers().push_back(last * 2);
+        numbers.set();
     });
 
     bindInput({ Key::Q, Key::Enter }, []() {

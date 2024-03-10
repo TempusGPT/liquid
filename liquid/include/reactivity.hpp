@@ -19,21 +19,23 @@ namespace std {
 }
 
 namespace Liquid {
-    class Effect {  
+    class Effect {
         friend struct std::hash<Liquid::Effect>;
 
     public:
-        static int newId;
-        static Effect current;
-
         Effect();
-        Effect(int id, const std::function<void()> &callback);
+        Effect(const std::function<void()> &callback);
 
-        void operator()();
+        static Effect &getCurrent();
+
+        void run();
         bool operator==(const Effect &other) const;
         operator bool() const;
 
     private:
+        static Effect current;
+        static int newId;
+
         int id;
         std::function<void()> callback;
     };
@@ -62,21 +64,23 @@ class Signal {
     friend Signal<std::string> createSignal(const char *value);
 
 public:
-    T operator()() {
-        if (Liquid::Effect::current && effects->find(Liquid::Effect::current) == effects->end()) {
-            auto effect = Liquid::Effect::current;
-            effects->insert(effect);
+    T &operator()() {
+        const auto &currentEffect = Liquid::Effect::getCurrent();
+        if (currentEffect && effects->find(currentEffect) == effects->end()) {
+            effects->insert(currentEffect);
         }
-
         return *value;
     }
 
     void set(const T &newValue) {
-        App::isDirty = true;
+        App::markDirty();
         *value = newValue;
+        set();
+    }
 
+    void set() {
         for (auto effect : *effects) {
-            effect();
+            effect.run();
         }
     }
 

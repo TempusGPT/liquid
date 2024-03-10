@@ -17,6 +17,10 @@ static std::unordered_map<std::string, Page> routes;
 
 bool App::isDirty = false;
 
+void App::markDirty() {
+    isDirty = true;
+}
+
 App::App() {
     setlocale(LC_ALL, "");
     initscr();
@@ -74,7 +78,7 @@ void exitApp() {
 
 void loadPage(const std::string &pageId) {
     pageElement = routes[pageId]();
-    App::isDirty = true;
+    App::markDirty();
 }
 
 void playBeep() {

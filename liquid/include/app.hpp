@@ -13,12 +13,14 @@ class App {
     friend App &initializeApp();
 
 public:
-    static bool isDirty;
+    static void markDirty();
 
     App &route(const std::string &id, const Page &page);
     int run(const std::string &pageId);
 
 private:
+    static bool isDirty;
+
     App();
     ~App();
 

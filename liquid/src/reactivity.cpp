@@ -7,9 +7,13 @@ namespace Liquid {
     Effect Effect::current = {};
 
     Effect::Effect() : id(-1), callback(nullptr) {}
-    Effect::Effect(int id, const std::function<void()> &callback) : id(id), callback(callback) {}
+    Effect::Effect(const std::function<void()> &callback) : id(newId++), callback(callback) {}
 
-    void Effect::operator()() {
+    Effect &Effect::getCurrent() {
+        return current;
+    }
+
+    void Effect::run() {
         if (callback) {
             current = *this;
             callback();
@@ -37,5 +41,5 @@ Signal<std::string> createSignal(const char *value) {
 }
 
 void createEffect(const std::function<void()> &callback) {
-    Liquid::Effect(Liquid::Effect::newId++, callback)();
+    Liquid::Effect(callback).run();
 }
