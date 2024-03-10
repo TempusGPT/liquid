@@ -45,6 +45,7 @@
                 return;                              \
             }                                        \
         }                                            \
+        elements.set({});                            \
     });                                              \
     return Element {                                 \
         [=]() mutable {                              \
