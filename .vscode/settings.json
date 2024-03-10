@@ -62,6 +62,7 @@
         "type_traits": "cpp",
         "iterator": "cpp",
         "__tree": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "memory": "cpp"
     }
 }

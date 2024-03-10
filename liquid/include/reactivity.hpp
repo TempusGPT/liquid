@@ -8,7 +8,7 @@
 #include <unordered_set>
 
 namespace Liquid {
-    struct Effect;
+    class Effect;
 }
 
 namespace std {
@@ -19,7 +19,7 @@ namespace std {
 }
 
 namespace Liquid {
-    class Effect {
+    class Effect {  
         friend struct std::hash<Liquid::Effect>;
 
     public:
