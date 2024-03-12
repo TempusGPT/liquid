@@ -1,6 +1,12 @@
 #ifndef LIQUID_CONTROL_HPP
 #define LIQUID_CONTROL_HPP
 
+#include "component.hpp"
+#include "reactivity.hpp"
+
+#include <tuple>
+#include <vector>
+
 #define WHEN(condition) \
     [=]() mutable {                                                                         \
         auto elements = createSignal<std::vector<Element>>({});                             \
@@ -84,7 +90,7 @@
     [=]() mutable {                                                                      \
         auto elements = createSignal<std::vector<Element>>({});                          \
         auto items = [=]() mutable { return collection; };                               \
-        const auto transform = [](decltype(items())::value_type item, const int index) { \
+        auto transform = [=](decltype(items())::value_type item, const int index) mutable { \
             return std::vector<Element>
 
 #define END_EACH                                                       \

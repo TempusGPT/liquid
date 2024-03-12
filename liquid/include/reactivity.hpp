@@ -73,7 +73,7 @@ public:
     }
 
     void set(const T &newValue) {
-        App::markDirty();
+        Liquid::markDirty();
         *value = newValue;
         set();
     }

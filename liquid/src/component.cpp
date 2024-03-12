@@ -26,46 +26,12 @@ void Element::cleanup() const {
     }
 }
 
-ElementBuilder createElement() {
-    return ElementBuilder();
-}
-
-ElementBuilder &ElementBuilder::onMount(std::function<void()> callback) {
-    mount = callback;
-    return *this;
-}
-
-ElementBuilder &ElementBuilder::onCleanup(std::function<void()> callback) {
-    cleanup = callback;
-    return *this;
-}
-
-Element ElementBuilder::with(const std::vector<Element> &elements) {
-    return Element(
-        [=]() {
-            for (auto &element : elements) {
-                element.render();
-            }
-        },
-        [=]() {
-            if (mount) {
-                mount();
-            }
-
-            for (auto &element : elements) {
-                element.mount();
-            }
-        },
-        [=]() {
-            if (cleanup) {
-                cleanup();
-            }
-
-            for (auto &element : elements) {
-                element.cleanup();
-            }
+Element Div(const std::vector<Element> &elements) {
+    return Element([=]() {
+        for (auto &element : elements) {
+            element.render();
         }
-    );
+    });
 }
 
 Element Text(
@@ -73,13 +39,9 @@ Element Text(
     const Prop<Color> &foreground,
     const Prop<Color> &background
 ) {
-    return Element(
-        [=]() {
-            Liquid::enableColor(foreground(), background());
-            printw("%s", value().c_str());
-            Liquid::disableColor(foreground(), background());
-        },
-        nullptr,
-        []() { beep(); }
-    );
+    return Element([=]() {
+        Liquid::enableColor(foreground(), background());
+        printw("%s", value().c_str());
+        Liquid::disableColor(foreground(), background());
+    });
 }

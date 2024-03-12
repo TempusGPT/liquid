@@ -1,7 +1,9 @@
 #include "include/app.hpp"
 #include "include/color.hpp"
 #include "include/component.hpp"
+#include "include/control.hpp"
 #include "include/input.hpp"
+#include "include/reactivity.hpp"
 #include "include/timer.hpp"
 
 #include <clocale>
@@ -10,46 +12,41 @@
 #include <thread>
 #include <unordered_map>
 
-struct ExitAppException {};
+static auto isDirty = true;
+static auto currentPath = createSignal("/");
 
-static Element pageElement;
-static std::unordered_map<std::string, Page> routes;
-
-bool App::isDirty = false;
-
-void App::markDirty() {
-    isDirty = true;
+namespace Liquid {
+    void markDirty() {
+        isDirty = true;
+    }
 }
 
-App::App() {
+struct ExitAppException {};
+
+Element Route(const Prop<std::string> &path, const Prop<Component<>> &component) {
+    return WHEN(path() == currentPath()) {
+        component()(),
+    } END_WHEN;
+}
+
+void navigate(const std::string &path) {
+    currentPath.set(path);
+}
+
+void exitApp() {
+    throw ExitAppException();
+}
+
+void playBeep() {
+    beep();
+}
+
+int render(const Element &element) {
     setlocale(LC_ALL, "");
     initscr();
     Liquid::initializeInput();
     Liquid::initializeColor();
-}
 
-App::~App() {
-    endwin();
-}
-
-App &App::route(const std::string &id, const Page &page) {
-    routes[id] = page;
-    return *this;
-}
-
-int App::run(const std::string &pageId) {
-    loadPage(pageId);
-    process();
-    return 0;
-}
-
-void App::render() {
-    clear();
-    pageElement.render();
-    refresh();
-}
-
-void App::process() {
     while (true) {
         try {
             Liquid::processInput();
@@ -57,30 +54,17 @@ void App::process() {
 
             if (isDirty) {
                 isDirty = false;
-                render();
+                clear();
+                element.render();
+                refresh();
             }
-        } catch (const ExitAppException &exitApp) {
-            return;
+        } catch (ExitAppException) {
+            break;
         }
 
         std::this_thread::yield();
     }
-}
 
-App &initializeApp() {
-    static App app;
-    return app;
-}
-
-void exitApp() {
-    throw ExitAppException();
-}
-
-void loadPage(const std::string &pageId) {
-    pageElement = routes[pageId]();
-    App::markDirty();
-}
-
-void playBeep() {
-    beep();
+    endwin();
+    return 0;
 }

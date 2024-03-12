@@ -5,31 +5,15 @@
 
 #include <string>
 
-class App;
+namespace Liquid {
+    void markDirty();
+}
 
-App &initializeApp();
+Element Route(const Prop<std::string> &path, const Prop<Component<>> &component);
 
-class App {
-    friend App &initializeApp();
-
-public:
-    static void markDirty();
-
-    App &route(const std::string &id, const Page &page);
-    int run(const std::string &pageId);
-
-private:
-    static bool isDirty;
-
-    App();
-    ~App();
-
-    void render();
-    void process();
-};
-
+void navigate(const std::string &path);
 void exitApp();
-void loadPage(const std::string &pageId);
 void playBeep();
+int render(const Element &element);
 
 #endif

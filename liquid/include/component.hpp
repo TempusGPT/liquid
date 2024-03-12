@@ -30,24 +30,6 @@ private:
     std::function<void()> onCleanup;
 };
 
-class ElementBuilder;
-
-ElementBuilder createElement();
-
-class ElementBuilder {
-    friend ElementBuilder createElement();
-
-public:
-    ElementBuilder &onMount(std::function<void()> callback);
-    ElementBuilder &onCleanup(std::function<void()> callback);
-    Element with(const std::vector<Element> &elements);
-
-private:
-    std::function<void()> mount;
-    std::function<void()> cleanup;
-    ElementBuilder() = default;
-};
-
 template <typename T>
 class Prop {
 public:
@@ -65,7 +47,6 @@ private:
 
 template <typename... Props>
 using Component = std::function<Element(Props...)>;
-using Page = Component<>;
 
 Element Div(const std::vector<Element> &elements);
 
