@@ -1,31 +1,23 @@
 #include "include/app.hpp"
 #include "include/color.hpp"
-#include "include/component.hpp"
 #include "include/control.hpp"
 #include "include/input.hpp"
 #include "include/reactivity.hpp"
 #include "include/timer.hpp"
 
 #include <clocale>
-#include <functional>
 #include <ncurses.h>
+#include <string>
 #include <thread>
-#include <unordered_map>
+
+struct ExitAppException {};
 
 static auto isDirty = true;
 static auto currentPath = createSignal("/");
 
-namespace Liquid {
-    void markDirty() {
-        isDirty = true;
-    }
-}
-
-struct ExitAppException {};
-
-Element Route(const Prop<std::string> &path, const Prop<Component<>> &component) {
-    return WHEN(path() == currentPath()) {
-        component()(),
+Element Route(const std::string &path, const Component<> &component) {
+    return WHEN(path == currentPath()) {
+        component(),
     } END_WHEN;
 }
 
@@ -67,4 +59,10 @@ int render(const Element &element) {
 
     endwin();
     return 0;
+}
+
+namespace Liquid {
+    void markDirty() {
+        isDirty = true;
+    }
 }

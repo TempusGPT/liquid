@@ -63,6 +63,7 @@
         "iterator": "cpp",
         "__tree": "cpp",
         "set": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "memory_resource": "cpp"
     }
 }

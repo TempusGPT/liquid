@@ -47,10 +47,10 @@ Element OtherPage() {
 }
 
 int main() {
-    return render(
-        Div({
-            Route("/", FN(MainPage)),
-            Route("/other", FN(OtherPage)),
-        })
-    );
+    const auto app = Div({
+        Route("/", MainPage),
+        Route("/other", OtherPage),
+    });
+
+    return render(app);
 }
