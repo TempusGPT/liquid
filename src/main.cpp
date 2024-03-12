@@ -10,10 +10,12 @@ Element MainMenu() {
         count.set(count() + 1);
     });
 
-    return WHEN(count() % 2 == 0) {
-        Text(FN(f("Count: {0}\n", count()))),
-        Text(FN(f("Count: {0}\n", count()))),
-    } END_WHEN;
+    return createElement().with({
+        WHEN(count() % 2 == 0) {
+            Text(FN(f("Count: {0}\n", count()))),
+            Text(FN(f("Count: {0}\n", count()))),
+        } END_WHEN,
+    });
 }
 
 int main() {

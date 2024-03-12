@@ -4,6 +4,7 @@
 #define WHEN(condition) \
     [=]() mutable {                                                                         \
         auto elements = createSignal<std::vector<Element>>({});                             \
+        auto prevIndex = createSignal(-1);                                                  \
         const auto args = std::vector<std::tuple<Prop<bool>, Prop<std::vector<Element>>>> { \
             {                                                                               \
                 { [=]() mutable { return condition; } },                                    \
@@ -31,36 +32,58 @@
         {         \
             [=]() mutable { return std::vector<Element>
 
-#define END_WHEN                                     \
-    ;                                                \
-    }                                                \
-    }                                                \
-    }                                                \
-    }                                                \
-    ;                                                \
-    createEffect([=]() mutable {                     \
-        for (const auto &arg : args) {               \
-            if (std::get<0>(arg)()) {                \
-                elements.set(std::get<1>(arg)());    \
-                return;                              \
-            }                                        \
-        }                                            \
-        elements.set({});                            \
-    });                                              \
-    return Element {                                 \
-        [=]() mutable {                              \
-            for (const auto &element : elements()) { \
-                element.render();                    \
-            }                                        \
-        }                                            \
-    };                                               \
-    }                                                \
+#define END_WHEN                                             \
+    ;                                                        \
+    }                                                        \
+    }                                                        \
+    }                                                        \
+    ,                                                        \
+    {                                                        \
+        true,                                                \
+        {                                                    \
+            [=]() mutable { return std::vector<Element>(); } \
+        }                                                    \
+    }                                                        \
+    }                                                        \
+    ;                                                        \
+    const auto render = [=]() {                              \
+        for (const auto &element : untrack(elements)) {      \
+            element.render();                                \
+        }                                                    \
+    };                                                       \
+    const auto mount = [=]() {                               \
+        for (const auto &element : untrack(elements)) {      \
+            element.mount();                                 \
+        }                                                    \
+    };                                                       \
+    const auto cleanup = [=]() {                             \
+        for (const auto &element : untrack(elements)) {      \
+            element.cleanup();                               \
+        }                                                    \
+    };                                                       \
+    createEffect([=]() mutable {                             \
+        auto index = 0;                                      \
+        for (const auto &arg : args) {                       \
+            if (std::get<0>(arg)()) {                        \
+                if (untrack(prevIndex) != index) {           \
+                    prevIndex.set(index);                    \
+                    cleanup();                               \
+                    elements.set(std::get<1>(arg)());        \
+                    mount();                                 \
+                }                                            \
+                return;                                      \
+            }                                                \
+            index += 1;                                      \
+        }                                                    \
+    });                                                      \
+    return Element(render, mount, cleanup);                  \
+    }                                                        \
     ()
 
 #define EACH(collection, item, index) \
-    [=]() mutable {                                                               \
-        auto elements = createSignal<std::vector<Element>>({});                   \
-        auto items = [=]() mutable { return collection; };                        \
+    [=]() mutable {                                                                      \
+        auto elements = createSignal<std::vector<Element>>({});                          \
+        auto items = [=]() mutable { return collection; };                               \
         const auto transform = [](decltype(items())::value_type item, const int index) { \
             return std::vector<Element>
 

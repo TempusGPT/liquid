@@ -14,12 +14,38 @@
 
 class Element {
 public:
-    Element();
-    Element(const std::function<void()> &renderer);
+    Element(
+        const std::function<void()> &onRender = nullptr,
+        const std::function<void()> &onMount = nullptr,
+        const std::function<void()> &onCleanup = nullptr
+    );
+
     void render() const;
+    void mount() const;
+    void cleanup() const;
 
 private:
-    std::function<void()> renderer;
+    std::function<void()> onRender;
+    std::function<void()> onMount;
+    std::function<void()> onCleanup;
+};
+
+class ElementBuilder;
+
+ElementBuilder createElement();
+
+class ElementBuilder {
+    friend ElementBuilder createElement();
+
+public:
+    ElementBuilder &onMount(std::function<void()> callback);
+    ElementBuilder &onCleanup(std::function<void()> callback);
+    Element with(const std::vector<Element> &elements);
+
+private:
+    std::function<void()> mount;
+    std::function<void()> cleanup;
+    ElementBuilder() = default;
 };
 
 template <typename T>
