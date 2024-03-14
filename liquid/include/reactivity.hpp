@@ -8,33 +8,34 @@
 #include <vector>
 
 namespace Liquid {
-    class Effect;
+    namespace Internal {
+        class EffectCore {
+        public:
+            EffectCore();
+            EffectCore(const std::function<void()> &callback);
 
+            static EffectCore &getCurrent();
+
+            void run() const;
+            bool operator==(const EffectCore &other) const;
+            operator bool() const;
+
+        private:
+            static EffectCore current;
+            static int newId;
+
+            int id;
+            std::function<void()> callback;
+        };
+    }
+
+    class Effect;
     Effect createEffect();
 
     class Effect {
         friend Effect createEffect();
 
     public:
-        class Data {
-        public:
-            Data();
-            Data(const std::function<void()> &callback);
-
-            static Data &getCurrent();
-
-            void run() const;
-            bool operator==(const Data &other) const;
-            operator bool() const;
-
-        private:
-            static Data current;
-            static int newId;
-
-            int id;
-            std::function<void()> callback;
-        };
-
         ~Effect();
         void operator()(const std::function<void()> &callback);
         void cleanup(const std::function<void()> &callback);
@@ -67,7 +68,7 @@ namespace Liquid {
 
     public:
         T &operator()() {
-            const auto &currentEffect = Effect::Data::getCurrent();
+            const auto &currentEffect = Internal::EffectCore::getCurrent();
             const auto iter = std::find(effects->begin(), effects->end(), currentEffect);
 
             if (currentEffect && iter == effects->end()) {
@@ -87,11 +88,11 @@ namespace Liquid {
 
     private:
         std::shared_ptr<T> value;
-        std::shared_ptr<std::vector<Effect::Data>> effects;
+        std::shared_ptr<std::vector<Internal::EffectCore>> effects;
 
         Signal(const T &value)
             : value(std::make_shared<T>(value)),
-              effects(std::make_shared<std::vector<Effect::Data>>()) {}
+              effects(std::make_shared<std::vector<Internal::EffectCore>>()) {}
     };
 }
 
