@@ -5,15 +5,17 @@
 
 #include <string>
 
-Element Route(const std::string &path, const Component<> &component);
-
-void navigate(const std::string &path);
-void exitApp();
-void playBeep();
-int render(const Element &element);
-
 namespace Liquid {
-    void markDirty();
+    Element Route(const std::string &path, const Component<> &component);
+    int render(const Element &element);
+
+    void navigate(const std::string &path);
+    void exitApp();
+    void playBeep();
+
+    namespace Internal {
+        void markDirty();
+    }
 }
 
 #endif

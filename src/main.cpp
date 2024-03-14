@@ -2,6 +2,8 @@
 
 #include "liquid.hpp"
 
+using namespace Liquid;
+
 Element MainPage() {
     auto count = createSignal(0);
 
@@ -17,9 +19,9 @@ Element MainPage() {
         Text("[Main Menu]\n"),
 
         WHEN(count() % 2 == 0) {
-            Text(FN(f("Even: {0}\n", count()))),
+            Text(FN(format("Even: {0}\n", count()))),
         } OTHERWISE {
-            Text(FN(f("Odd: {0}\n", count()))),
+            Text(FN(format("Odd: {0}\n", count()))),
         } END_WHEN,
     });
 }
@@ -39,18 +41,18 @@ Element OtherPage() {
         Text("[Other Menu]\n"),
 
         WHEN(count() % 2 == 0) {
-            Text(FN(f("Even: {0}\n", count()))),
+            Text(FN(format("Even: {0}\n", count()))),
         } OTHERWISE {
-            Text(FN(f("Odd: {0}\n", count()))),
+            Text(FN(format("Odd: {0}\n", count()))),
         } END_WHEN,
     });
 }
 
 int main() {
-    const auto app = Div({
+    const auto element = Div({
         Route("/", MainPage),
         Route("/other", OtherPage),
     });
 
-    return render(app);
+    return render(element);
 }

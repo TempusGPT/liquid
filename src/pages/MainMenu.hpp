@@ -39,7 +39,7 @@ Element MainMenu() {
 
     return Div({
         Timer(FN(title())),
-        Text(FN(f("Signal is {0}\n", signal()))),
+        Text(FN(format("Signal is {0}\n", signal()))),
 
         WHEN(signal() < 0) {
             Text("Signal is negative\n"),
@@ -51,7 +51,7 @@ Element MainMenu() {
 
         Text("\n"),
         EACH(numbers(), n, i) {
-            Text(f("{0}th Number is {1}\n", i, n)),
+            Text(format("{0}th Number is {1}\n", i, n)),
         } END_EACH,
     });
 }

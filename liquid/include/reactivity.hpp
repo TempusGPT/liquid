@@ -5,92 +5,94 @@
 
 #include <functional>
 #include <memory>
-#include <unordered_set>
+#include <vector>
 
 namespace Liquid {
     class Effect;
-}
 
-namespace std {
-    template <>
-    struct hash<Liquid::Effect> {
-        size_t operator()(const Liquid::Effect &effect) const;
-    };
-}
+    Effect createEffect();
 
-namespace Liquid {
     class Effect {
-        friend struct std::hash<Liquid::Effect>;
+        friend Effect createEffect();
 
     public:
-        Effect();
-        Effect(const std::function<void()> &callback);
+        class Data {
+        public:
+            Data();
+            Data(const std::function<void()> &callback);
 
-        static Effect &getCurrent();
+            static Data &getCurrent();
 
-        void run();
-        bool operator==(const Effect &other) const;
-        operator bool() const;
+            void run() const;
+            bool operator==(const Data &other) const;
+            operator bool() const;
+
+        private:
+            static Data current;
+            static int newId;
+
+            int id;
+            std::function<void()> callback;
+        };
+
+        ~Effect();
+        void operator()(const std::function<void()> &callback);
+        void cleanup(const std::function<void()> &callback);
 
     private:
-        static Effect current;
-        static int newId;
+        std::vector<std::function<void()>> callbacks;
+        std::vector<std::function<void()>> cleanupCallbacks;
+    };
 
-        int id;
-        std::function<void()> callback;
+    template <typename T>
+    class Signal;
+
+    template <typename T>
+    T untrack(const Signal<T> &signal) {
+        return *signal.value;
+    }
+
+    template <typename T>
+    Signal<T> createSignal(const T &value) {
+        return Signal<T>(value);
+    }
+
+    Signal<std::string> createSignal(const char *value);
+
+    template <typename T>
+    class Signal {
+        friend T untrack<T>(const Signal<T> &signal);
+        friend Signal<T> createSignal<T>(const T &value);
+        friend Signal<std::string> createSignal(const char *value);
+
+    public:
+        T &operator()() {
+            const auto &currentEffect = Effect::Data::getCurrent();
+            const auto iter = std::find(effects->begin(), effects->end(), currentEffect);
+
+            if (currentEffect && iter == effects->end()) {
+                effects->push_back(currentEffect);
+            }
+            return *value;
+        }
+
+        void set(const T &newValue) {
+            Internal::markDirty();
+            *value = newValue;
+
+            for (auto effect : *effects) {
+                effect.run();
+            }
+        }
+
+    private:
+        std::shared_ptr<T> value;
+        std::shared_ptr<std::vector<Effect::Data>> effects;
+
+        Signal(const T &value)
+            : value(std::make_shared<T>(value)),
+              effects(std::make_shared<std::vector<Effect::Data>>()) {}
     };
 }
-
-template <typename T>
-class Signal;
-
-template <typename T>
-Signal<T> createSignal(const T &value) {
-    return Signal<T>(value);
-}
-
-Signal<std::string> createSignal(const char *value);
-void createEffect(const std::function<void()> &callback);
-
-template <typename T>
-T untrack(const Signal<T> &signal) {
-    return *signal.value;
-}
-
-template <typename T>
-class Signal {
-    friend T untrack<T>(const Signal<T> &signal);
-    friend Signal<T> createSignal<T>(const T &value);
-    friend Signal<std::string> createSignal(const char *value);
-
-public:
-    T &operator()() {
-        const auto &currentEffect = Liquid::Effect::getCurrent();
-        if (currentEffect && effects->find(currentEffect) == effects->end()) {
-            effects->insert(currentEffect);
-        }
-        return *value;
-    }
-
-    void set(const T &newValue) {
-        Liquid::markDirty();
-        *value = newValue;
-        set();
-    }
-
-    void set() {
-        for (auto effect : *effects) {
-            effect.run();
-        }
-    }
-
-private:
-    std::shared_ptr<T> value;
-    std::shared_ptr<std::unordered_set<Liquid::Effect>> effects;
-
-    Signal(const T &value)
-        : value(std::make_shared<T>(value)),
-          effects(std::make_shared<std::unordered_set<Liquid::Effect>>()) {}
-};
 
 #endif

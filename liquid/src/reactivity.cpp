@@ -3,17 +3,36 @@
 #include <string>
 
 namespace Liquid {
-    int Effect::newId = 0;
-    Effect Effect::current = {};
+    Effect createEffect() {
+        return Effect();
+    }
 
-    Effect::Effect() : id(-1), callback(nullptr) {}
-    Effect::Effect(const std::function<void()> &callback) : id(newId++), callback(callback) {}
+    Effect::~Effect() {
+        for (const auto &callback : callbacks) {
+            Data(callback).run();
+        }
 
-    Effect &Effect::getCurrent() {
+        for (const auto &callback : cleanupCallbacks) {
+            // add callback to element.cleanupCallbacks
+        }
+    }
+
+    void Effect::operator()(const std::function<void()> &callback) {
+        callbacks.push_back(callback);
+    }
+
+    void Effect::cleanup(const std::function<void()> &callback) {
+        cleanupCallbacks.push_back(callback);
+    }
+
+    Effect::Data::Data() : id(-1), callback(nullptr) {}
+    Effect::Data::Data(const std::function<void()> &callback) : id(newId++), callback(callback) {}
+
+    Effect::Data &Effect::Data::getCurrent() {
         return current;
     }
 
-    void Effect::run() {
+    void Effect::Data::run() const {
         if (callback) {
             current = *this;
             callback();
@@ -21,25 +40,18 @@ namespace Liquid {
         }
     }
 
-    bool Effect::operator==(const Effect &other) const {
+    bool Effect::Data::operator==(const Data &other) const {
         return id == other.id;
     }
 
-    Effect::operator bool() const {
-        return id >= 0;
+    Effect::Data::operator bool() const {
+        return id != -1;
     }
-}
 
-namespace std {
-    size_t hash<Liquid::Effect>::operator()(const Liquid::Effect &effect) const {
-        return hash<int>()(effect.id);
+    int Effect::Data::newId = 0;
+    Effect::Data Effect::Data::current = {};
+
+    Signal<std::string> createSignal(const char *value) {
+        return Signal<std::string>(value);
     }
-}
-
-Signal<std::string> createSignal(const char *value) {
-    return Signal<std::string>(value);
-}
-
-void createEffect(const std::function<void()> &callback) {
-    Liquid::Effect(callback).run();
 }

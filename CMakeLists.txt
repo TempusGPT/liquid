@@ -15,7 +15,6 @@ add_executable(
     liquid/src/color.cpp
     liquid/src/component.cpp
     liquid/src/input.cpp
-    liquid/src/lifecycle.cpp
     liquid/src/reactivity.cpp
     liquid/src/timer.cpp
     liquid/src/utility.cpp

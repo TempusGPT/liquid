@@ -10,39 +10,26 @@
 #include <string>
 #include <thread>
 
-struct ExitAppException {};
+namespace Liquid {
+    static auto isDirty = true;
+    static auto isActive = true;
+    static auto currentPath = createSignal("/");
 
-static auto isDirty = true;
-static auto currentPath = createSignal("/");
+    Element Route(const std::string &path, const Component<> &component) {
+        return WHEN(path == currentPath()) {
+            component(),
+        } END_WHEN;
+    }
 
-Element Route(const std::string &path, const Component<> &component) {
-    return WHEN(path == currentPath()) {
-        component(),
-    } END_WHEN;
-}
+    int render(const Element &element) {
+        setlocale(LC_ALL, "");
+        initscr();
+        Internal::initializeInput();
+        Internal::initializeColor();
 
-void navigate(const std::string &path) {
-    currentPath.set(path);
-}
-
-void exitApp() {
-    throw ExitAppException();
-}
-
-void playBeep() {
-    beep();
-}
-
-int render(const Element &element) {
-    setlocale(LC_ALL, "");
-    initscr();
-    Liquid::initializeInput();
-    Liquid::initializeColor();
-
-    while (true) {
-        try {
-            Liquid::processInput();
-            Liquid::processTimer();
+        while (isActive) {
+            Internal::processInput();
+            Internal::processTimer();
 
             if (isDirty) {
                 isDirty = false;
@@ -50,19 +37,29 @@ int render(const Element &element) {
                 element.render();
                 refresh();
             }
-        } catch (ExitAppException) {
-            break;
+
+            std::this_thread::yield();
         }
 
-        std::this_thread::yield();
+        endwin();
+        return 0;
     }
 
-    endwin();
-    return 0;
-}
+    void navigate(const std::string &path) {
+        currentPath.set(path);
+    }
 
-namespace Liquid {
-    void markDirty() {
-        isDirty = true;
+    void exitApp() {
+        isActive = false;
+    }
+
+    void playBeep() {
+        beep();
+    }
+
+    namespace Internal {
+        void markDirty() {
+            isDirty = true;
+        }
     }
 }
