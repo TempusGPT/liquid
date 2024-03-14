@@ -7,9 +7,13 @@
 #include <string>
 #include <vector>
 
-#define FN(expression)                       \
-    {                                        \
-        [=]() mutable { return expression; } \
+#define FN \
+    {          \
+        [=]() mutable { return
+
+#define END_FN \
+    ;              \
+    }              \
     }
 
 namespace Liquid {

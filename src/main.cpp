@@ -19,9 +19,9 @@ Element MainPage() {
         Text("[Main Menu]\n"),
 
         WHEN(count() % 2 == 0) {
-            Text(FN(format("Even: {0}\n", count()))),
+            Text(FN format("Even: {0}\n", count()) END_FN),
         } OTHERWISE {
-            Text(FN(format("Odd: {0}\n", count()))),
+            Text(FN format("Odd: {0}\n", count()) END_FN),
         } END_WHEN,
     });
 }
@@ -41,9 +41,9 @@ Element OtherPage() {
         Text("[Other Menu]\n"),
 
         WHEN(count() % 2 == 0) {
-            Text(FN(format("Even: {0}\n", count()))),
+            Text(FN format("Even: {0}\n", count()) END_FN),
         } OTHERWISE {
-            Text(FN(format("Odd: {0}\n", count()))),
+            Text(FN format("Odd: {0}\n", count()) END_FN),
         } END_WHEN,
     });
 }

@@ -88,9 +88,10 @@
     ()
 
 #define EACH(collection, item, index) \
-    [=]() mutable {                                                                      \
-        auto elements = createSignal<std::vector<Element>>({});                          \
-        auto items = [=]() mutable { return collection; };                               \
+    [=]() mutable {                                                                         \
+        auto effect = createEffect();                                                       \
+        auto elements = createSignal<std::vector<Element>>({});                             \
+        auto items = [=]() mutable { return collection; };                                  \
         auto transform = [=](decltype(items())::value_type item, const int index) mutable { \
             return std::vector<Element>
 
@@ -98,7 +99,7 @@
     ;                                                                  \
     }                                                                  \
     ;                                                                  \
-    createEffect([=]() mutable {                                       \
+    effect([=]() mutable {                                             \
         auto newElements = std::vector<Element>({});                   \
         auto index = 0;                                                \
         for (const auto &item : items()) {                             \
@@ -108,13 +109,11 @@
         }                                                              \
         elements.set(newElements);                                     \
     });                                                                \
-    return Element {                                                   \
-        [=]() mutable {                                                \
-            for (const auto &element : elements()) {                   \
-                element.render();                                      \
-            }                                                          \
+    return Element([=]() mutable {                                     \
+        for (const auto &element : elements()) {                       \
+            element.render();                                          \
         }                                                              \
-    };                                                                 \
+    });                                                                \
     }                                                                  \
     ()
 
