@@ -7,15 +7,6 @@
 #include <string>
 #include <vector>
 
-#define FN \
-    {          \
-        [=]() mutable { return
-
-#define END_FN \
-    ;              \
-    }              \
-    }
-
 namespace Liquid {
     class Element {
     public:

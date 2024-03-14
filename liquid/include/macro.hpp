@@ -7,6 +7,15 @@
 #include <tuple>
 #include <vector>
 
+#define FN \
+    {      \
+        [=]() mutable { return
+
+#define END_FN \
+    ;          \
+    }          \
+    }
+
 #define WHEN(condition) \
     [=]() mutable {                                                                         \
         auto effect = createEffect();                                                       \

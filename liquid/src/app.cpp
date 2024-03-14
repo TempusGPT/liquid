@@ -1,7 +1,7 @@
 #include "include/app.hpp"
 #include "include/color.hpp"
-#include "include/control.hpp"
 #include "include/input.hpp"
+#include "include/macro.hpp"
 #include "include/reactivity.hpp"
 #include "include/timer.hpp"
 
