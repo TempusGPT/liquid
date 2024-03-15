@@ -5,14 +5,21 @@
 using namespace Liquid;
 
 Element MainPage() {
+    auto effect = createEffect();
     auto count = createSignal(0);
 
     bindInput({ Key::Q }, [=]() mutable {
         count.set(count() + 1);
     });
 
-    bindInput({ Key::W }, [=]() mutable {
+    bindInput({ Key::W }, []() {
         navigate("/other");
+    });
+
+    effect.cleanup([]() {
+        bindInput({ Key::S }, []() {
+            navigate("/");
+        });
     });
 
     return Div({
@@ -33,9 +40,9 @@ Element OtherPage() {
         count.set(count() + 1);
     });
 
-    bindInput({ Key::S }, [=]() mutable {
-        navigate("/");
-    });
+    // bindInput({ Key::S }, []() {
+    //     navigate("/");
+    // });
 
     return Div({
         Text("[Other Menu]\n"),

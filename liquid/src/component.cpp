@@ -3,29 +3,27 @@
 #include <ncurses.h>
 
 namespace Liquid {
-    Element::Element(
-        const std::function<void()> &onRender,
-        const std::function<void()> &onMount,
-        const std::function<void()> &onCleanup
-    ) : onRender(onRender), onMount(onMount), onCleanup(onCleanup) {}
-
-    void Element::render() const {
-        if (onRender) {
-            onRender();
+    namespace Internal {
+        void onCleanup(const std::function<void()> &callback) {
+            Element::lastMounted->cleanupCallbacks.push_back(callback);
         }
     }
 
-    void Element::mount() const {
-        if (onMount) {
-            onMount();
-        }
+    Element::Element(const std::function<void()> &renderCallback) : renderCallback(renderCallback) {
+        lastMounted = this;
+    }
+
+    void Element::render() const {
+        renderCallback();
     }
 
     void Element::cleanup() const {
-        if (onCleanup) {
-            onCleanup();
+        for (const auto &callback : cleanupCallbacks) {
+            callback();
         }
     }
+
+    Element *Element::lastMounted = nullptr;
 
     Element Div(const std::vector<Element> &elements) {
         return Element([=]() {

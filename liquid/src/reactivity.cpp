@@ -1,4 +1,5 @@
 #include "include/reactivity.hpp"
+// #include "include/component.hpp"
 
 #include <string>
 
@@ -41,7 +42,7 @@ namespace Liquid {
         }
 
         for (const auto &callback : cleanupCallbacks) {
-            // add callback to element.cleanupCallbacks
+            Internal::onCleanup(callback);
         }
     }
 

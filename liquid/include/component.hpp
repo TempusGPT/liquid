@@ -8,22 +8,23 @@
 #include <vector>
 
 namespace Liquid {
+    namespace Internal {
+        void onCleanup(const std::function<void()> &callback);
+    }
+
     class Element {
+        friend void Internal::onCleanup(const std::function<void()> &callback);
+
     public:
-        Element(
-            const std::function<void()> &onRender = nullptr,
-            const std::function<void()> &onMount = nullptr,
-            const std::function<void()> &onCleanup = nullptr
-        );
+        Element(const std::function<void()> &renderCallback = nullptr);
 
         void render() const;
-        void mount() const;
         void cleanup() const;
 
     private:
-        std::function<void()> onRender;
-        std::function<void()> onMount;
-        std::function<void()> onCleanup;
+        static Element *lastMounted;
+        std::function<void()> renderCallback;
+        std::vector<std::function<void()>> cleanupCallbacks;
     };
 
     template <typename T>

@@ -62,16 +62,6 @@
     }                                                        \
     }                                                        \
     ;                                                        \
-    const auto render = [=]() {                              \
-        for (const auto &element : untrack(elements)) {      \
-            element.render();                                \
-        }                                                    \
-    };                                                       \
-    const auto mount = [=]() {                               \
-        for (const auto &element : untrack(elements)) {      \
-            element.mount();                                 \
-        }                                                    \
-    };                                                       \
     const auto cleanup = [=]() {                             \
         for (const auto &element : untrack(elements)) {      \
             element.cleanup();                               \
@@ -82,17 +72,20 @@
         for (const auto &arg : args) {                       \
             if (std::get<0>(arg)()) {                        \
                 if (untrack(prevIndex) != index) {           \
-                    prevIndex.set(index);                    \
                     cleanup();                               \
                     elements.set(std::get<1>(arg)());        \
-                    mount();                                 \
+                    prevIndex.set(index);                    \
                 }                                            \
                 return;                                      \
             }                                                \
             index += 1;                                      \
         }                                                    \
     });                                                      \
-    return Element(render, mount, cleanup);                  \
+    return Element([=]() mutable {                           \
+        for (const auto &element : elements()) {             \
+            element.render();                                \
+        }                                                    \
+    });                                                      \
     }                                                        \
     ()
 
