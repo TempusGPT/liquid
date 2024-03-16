@@ -4,12 +4,15 @@
 #include "components/Timer.hpp"
 #include "liquid.hpp"
 
+using namespace Liquid;
+
 Element MainMenu() {
+    auto effect = createEffect();
     auto signal = createSignal(0);
     auto title = createSignal("MainMenu");
     auto numbers = createSignal(std::vector<int> { 1, 2 });
 
-    createEffect([=]() mutable {
+    effect([=]() mutable {
         if (signal() == 0 && untrack(title) == "MainMenu!!!!!") {
             playBeep();
         }
@@ -28,9 +31,10 @@ Element MainMenu() {
     });
 
     bindInput({ Key::RightArrow }, [=]() mutable {
-        const auto last = numbers()[numbers().size() - 1];
-        numbers().push_back(last * 2);
-        numbers.set();
+        auto newNumbers = numbers();
+        const auto last = newNumbers[numbers().size() - 1];
+        newNumbers.push_back(last * 2);
+        numbers.set(newNumbers);
     });
 
     bindInput({ Key::Q, Key::Enter }, []() {
@@ -38,8 +42,8 @@ Element MainMenu() {
     });
 
     return Group({
-        Timer(FN(title())),
-        Text(FN(format("Signal is {0}\n", signal()))),
+        Timer(RP(title())),
+        Text(RP(format("Signal is {0}\n", signal()))),
 
         WHEN(signal() < 0) {
             Text("Signal is negative\n"),
