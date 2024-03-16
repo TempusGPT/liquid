@@ -1,9 +1,8 @@
 #include "include/app.hpp"
 #include "include/color.hpp"
 #include "include/input.hpp"
-#include "include/macro.hpp"
-#include "include/reactivity.hpp"
 #include "include/timer.hpp"
+#include "include/reactivity.hpp"
 
 #include <clocale>
 #include <ncurses.h>
@@ -14,12 +13,6 @@ namespace Liquid {
     static auto isDirty = true;
     static auto isActive = true;
     static auto currentPath = createSignal("/");
-
-    Element Route(const std::string &path, const Component<> &component) {
-        return WHEN(path == currentPath()) {
-            component(),
-        } END_WHEN;
-    }
 
     int render(const Element &element) {
         setlocale(LC_ALL, "");
@@ -43,6 +36,10 @@ namespace Liquid {
 
         endwin();
         return 0;
+    }
+
+    std::string pathname() {
+        return currentPath();
     }
 
     void navigate(const std::string &path) {

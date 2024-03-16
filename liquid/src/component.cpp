@@ -1,32 +1,10 @@
 #include "include/component.hpp"
+#include "include/macro.hpp"
+#include "include/app.hpp"
 
 #include <ncurses.h>
 
 namespace Liquid {
-    namespace Internal {
-        void onCleanup(const std::function<void()> &callback) {
-            Element::lastMounted->cleanupCallbacks.push_back(callback);
-        }
-    }
-
-    Element::Element(
-        const std::function<void(int, int)> &renderCallback
-    ) : renderCallback(renderCallback) {
-        lastMounted = this;
-    }
-
-    void Element::render(int x, int y) const {
-        renderCallback(x, y);
-    }
-
-    void Element::cleanup() const {
-        for (const auto &callback : cleanupCallbacks) {
-            callback();
-        }
-    }
-
-    Element *Element::lastMounted = nullptr;
-
     Element Goto(const Prop<int> &x, const Prop<int> &y) {
         return Element([=](int xOrigin, int yOrigin) {
             move(yOrigin + y(), xOrigin + x());
@@ -42,6 +20,12 @@ namespace Liquid {
                 element.render(x, y);
             }
         });
+    }
+
+    Element Route(const Prop<std::string> &path, const Prop<std::function<Element()>> &component) {
+        return WHEN(path() == pathname()) {
+            component()(),
+        } END_WHEN;
     }
 
     Element Text(

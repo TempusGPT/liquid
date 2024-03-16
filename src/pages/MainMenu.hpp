@@ -42,8 +42,8 @@ Element MainMenu() {
     });
 
     return Group({
-        Timer(RP(title())),
-        Text(RP(format("Signal is {0}\n", signal()))),
+        Timer(RP title() END_RP),
+        Text(RP format("Signal is {0}\n", signal()) END_RP),
 
         WHEN(signal() < 0) {
             Text("Signal is negative\n"),

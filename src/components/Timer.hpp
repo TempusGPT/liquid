@@ -12,7 +12,7 @@ Element Timer(const Prop<std::string> &title) {
         elapsed.set(elapsed() + 1);
     });
 
-    return Text(RP(format("{0}s in {1}\n", elapsed(), title())), Color::Black, Color::White);
+    return Text(RP format("{0}s in {1}\n", elapsed(), title()) END_RP, Color::Black, Color::White);
 }
 
 #endif

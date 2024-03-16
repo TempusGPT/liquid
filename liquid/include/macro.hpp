@@ -7,7 +7,14 @@
 #include <tuple>
 #include <vector>
 
-#define RP(value) Prop<decltype(value)>([=]() mutable { return value; })
+#define RP \
+    {      \
+        [=]() mutable { return
+
+#define END_RP \
+    ;          \
+    }          \
+    }
 
 #define WHEN(condition) \
     [=]() mutable {                                                                         \
@@ -16,61 +23,71 @@
         auto prevIndex = createSignal(-1);                                                  \
         const auto args = std::vector<std::tuple<Prop<bool>, Prop<std::vector<Element>>>> { \
             {                                                                               \
-                Prop<bool>([=]() mutable { return condition; }),                            \
-                Prop<std::vector<Element>>([=]() mutable { return std::vector<Element>
+                { [=]() mutable { return condition; } },                                    \
+                {                                                                           \
+                    [=]() mutable { return std::vector<Element>
 
-#define OR(condition)                                    \
-    ;                                                    \
-    })                                                   \
-    }                                                    \
-    ,                                                    \
-    {                                                    \
-        Prop<bool>([=]() mutable { return condition; }), \
-        Prop<std::vector<Element>>([=]() mutable { return std::vector<Element>
+#define OR(condition)                            \
+    ;                                            \
+    }                                            \
+    }                                            \
+    }                                            \
+    ,                                            \
+    {                                            \
+        { [=]() mutable { return condition; } }, \
+        {                                        \
+            [=]() mutable { return std::vector<Element>
 
 #define OTHERWISE \
     ;             \
-    })            \
+    }             \
+    }             \
     }             \
     ,             \
     {             \
-        true, Prop<std::vector<Element>>([=]() mutable { return std::vector<Element>
+        true,     \
+        {         \
+            [=]() mutable { return std::vector<Element>
 
-#define END_WHEN                                                                           \
-    ;                                                                                      \
-    })                                                                                     \
-    }                                                                                      \
-    ,                                                                                      \
-    {                                                                                      \
-        true, Prop<std::vector<Element>>([=]() mutable { return std::vector<Element>(); }) \
-    }                                                                                      \
-    }                                                                                      \
-    ;                                                                                      \
-    const auto cleanup = [=]() {                                                           \
-        for (const auto &element : untrack(elements)) {                                    \
-            element.cleanup();                                                             \
-        }                                                                                  \
-    };                                                                                     \
-    effect([=]() mutable {                                                                 \
-        auto index = 0;                                                                    \
-        for (const auto &arg : args) {                                                     \
-            if (std::get<0>(arg)()) {                                                      \
-                if (untrack(prevIndex) != index) {                                         \
-                    cleanup();                                                             \
-                    elements.set(std::get<1>(arg)());                                      \
-                    prevIndex.set(index);                                                  \
-                }                                                                          \
-                return;                                                                    \
-            }                                                                              \
-            index += 1;                                                                    \
-        }                                                                                  \
-    });                                                                                    \
-    return Element([=](int x, int y) mutable {                                             \
-        for (const auto &element : elements()) {                                           \
-            element.render(x, y);                                                          \
-        }                                                                                  \
-    });                                                                                    \
-    }                                                                                      \
+#define END_WHEN                                             \
+    ;                                                        \
+    }                                                        \
+    }                                                        \
+    }                                                        \
+    ,                                                        \
+    {                                                        \
+        true,                                                \
+        {                                                    \
+            [=]() mutable { return std::vector<Element>(); } \
+        }                                                    \
+    }                                                        \
+    }                                                        \
+    ;                                                        \
+    const auto cleanup = [=]() {                             \
+        for (const auto &element : untrack(elements)) {      \
+            element.cleanup();                               \
+        }                                                    \
+    };                                                       \
+    effect([=]() mutable {                                   \
+        auto index = 0;                                      \
+        for (const auto &arg : args) {                       \
+            if (std::get<0>(arg)()) {                        \
+                if (untrack(prevIndex) != index) {           \
+                    cleanup();                               \
+                    elements.set(std::get<1>(arg)());        \
+                    prevIndex.set(index);                    \
+                }                                            \
+                return;                                      \
+            }                                                \
+            index += 1;                                      \
+        }                                                    \
+    });                                                      \
+    return Element([=](int x, int y) mutable {               \
+        for (const auto &element : elements()) {             \
+            element.render(x, y);                            \
+        }                                                    \
+    });                                                      \
+    }                                                        \
     ()
 
 #define EACH(collection, item, index) \
