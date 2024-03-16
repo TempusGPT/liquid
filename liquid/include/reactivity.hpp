@@ -67,7 +67,7 @@ namespace Liquid {
         friend Signal<std::string> createSignal(const char *value);
 
     public:
-        T &operator()() {
+        T operator()() {
             const auto &currentEffect = Internal::EffectCore::getCurrent();
             const auto iter = std::find(effects->begin(), effects->end(), currentEffect);
 

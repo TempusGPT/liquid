@@ -34,7 +34,7 @@ namespace Liquid {
             if (isDirty) {
                 isDirty = false;
                 clear();
-                element.render();
+                element.render(0, 0);
                 refresh();
             }
 

@@ -37,7 +37,7 @@ Element MainMenu() {
         exitApp();
     });
 
-    return Div({
+    return Group({
         Timer(FN(title())),
         Text(FN(format("Signal is {0}\n", signal()))),
 

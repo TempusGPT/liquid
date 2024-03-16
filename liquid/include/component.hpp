@@ -16,14 +16,14 @@ namespace Liquid {
         friend void Internal::onCleanup(const std::function<void()> &callback);
 
     public:
-        Element(const std::function<void()> &renderCallback = nullptr);
+        Element(const std::function<void(int, int)> &renderCallback = nullptr);
 
-        void render() const;
+        void render(int x, int y) const;
         void cleanup() const;
 
     private:
         static Element *lastMounted;
-        std::function<void()> renderCallback;
+        std::function<void(int, int)> renderCallback;
         std::vector<std::function<void()>> cleanupCallbacks;
     };
 
@@ -32,20 +32,32 @@ namespace Liquid {
     public:
         Prop(const std::function<T()> &getter) : getter(getter) {}
         Prop(const T &value) : getter([=]() { return value; }) {}
-        Prop(const char *value) : getter([=]() { return std::string(value); }) {}
+
+        Prop(const char *value) {
+            const auto str = std::string(value);
+            getter = [=]() { return str; };
+        }
+
+        template <typename U>
+        Prop(const std::initializer_list<U> &value) {
+            const auto vec = std::vector<U>(value);
+            getter = [=]() { return vec; };
+        }
 
         T operator()() const {
             return getter();
         }
 
     private:
-        const std::function<T()> getter;
+        std::function<T()> getter;
     };
 
     template <typename... Props>
     using Component = std::function<Element(Props...)>;
 
-    Element Div(const std::vector<Element> &elements);
+    Element Goto(const Prop<int> &x, const Prop<int> &y);
+
+    Element Group(const Prop<std::vector<Element>> &elements);
 
     Element Text(
         const Prop<std::string> &value,

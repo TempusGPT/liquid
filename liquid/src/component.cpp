@@ -9,12 +9,14 @@ namespace Liquid {
         }
     }
 
-    Element::Element(const std::function<void()> &renderCallback) : renderCallback(renderCallback) {
+    Element::Element(
+        const std::function<void(int, int)> &renderCallback
+    ) : renderCallback(renderCallback) {
         lastMounted = this;
     }
 
-    void Element::render() const {
-        renderCallback();
+    void Element::render(int x, int y) const {
+        renderCallback(x, y);
     }
 
     void Element::cleanup() const {
@@ -25,10 +27,19 @@ namespace Liquid {
 
     Element *Element::lastMounted = nullptr;
 
-    Element Div(const std::vector<Element> &elements) {
-        return Element([=]() {
-            for (auto &element : elements) {
-                element.render();
+    Element Goto(const Prop<int> &x, const Prop<int> &y) {
+        return Element([=](int xOrigin, int yOrigin) {
+            move(yOrigin + y(), xOrigin + x());
+        });
+    }
+
+    Element Group(const Prop<std::vector<Element>> &elements) {
+        return Element([=](int, int) {
+            const auto x = getcurx(stdscr);
+            const auto y = getcury(stdscr);
+
+            for (auto &element : elements()) {
+                element.render(x, y);
             }
         });
     }
@@ -38,7 +49,7 @@ namespace Liquid {
         const Prop<Color> &foreground,
         const Prop<Color> &background
     ) {
-        return Element([=]() {
+        return Element([=](int, int) {
             Internal::enableColor(foreground(), background());
             printw("%s", value().c_str());
             Internal::disableColor(foreground(), background());
