@@ -12,7 +12,7 @@ Element MainMenu() {
     auto title = createSignal("MainMenu");
     auto numbers = createSignal<std::vector<int>>({ 1, 2 });
 
-    effect([=]() mutable {
+    effect([=]() {
         if (signal() == 0 && untrack(title) == "MainMenu!!!!!") {
             playBeep();
         }

@@ -67,7 +67,7 @@ namespace Liquid {
         friend Signal<std::string> createSignal(const char *value);
 
     public:
-        T operator()() {
+        T operator()() const {
             const auto &currentEffect = Internal::EffectCore::getCurrent();
             const auto iter = std::find(effects->begin(), effects->end(), currentEffect);
 
@@ -87,8 +87,8 @@ namespace Liquid {
         }
 
     private:
-        std::shared_ptr<T> value;
-        std::shared_ptr<std::vector<Internal::EffectCore>> effects;
+        const std::shared_ptr<T> value;
+        const std::shared_ptr<std::vector<Internal::EffectCore>> effects;
 
         Signal(const T &value)
             : value(std::make_shared<T>(value)),
