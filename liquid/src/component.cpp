@@ -23,7 +23,7 @@ namespace Liquid {
     }
 
     Element Route(const Prop<std::string> &path, const Prop<std::function<Element()>> &component) {
-        return WHEN(path() == pathname()) {
+        return WHEN(path() == Liquid::path()) {
             component()(),
         } END_WHEN;
     }

@@ -8,10 +8,10 @@
 namespace Liquid {
     int render(const Element &element);
 
-    std::string pathname();
+    std::string path();
     void navigate(const std::string &path);
-    void exitApp();
-    void playBeep();
+    void exit();
+    void beep();
 
     namespace Internal {
         void markDirty();

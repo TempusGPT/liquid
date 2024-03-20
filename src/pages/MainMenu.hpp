@@ -14,7 +14,7 @@ Element MainMenu() {
 
     effect([=]() {
         if (signal() == 0 && untrack(title) == "MainMenu!!!!!") {
-            playBeep();
+            beep();
         }
     });
 
@@ -37,7 +37,7 @@ Element MainMenu() {
     });
 
     bindInput({ Key::Q, Key::Enter }, []() {
-        exitApp();
+        exit();
     });
 
     return Group({

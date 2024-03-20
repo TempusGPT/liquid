@@ -38,7 +38,7 @@ namespace Liquid {
         return 0;
     }
 
-    std::string pathname() {
+    std::string path() {
         return currentPath();
     }
 
@@ -46,12 +46,12 @@ namespace Liquid {
         currentPath.set(path);
     }
 
-    void exitApp() {
+    void exit() {
         isActive = false;
     }
 
-    void playBeep() {
-        beep();
+    void beep() {
+        ::beep();
     }
 
     namespace Internal {
