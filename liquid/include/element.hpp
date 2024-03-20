@@ -27,16 +27,40 @@ namespace Liquid {
         std::vector<std::function<void()>> cleanupCallbacks;
     };
 
-    // TODO: Enhance props
     template <typename T>
     class Prop {
     public:
-        Prop(const std::function<T()> &getter) : getter(getter) {}
-        Prop(const T &value) : getter([=]() { return value; }) {}
+        Prop(T &&value) {
+            getter = [=]() { return value; };
+        }
 
-        Prop(const char *value) {
-            const auto str = std::string(value);
-            getter = [=]() { return str; };
+        template <typename Fn>
+        Prop(
+            Fn &&fn,
+            typename std::enable_if<std::is_convertible<
+                typename std::result_of<Fn()>::type,
+                T>::value>::type * = nullptr
+        ) {
+            getter = fn;
+        }
+
+        template <typename Arg>
+        Prop(
+            Arg &&arg,
+            typename std::enable_if<std::is_convertible<Arg, T>::value>::type * = nullptr
+        ) {
+            const auto value = T(std::forward<Arg>(arg));
+            getter = [=]() { return value; };
+        }
+
+        template <typename Arg>
+        Prop(
+            std::initializer_list<Arg> &&list,
+            typename std::enable_if<
+                std::is_convertible<std::initializer_list<Arg>, T>::value>::type * = nullptr
+        ) {
+            const auto value = T(std::forward<std::initializer_list<Arg>>(list));
+            getter = [=]() { return value; };
         }
 
         T operator()() const {
@@ -45,39 +69,6 @@ namespace Liquid {
 
     private:
         std::function<T()> getter;
-    };
-
-    template <typename T>
-    class Prop<std::vector<T>> {
-    public:
-        Prop(const std::function<std::vector<T>()> &getter) : getter(getter) {}
-
-        Prop(const std::initializer_list<T> &value) {
-            const auto vec = std::vector<T>(value);
-            getter = [=]() { return vec; };
-        }
-
-        std::vector<T> operator()() const {
-            return getter();
-        }
-
-    private:
-        std::function<std::vector<T>()> getter;
-    };
-
-    template <typename T, typename... Args>
-    class Prop<std::function<T(Args...)>> {
-    public:
-        Prop(const std::function<std::function<T(Args...)>> &getter) : getter(getter) {}
-        Prop(const std::function<T(Args...)> &value) : getter([=]() { return value; }) {}
-        Prop(T (*value)(Args...)) : getter([=]() { return value; }) {}
-
-        std::function<T(Args...)> operator()() const {
-            return getter();
-        }
-
-    private:
-        std::function<std::function<T(Args...)>()> getter;
     };
 }
 

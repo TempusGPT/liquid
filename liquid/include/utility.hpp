@@ -10,7 +10,7 @@ namespace Liquid {
         void format(std::string &fmt, int index);
 
         template <typename T, typename... TArgs>
-        void format(std::string &fmt, int index, const T &value, const TArgs &...args) {
+        void format(std::string &fmt, int index, const T &value, TArgs &&...args) {
             auto oldValue = "{" + std::to_string(index) + "}";
             auto newValue = (std::ostringstream() << value).str();
             replaceAll(fmt, oldValue, newValue);
@@ -19,7 +19,7 @@ namespace Liquid {
     }
 
     template <typename... TArgs>
-    std::string format(const std::string &fmt, const TArgs &...args) {
+    std::string format(const std::string &fmt, TArgs &&...args) {
         auto mutableFmt = fmt;
         Internal::format(mutableFmt, 0, args...);
         return mutableFmt;

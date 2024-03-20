@@ -10,7 +10,7 @@ Element MainMenu() {
     auto effect = createEffect();
     auto signal = createSignal(0);
     auto title = createSignal("MainMenu");
-    auto numbers = createSignal(std::vector<int> { 1, 2 });
+    auto numbers = createSignal<std::vector<int>>({ 1, 2 });
 
     effect([=]() mutable {
         if (signal() == 0 && untrack(title) == "MainMenu!!!!!") {

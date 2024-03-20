@@ -65,6 +65,13 @@
         "set": "cpp",
         "memory": "cpp",
         "memory_resource": "cpp",
-        "regex": "cpp"
+        "regex": "cpp",
+        "utility": "cpp",
+        "__availability": "cpp",
+        "version": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "chrono": "cpp",
+        "compare": "cpp"
     }
 }
