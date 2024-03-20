@@ -5,25 +5,32 @@
 #include <string>
 
 namespace Liquid {
-    namespace Internal {
-        void replaceAll(std::string &str, const std::string &oldValue, const std::string &newValue);
-        void format(std::string &fmt, int index);
+    class StringFormatter {
+    public:
+        StringFormatter(const std::string &fmt);
+        operator std::string() const;
 
-        template <typename T, typename... TArgs>
-        void format(std::string &fmt, int index, const T &value, TArgs &&...args) {
-            auto oldValue = "{" + std::to_string(index) + "}";
-            auto newValue = (std::ostringstream() << value).str();
-            replaceAll(fmt, oldValue, newValue);
-            format(fmt, index + 1, args...);
+        template <typename T>
+        StringFormatter &operator%(T &&value) {
+            const auto oldValue = '%' + std::to_string(index) + '%';
+            const auto newValue = (std::ostringstream() << value).str();
+            auto pos = 0;
+
+            while (std::string::npos != (pos = fmt.find(oldValue, pos))) {
+                fmt.replace(pos, oldValue.length(), newValue);
+                pos += newValue.length();
+            }
+
+            index += 1;
+            return *this;
         }
-    }
 
-    template <typename... TArgs>
-    std::string format(const std::string &fmt, TArgs &&...args) {
-        auto mutableFmt = fmt;
-        Internal::format(mutableFmt, 0, args...);
-        return mutableFmt;
-    }
+    private:
+        int index = 0;
+        std::string fmt;
+    };
+
+    StringFormatter operator"" _f(const char *fmt, size_t);
 }
 
 #endif

@@ -3,15 +3,13 @@
 #include <iostream>
 
 namespace Liquid {
-    namespace Internal {
-        void replaceAll(std::string &str, const std::string &oldValue, const std::string &newValue) {
-            auto pos = 0;
-            while (std::string::npos != (pos = str.find(oldValue, pos))) {
-                str.replace(pos, oldValue.length(), newValue);
-                pos += newValue.length();
-            }
-        }
+    StringFormatter::StringFormatter(const std::string &fmt) : fmt(fmt) {}
 
-        void format(std::string &fmt, int index) {}
+    StringFormatter::operator std::string() const {
+        return fmt;
+    }
+
+    StringFormatter operator"" _f(const char *fmt, size_t) {
+        return StringFormatter(fmt);
     }
 }

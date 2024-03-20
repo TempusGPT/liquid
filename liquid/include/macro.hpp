@@ -7,11 +7,7 @@
 #include <tuple>
 #include <vector>
 
-#define RP [=]() mutable { return
-
-#define END_RP \
-    ;          \
-    }
+#define FN(expr) [=]() mutable { return expr; }
 
 #define WHEN(condition) \
     [=]() mutable {                                                                         \

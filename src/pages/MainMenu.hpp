@@ -42,8 +42,8 @@ Element MainMenu() {
     });
 
     return Group({
-        Timer(RP title() END_RP),
-        Text(RP format("Signal is {0}\n", signal()) END_RP),
+        Timer(FN(title())),
+        Text(FN("Signal is %0%\n"_f % signal())),
 
         WHEN(signal() < 0) {
             Text("Signal is negative\n"),
@@ -55,7 +55,7 @@ Element MainMenu() {
 
         Text("\n"),
         EACH(numbers(), n, i) {
-            Text(format("{0}th Number is {1}\n", i, n)),
+            Text("%0%th Number is %1%\n"_f % i % n),
         } END_EACH,
     });
 }
