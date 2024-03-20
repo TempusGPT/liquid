@@ -3,7 +3,7 @@
 #include <ncurses.h>
 
 namespace Liquid {
-    short colorAttribute(const Color foreground, const Color background) {
+    short colorAttribute(Color foreground, Color background) {
         auto const lhs = static_cast<int>(foreground) * 10;
         auto const rhs = static_cast<int>(background);
         return lhs + rhs;
@@ -24,11 +24,11 @@ namespace Liquid {
             }
         }
 
-        void enableColor(const Color foreground, const Color background) {
+        void enableColor(Color foreground, Color background) {
             attron(COLOR_PAIR(colorAttribute(foreground, background)));
         }
 
-        void disableColor(const Color foreground, const Color background) {
+        void disableColor(Color foreground, Color background) {
             attroff(COLOR_PAIR(colorAttribute(foreground, background)));
         }
     }

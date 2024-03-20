@@ -32,8 +32,7 @@ Element MainMenu() {
 
     bindInput({ Key::RightArrow }, [=]() mutable {
         auto newNumbers = numbers();
-        const auto last = newNumbers[numbers().size() - 1];
-        newNumbers.push_back(last * 2);
+        newNumbers.push_back(newNumbers.back() * 2);
         numbers.set(newNumbers);
     });
 

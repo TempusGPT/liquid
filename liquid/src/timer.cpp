@@ -18,7 +18,7 @@ namespace Liquid {
         std::chrono::milliseconds delay;
         std::chrono::steady_clock::time_point invokeAt;
 
-        Timer(const bool willRepeat, const int delay, const std::function<void()> &callback)
+        Timer(bool willRepeat, int delay, const std::function<void()> &callback)
             : id(newId++), willRepeat(willRepeat), callback(callback) {
             const auto now = std::chrono::steady_clock::now();
             const auto chronoDelay = std::chrono::milliseconds(delay);
@@ -31,21 +31,21 @@ namespace Liquid {
     std::priority_queue<Timer, std::vector<Timer>, Timer::Comparator> Timer::queue = {};
     int Timer::newId = 1;
 
-    int setTimeout(const int delay, const std::function<void()> &callback) {
+    int setTimeout(int delay, const std::function<void()> &callback) {
         const auto timer = Timer(false, delay, callback);
         Timer::queue.push(timer);
         Timer::idSet.insert(timer.id);
         return timer.id;
     }
 
-    int setInterval(const int delay, const std::function<void()> &callback) {
+    int setInterval(int delay, const std::function<void()> &callback) {
         const auto timer = Timer(true, delay, callback);
         Timer::queue.push(timer);
         Timer::idSet.insert(timer.id);
         return timer.id;
     }
 
-    void clearTimer(const int id) {
+    void clearTimer(int id) {
         Timer::idSet.erase(id);
     }
 
