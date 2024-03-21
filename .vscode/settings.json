@@ -72,6 +72,7 @@
         "fstream": "cpp",
         "iomanip": "cpp",
         "chrono": "cpp",
-        "compare": "cpp"
+        "compare": "cpp",
+        "map": "cpp"
     }
 }

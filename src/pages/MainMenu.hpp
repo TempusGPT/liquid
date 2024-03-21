@@ -7,6 +7,7 @@
 using namespace Liquid;
 
 Element MainMenu() {
+    auto input = createInput();
     auto effect = createEffect();
     auto signal = createSignal(0);
     auto title = createSignal("MainMenu");
@@ -18,25 +19,25 @@ Element MainMenu() {
         }
     });
 
-    bindInput({ Key::UpArrow }, [=]() mutable {
+    input({ Key::UpArrow }, [=]() mutable {
         signal.set(signal() + 1);
     });
 
-    bindInput({ Key::DownArrow }, [=]() mutable {
+    input({ Key::DownArrow }, [=]() mutable {
         signal.set(signal() - 1);
     });
 
-    bindInput({ Key::LeftArrow }, [=]() mutable {
+    input({ Key::LeftArrow }, [=]() mutable {
         title.set(title() + "!");
     });
 
-    bindInput({ Key::RightArrow }, [=]() mutable {
+    input({ Key::RightArrow }, [=]() mutable {
         auto newNumbers = numbers();
         newNumbers.push_back(newNumbers.back() * 2);
         numbers.set(newNumbers);
     });
 
-    bindInput({ Key::Q, Key::Enter }, []() {
+    input({ Key::Q, Key::Enter }, []() {
         exit();
     });
 

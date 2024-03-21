@@ -81,7 +81,20 @@ namespace Liquid {
         RightArrow,
     };
 
-    void bindInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback);
+    class InputHandler;
+
+    InputHandler createInput();
+
+    class InputHandler {
+        friend InputHandler Liquid::createInput();
+
+    public:
+        ~InputHandler();
+        void operator()(const std::vector<Key> &keys, const std::function<void()> &callback);
+
+    private:
+        std::vector<int> ids;
+    };
 
     namespace Internal {
         void initializeInput();

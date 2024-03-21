@@ -1,5 +1,7 @@
 #include "include/input.hpp"
+#include "include/element.hpp"
 
+#include <algorithm>
 #include <ncurses.h>
 #include <unordered_map>
 
@@ -135,11 +137,38 @@ namespace Liquid {
         { KEY_SRIGHT, Key::RightArrow },
     };
 
-    static auto inputCallbacks = std::unordered_multimap<Key, std::function<void()>>();
+    struct Input {
+        int id;
+        std::function<void()> callback;
+    };
 
-    void bindInput(const std::initializer_list<Key> &keys, const std::function<void()> &callback) {
-        for (const auto &key : keys) {
-            inputCallbacks.insert({ key, callback });
+    static auto inputId = 0;
+    static auto inputMap = std::unordered_multimap<Key, Input>();
+
+    InputHandler createInput() {
+        return InputHandler();
+    }
+
+    InputHandler::~InputHandler() {
+        for (const auto id : ids) {
+            Internal::onCleanup([=]() {
+                for (auto it = inputMap.begin(); it != inputMap.end();) {
+                    it->second.id == id
+                        ? it = inputMap.erase(it)
+                        : ++it;
+                }
+            });
+        }
+    }
+
+    void InputHandler::operator()(
+        const std::vector<Key> &keys,
+        const std::function<void()> &callback
+    ) {
+        for (const auto key : keys) {
+            const auto id = inputId++;
+            inputMap.insert({ key, { id, callback } });
+            ids.push_back(id);
         }
     }
 
@@ -157,10 +186,9 @@ namespace Liquid {
                 return;
             }
 
-            for (const auto &callback : inputCallbacks) {
-                if (callback.first == key->second) {
-                    callback.second();
-                }
+            const auto range = inputMap.equal_range(key->second);
+            for (auto it = range.first; it != range.second; ++it) {
+                it->second.callback();
             }
         }
     }
