@@ -52,17 +52,15 @@ namespace Liquid {
     namespace Internal {
         void processTimer() {
             const auto now = std::chrono::steady_clock::now();
-            if (timerSet.empty() || timerSet.begin()->invokeAt > now) {
-                return;
-            }
+            while (!timerSet.empty() && timerSet.begin()->invokeAt <= now) {
+                auto timer = *timerSet.begin();
+                timerSet.erase(timer);
+                timer.callback();
 
-            auto timer = *timerSet.begin();
-            timerSet.erase(timer);
-            timer.callback();
-
-            if (timer.willRepeat) {
-                timer.invokeAt += timer.delay;
-                timerSet.insert(timer);
+                if (timer.willRepeat) {
+                    timer.invokeAt += timer.delay;
+                    timerSet.insert(timer);
+                }
             }
         }
     }
