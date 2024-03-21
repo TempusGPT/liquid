@@ -82,7 +82,6 @@ namespace Liquid {
     };
 
     class InputHandler;
-
     InputHandler createInput();
 
     class InputHandler {

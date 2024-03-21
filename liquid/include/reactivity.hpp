@@ -4,39 +4,29 @@
 #include "app.hpp"
 
 #include <functional>
+#include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace Liquid {
     namespace Internal {
-        class EffectCore {
-        public:
-            EffectCore();
-            EffectCore(const std::function<void()> &callback);
-
-            static EffectCore &getCurrent();
-
-            void run() const;
-            bool operator==(const EffectCore &other) const;
-            operator bool() const;
-
-        private:
-            static EffectCore current;
-            static int newId;
-
+        struct Effect {
             int id;
             std::function<void()> callback;
         };
+
+        Effect currentEffect();
     }
 
-    class Effect;
-    Effect createEffect();
+    class EffectHandler;
+    EffectHandler createEffect();
 
-    class Effect {
-        friend Effect createEffect();
+    class EffectHandler {
+        friend EffectHandler createEffect();
 
     public:
-        ~Effect();
+        ~EffectHandler();
         void operator()(const std::function<void()> &callback);
         void cleanup(const std::function<void()> &callback);
 
@@ -68,12 +58,11 @@ namespace Liquid {
 
     public:
         T operator()() const {
-            const auto &currentEffect = Internal::EffectCore::getCurrent();
-            const auto iter = std::find(effects->begin(), effects->end(), currentEffect);
-
-            if (currentEffect && iter == effects->end()) {
-                effects->push_back(currentEffect);
+            const auto effect = Internal::currentEffect();
+            if (effect.callback && effectMap->find(effect.id) == effectMap->end()) {
+                effectMap->insert({ effect.id, effect.callback });
             }
+
             return *value;
         }
 
@@ -81,18 +70,18 @@ namespace Liquid {
             Internal::markDirty();
             *value = newValue;
 
-            for (auto effect : *effects) {
-                effect.run();
+            for (const auto &effect : *effectMap) {
+                effect.second();
             }
         }
 
     private:
         const std::shared_ptr<T> value;
-        const std::shared_ptr<std::vector<Internal::EffectCore>> effects;
+        const std::shared_ptr<std::map<int, std::function<void()>>> effectMap;
 
         Signal(const T &value)
             : value(std::make_shared<T>(value)),
-              effects(std::make_shared<std::vector<Internal::EffectCore>>()) {}
+              effectMap(std::make_shared<std::map<int, std::function<void()>>>()) {}
     };
 }
 
