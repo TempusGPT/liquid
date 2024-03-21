@@ -5,16 +5,16 @@ namespace Liquid {
     static auto effectCallback = std::function<void()>();
 
     namespace Internal {
-        Effect currentEffect() {
+        EffectData currentEffect() {
             return { effectId, effectCallback };
         }
     }
 
-    EffectHandler createEffect() {
-        return EffectHandler();
+    Effect createEffect() {
+        return Effect();
     }
 
-    EffectHandler::~EffectHandler() {
+    Effect::~Effect() {
         for (const auto &callback : callbacks) {
             if (!callback) {
                 continue;
@@ -31,11 +31,11 @@ namespace Liquid {
         }
     }
 
-    void EffectHandler::operator()(const std::function<void()> &callback) {
+    void Effect::operator()(const std::function<void()> &callback) {
         callbacks.push_back(callback);
     }
 
-    void EffectHandler::cleanup(const std::function<void()> &callback) {
+    void Effect::cleanup(const std::function<void()> &callback) {
         cleanupCallbacks.push_back(callback);
     }
 

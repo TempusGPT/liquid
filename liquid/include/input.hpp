@@ -2,7 +2,7 @@
 #define LIQUID_INPUT_HPP
 
 #include <functional>
-#include <initializer_list>
+#include <vector>
 
 namespace Liquid {
     enum class Key {
@@ -81,14 +81,14 @@ namespace Liquid {
         RightArrow,
     };
 
-    class InputHandler;
-    InputHandler createInput();
+    class Input;
+    Input createInput();
 
-    class InputHandler {
-        friend InputHandler Liquid::createInput();
+    class Input {
+        friend Input Liquid::createInput();
 
     public:
-        ~InputHandler();
+        ~Input();
         void operator()(const std::vector<Key> &keys, const std::function<void()> &callback);
 
     private:

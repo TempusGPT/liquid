@@ -11,22 +11,22 @@
 
 namespace Liquid {
     namespace Internal {
-        struct Effect {
+        struct EffectData {
             int id;
             std::function<void()> callback;
         };
 
-        Effect currentEffect();
+        EffectData currentEffect();
     }
 
-    class EffectHandler;
-    EffectHandler createEffect();
+    class Effect;
+    Effect createEffect();
 
-    class EffectHandler {
-        friend EffectHandler createEffect();
+    class Effect {
+        friend Effect createEffect();
 
     public:
-        ~EffectHandler();
+        ~Effect();
         void operator()(const std::function<void()> &callback);
         void cleanup(const std::function<void()> &callback);
 

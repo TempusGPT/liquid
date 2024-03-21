@@ -137,19 +137,19 @@ namespace Liquid {
         { KEY_SRIGHT, Key::RightArrow },
     };
 
-    struct Input {
+    struct InputData {
         int id;
         std::function<void()> callback;
     };
 
     static auto inputId = 0;
-    static auto inputMap = std::unordered_multimap<Key, Input>();
+    static auto inputMap = std::unordered_multimap<Key, InputData>();
 
-    InputHandler createInput() {
-        return InputHandler();
+    Input createInput() {
+        return Input();
     }
 
-    InputHandler::~InputHandler() {
+    Input::~Input() {
         for (const auto id : ids) {
             Internal::onCleanup([=]() {
                 for (auto it = inputMap.begin(); it != inputMap.end();) {
@@ -161,7 +161,7 @@ namespace Liquid {
         }
     }
 
-    void InputHandler::operator()(
+    void Input::operator()(
         const std::vector<Key> &keys,
         const std::function<void()> &callback
     ) {
