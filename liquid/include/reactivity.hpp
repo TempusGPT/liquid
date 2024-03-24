@@ -12,6 +12,7 @@
 namespace Liquid {
     namespace Internal {
         std::pair<int, std::function<void()>> currentEffect();
+        void runEffect(int id, const std::function<void()> &callback);
     }
 
     void createEffect(const std::function<void()> &callback);
@@ -52,7 +53,7 @@ namespace Liquid {
             *value = newValue;
 
             for (const auto &effect : *effectMap) {
-                effect.second();
+                Internal::runEffect(effect.first, effect.second);
             }
         }
 
