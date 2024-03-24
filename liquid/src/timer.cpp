@@ -1,10 +1,11 @@
 #include "include/timer.hpp"
 
+#include <chrono>
 #include <set>
 
 namespace Liquid {
     struct Timer;
-    static auto timerSet = std::multiset<Timer>();
+    static auto timerSet = std::set<Timer>();
     static auto timerId = 0;
 
     struct Timer {
@@ -23,7 +24,7 @@ namespace Liquid {
         }
 
         bool operator<(const Timer &other) const {
-            return invokeAt < other.invokeAt;
+            return invokeAt == other.invokeAt ? id < other.id : invokeAt < other.invokeAt;
         }
     };
 

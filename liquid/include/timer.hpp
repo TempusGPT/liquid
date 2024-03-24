@@ -1,10 +1,7 @@
 #ifndef LIQUID_TIMER_HPP
 #define LIQUID_TIMER_HPP
 
-#include <chrono>
 #include <functional>
-#include <queue>
-#include <unordered_set>
 
 namespace Liquid {
     int setTimeout(int delay, const std::function<void()> &callback);
