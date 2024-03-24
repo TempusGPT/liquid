@@ -1,5 +1,5 @@
-#include "lifecycle.hpp"
-#include "element.hpp"
+#include "include/lifecycle.hpp"
+#include "include/element.hpp"
 
 namespace Liquid {
     Lifecycle useLifecycle() {

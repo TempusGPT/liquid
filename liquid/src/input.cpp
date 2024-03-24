@@ -151,7 +151,7 @@ namespace Liquid {
     }
 
     Input::~Input() {
-        auto idSet = this->idSet;
+        const auto idSet = this->idSet;
         Internal::onCleanup([=]() {
             garbageSet.insert(idSet.begin(), idSet.end());
         });
