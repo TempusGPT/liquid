@@ -11,29 +11,10 @@
 
 namespace Liquid {
     namespace Internal {
-        struct EffectData {
-            int id;
-            std::function<void()> callback;
-        };
-
-        EffectData currentEffect();
+        std::pair<int, std::function<void()>> currentEffect();
     }
 
-    class Effect;
-    Effect createEffect();
-
-    class Effect {
-        friend Effect createEffect();
-
-    public:
-        ~Effect();
-        void operator()(const std::function<void()> &callback);
-        void cleanup(const std::function<void()> &callback);
-
-    private:
-        std::vector<std::function<void()>> callbacks;
-        std::vector<std::function<void()>> cleanupCallbacks;
-    };
+    void createEffect(const std::function<void()> &callback);
 
     template <typename T>
     class Signal;
@@ -59,8 +40,8 @@ namespace Liquid {
     public:
         T operator()() const {
             const auto effect = Internal::currentEffect();
-            if (effect.callback && effectMap->find(effect.id) == effectMap->end()) {
-                effectMap->insert({ effect.id, effect.callback });
+            if (effect.second && effectMap->find(effect.first) == effectMap->end()) {
+                effectMap->insert(effect);
             }
 
             return *value;
