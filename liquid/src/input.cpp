@@ -146,7 +146,7 @@ namespace Liquid {
     static auto inputMap = std::unordered_multimap<Key, InputData>();
     static auto garbageSet = std::unordered_set<int>();
 
-    Input createInput() {
+    Input useInput() {
         return Input();
     }
 

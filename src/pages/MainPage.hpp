@@ -6,8 +6,7 @@
 using namespace Liquid;
 
 Element MainPage() {
-    auto input = createInput();
-    auto effect = createEffect();
+    auto input = useInput();
 
     input({ Key::Enter }, []() {
         beep();

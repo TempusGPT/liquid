@@ -83,10 +83,10 @@ namespace Liquid {
     };
 
     class Input;
-    Input createInput();
+    Input useInput();
 
     class Input {
-        friend Input Liquid::createInput();
+        friend Input Liquid::useInput();
 
     public:
         ~Input();
