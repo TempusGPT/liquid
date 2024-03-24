@@ -11,12 +11,10 @@ namespace Liquid {
     }
 
     void createEffect(const std::function<void()> &callback) {
-        if (callback) {
-            effectCallback = callback;
-            callback();
-            effectCallback = nullptr;
-            effectId += 1;
-        }
+        effectCallback = callback;
+        callback();
+        effectCallback = nullptr;
+        effectId += 1;
     }
 
     Signal<std::string> createSignal(const char *value) {
