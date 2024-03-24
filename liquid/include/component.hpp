@@ -2,6 +2,7 @@
 #define LIQUID_COMPONENT_HPP
 
 #include "element.hpp"
+#include "prop.hpp"
 
 namespace Liquid {
     Element Goto(const Prop<int> &x, const Prop<int> &y);
