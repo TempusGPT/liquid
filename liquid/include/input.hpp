@@ -3,6 +3,7 @@
 
 #include <functional>
 #include <vector>
+#include <unordered_set>
 
 namespace Liquid {
     enum class Key {
@@ -92,7 +93,7 @@ namespace Liquid {
         void operator()(const std::vector<Key> &keys, const std::function<void()> &callback);
 
     private:
-        std::vector<int> ids;
+        std::unordered_set<int> idSet;
     };
 
     namespace Internal {

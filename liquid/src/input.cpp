@@ -1,8 +1,8 @@
 #include "include/input.hpp"
 #include "include/element.hpp"
 
-#include <algorithm>
 #include <ncurses.h>
+#include <queue>
 #include <unordered_map>
 
 namespace Liquid {
@@ -144,21 +144,17 @@ namespace Liquid {
 
     static auto inputId = 0;
     static auto inputMap = std::unordered_multimap<Key, InputData>();
+    static auto garbageSet = std::unordered_set<int>();
 
     Input createInput() {
         return Input();
     }
 
     Input::~Input() {
-        for (const auto id : ids) {
-            Internal::onCleanup([=]() {
-                for (auto it = inputMap.begin(); it != inputMap.end();) {
-                    it->second.id == id
-                        ? it = inputMap.erase(it)
-                        : ++it;
-                }
-            });
-        }
+        auto idSet = this->idSet;
+        Internal::onCleanup([=]() {
+            garbageSet.insert(idSet.begin(), idSet.end());
+        });
     }
 
     void Input::operator()(
@@ -168,7 +164,7 @@ namespace Liquid {
         for (const auto key : keys) {
             const auto id = inputId++;
             inputMap.insert({ key, { id, callback } });
-            ids.push_back(id);
+            idSet.insert(id);
         }
     }
 
@@ -189,6 +185,15 @@ namespace Liquid {
             const auto range = inputMap.equal_range(key->second);
             for (auto it = range.first; it != range.second; ++it) {
                 it->second.callback();
+            }
+
+            for (auto it = inputMap.begin(); it != inputMap.end();) {
+                if (garbageSet.find(it->second.id) != garbageSet.end()) {
+                    garbageSet.erase(it->second.id);
+                    it = inputMap.erase(it);
+                } else {
+                    ++it;
+                }
             }
         }
     }
