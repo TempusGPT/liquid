@@ -12,6 +12,26 @@ struct Vector {
     Vector operator-(const Vector &other) const {
         return { x - other.x, y - other.y };
     }
+
+    static Vector zero() {
+        return { 0, 0 };
+    }
+
+    static Vector up() {
+        return { 0, -1 };
+    }
+
+    static Vector down() {
+        return { 0, 1 };
+    }
+
+    static Vector left() {
+        return { -1, 0 };
+    }
+
+    static Vector right() {
+        return { 1, 0 };
+    }
 };
 
 #endif

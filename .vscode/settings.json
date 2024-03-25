@@ -74,6 +74,7 @@
         "chrono": "cpp",
         "compare": "cpp",
         "map": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "list": "cpp"
     }
 }

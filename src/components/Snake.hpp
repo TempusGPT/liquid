@@ -11,22 +11,22 @@ using namespace Liquid;
 Element Snake() {
     auto input = useInput();
     auto snake = createSignal<std::list<Vector>>({ { 2, 0 }, { 1, 0 }, { 0, 0 } });
-    auto direction = createSignal<Vector>({ 1, 0 });
+    auto direction = createSignal(Vector::right());
 
     input.bind({ Key::UpArrow }, [=]() mutable {
-        direction.set({ 0, -1 });
+        direction.set(Vector::up());
     });
 
     input.bind({ Key::DownArrow }, [=]() mutable {
-        direction.set({ 0, 1 });
+        direction.set(Vector::down());
     });
 
     input.bind({ Key::LeftArrow }, [=]() mutable {
-        direction.set({ -1, 0 });
+        direction.set(Vector::left());
     });
 
     input.bind({ Key::RightArrow }, [=]() mutable {
-        direction.set({ 1, 0 });
+        direction.set(Vector::right());
     });
 
     setInterval(200, [=]() mutable {
