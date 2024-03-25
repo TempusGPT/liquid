@@ -6,8 +6,8 @@
 
 using namespace Liquid;
 
-int main() {
-    const auto element = Group({
+auto main() -> int {
+    auto element = Group({
         Route("/", MainPage),
         Route("/play", PlayPage),
     });

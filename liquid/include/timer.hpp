@@ -4,12 +4,12 @@
 #include <functional>
 
 namespace Liquid {
-    int setTimeout(int delay, const std::function<void()> &callback);
-    int setInterval(int delay, const std::function<void()> &callback);
-    void clearTimer(int id);
+    auto setTimeout(int delay, const std::function<void()>& callback) -> int;
+    auto setInterval(int delay, const std::function<void()>& callback) -> int;
+    auto clearTimer(int id) -> void;
 
     namespace Internal {
-        void processTimer();
+        auto processTimer() -> void;
     }
 }
 

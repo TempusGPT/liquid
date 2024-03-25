@@ -2,8 +2,8 @@
 #define LIQUID_INPUT_HPP
 
 #include <functional>
-#include <vector>
 #include <unordered_set>
+#include <vector>
 
 namespace Liquid {
     enum class Key {
@@ -83,22 +83,22 @@ namespace Liquid {
     };
 
     class Input;
-    Input useInput();
+    auto useInput() -> Input;
 
     class Input {
-        friend Input Liquid::useInput();
+        friend auto Liquid::useInput() -> Input;
 
     public:
         ~Input();
-        void bind(const std::vector<Key> &keys, const std::function<void()> &callback);
+        auto bind(const std::vector<Key>& keys, const std::function<void()>& callback) -> void;
 
     private:
         std::unordered_set<int> idSet;
     };
 
     namespace Internal {
-        void initializeInput();
-        void processInput();
+        auto initializeInput() -> void;
+        auto processInput() -> void;
     }
 }
 

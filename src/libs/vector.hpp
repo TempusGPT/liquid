@@ -5,42 +5,39 @@ struct Vector {
     int x;
     int y;
 
-    Vector() : x(0), y(0) {}
-    Vector(int x, int y) : x(x), y(y) {}
-
-    Vector operator+(const Vector &other) const {
+    auto operator+(const Vector& other) const -> Vector {
         return { x + other.x, y + other.y };
     }
 
-    Vector operator-(const Vector &other) const {
+    auto operator-(const Vector& other) const -> Vector {
         return { x - other.x, y - other.y };
     }
 
-    bool operator==(const Vector &other) const {
+    auto operator==(const Vector& other) const -> bool {
         return x == other.x && y == other.y;
     }
 
-    bool operator!=(const Vector &other) const {
+    auto operator!=(const Vector& other) const -> bool {
         return x != other.x || y != other.y;
     }
 
-    static Vector zero() {
+    static auto zero() -> Vector {
         return { 0, 0 };
     }
 
-    static Vector up() {
+    static auto up() -> Vector {
         return { 0, -1 };
     }
 
-    static Vector down() {
+    static auto down() -> Vector {
         return { 0, 1 };
     }
 
-    static Vector left() {
+    static auto left() -> Vector {
         return { -1, 0 };
     }
 
-    static Vector right() {
+    static auto right() -> Vector {
         return { 1, 0 };
     }
 };

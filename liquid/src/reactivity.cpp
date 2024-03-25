@@ -6,11 +6,11 @@ namespace Liquid {
     static auto currentCallback = std::function<void()>();
 
     namespace Internal {
-        std::pair<int, std::function<void()>> currentEffect() {
+        auto currentEffect() -> std::tuple<int, std::function<void()>> {
             return { currentId, currentCallback };
         }
 
-        void runEffect(int id, const std::function<void()> &callback) {
+        auto runEffect(int id, const std::function<void()>& callback) -> void {
             currentId = id;
             currentCallback = callback;
             callback();
@@ -18,11 +18,11 @@ namespace Liquid {
         }
     }
 
-    void createEffect(const std::function<void()> &callback) {
+    auto createEffect(const std::function<void()>& callback) -> void {
         Internal::runEffect(effectId++, callback);
     }
 
-    Signal<std::string> createSignal(const char *value) {
+    auto createSignal(const char* value) -> Signal<std::string> {
         return Signal<std::string>(value);
     }
 }

@@ -11,49 +11,49 @@
 
 namespace Liquid {
     namespace Internal {
-        std::pair<int, std::function<void()>> currentEffect();
-        void runEffect(int id, const std::function<void()> &callback);
+        auto currentEffect() -> std::tuple<int, std::function<void()>>;
+        auto runEffect(int id, const std::function<void()>& callback) -> void;
     }
 
-    void createEffect(const std::function<void()> &callback);
+    auto createEffect(const std::function<void()>& callback) -> void;
 
     template <typename T>
     class Signal;
 
     template <typename T>
-    T untrack(const Signal<T> &signal) {
+    auto untrack(const Signal<T>& signal) -> T {
         return *signal.value;
     }
 
     template <typename T>
-    Signal<T> createSignal(const T &value) {
+    auto createSignal(const T& value) -> Signal<T> {
         return Signal<T>(value);
     }
 
-    Signal<std::string> createSignal(const char *value);
+    auto createSignal(const char* value) -> Signal<std::string>;
 
     template <typename T>
     class Signal {
-        friend T untrack<T>(const Signal<T> &signal);
-        friend Signal<T> createSignal<T>(const T &value);
-        friend Signal<std::string> createSignal(const char *value);
+        friend auto untrack<T>(const Signal<T>& signal) -> T;
+        friend auto createSignal<T>(const T& value) -> Signal<T>;
+        friend auto createSignal(const char* value) -> Signal<std::string>;
 
     public:
-        T operator()() const {
-            const auto effect = Internal::currentEffect();
-            if (effect.second && effectMap->find(effect.first) == effectMap->end()) {
-                effectMap->insert(effect);
+        auto operator()() const -> T {
+            auto [id, callback] = Internal::currentEffect();
+            if (callback && effectMap->find(id) == effectMap->end()) {
+                effectMap->insert({ id, callback });
             }
 
             return *value;
         }
 
-        void set(const T &newValue) {
+        auto set(const T& newValue) -> void {
             Internal::markDirty();
             *value = newValue;
 
-            for (const auto &effect : *effectMap) {
-                Internal::runEffect(effect.first, effect.second);
+            for (const auto& [id, callback] : *effectMap) {
+                Internal::runEffect(id, callback);
             }
         }
 
@@ -61,7 +61,7 @@ namespace Liquid {
         const std::shared_ptr<T> value;
         const std::shared_ptr<std::map<int, std::function<void()>>> effectMap;
 
-        Signal(const T &value)
+        Signal(const T& value)
             : value(std::make_shared<T>(value)),
               effectMap(std::make_shared<std::map<int, std::function<void()>>>()) {}
     };

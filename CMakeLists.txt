@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.28.3)
 project(snake-game)
 
-set(CMAKE_CXX_STANDARD 11)
-set(CURSES_NEED_NCURSES TRUE)
+set(CMAKE_CXX_STANDARD 17)
 set(CURSES_NEED_WIDE TRUE)
 
+find_package(Curses)
+include_directories(${CURSES_INCLUDE_DIR})
 include_directories(liquid)
 include_directories(src)
 
@@ -21,7 +22,4 @@ add_executable(
     liquid/src/reactivity.cpp
     liquid/src/timer.cpp
 )
-
-find_package(Curses)
-target_include_directories(build.out PUBLIC ${CURSES_INCLUDE_DIR})
 target_link_libraries(build.out ${CURSES_LIBRARIES})

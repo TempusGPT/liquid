@@ -14,9 +14,9 @@ namespace Liquid {
     };
 
     namespace Internal {
-        void initializeColor();
-        void enableColor(Color foreground, Color background);
-        void disableColor(Color foreground, Color background);
+        auto initializeColor() -> void;
+        auto enableColor(Color foreground, Color background) -> void;
+        auto disableColor(Color foreground, Color background) -> void;
     }
 }
 

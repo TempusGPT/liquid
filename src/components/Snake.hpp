@@ -9,7 +9,7 @@
 
 using namespace Liquid;
 
-Element Snake(const Prop<int> &fieldWidth, const Prop<int> &fieldHeight) {
+auto Snake(const Prop<int>& fieldWidth, const Prop<int>& fieldHeight) -> Element {
     auto input = useInput();
     auto lifecycle = useLifecycle();
 
@@ -28,17 +28,17 @@ Element Snake(const Prop<int> &fieldWidth, const Prop<int> &fieldHeight) {
         return direction();
     };
 
-    auto enqueueDirection = [=](Vector direction) mutable {
+    auto enqueueDirection = [=](const Vector& direction) mutable {
         auto newDirectionQueue = directionQueue();
         newDirectionQueue.push(direction);
         directionQueue.set(newDirectionQueue);
     };
 
-    const auto isOutOfField = [=](const Vector &head) {
+    auto isOutOfField = [=](const Vector& head) {
         return head.x < 0 || head.x >= fieldWidth() || head.y < 0 || head.y >= fieldHeight();
     };
 
-    const auto isSuicide = [=](const Vector &head) {
+    auto isSuicide = [=](const Vector& head) {
         const auto pos = positions();
         return std::find(++pos.begin(), pos.end(), head) != pos.end();
     };
@@ -48,7 +48,7 @@ Element Snake(const Prop<int> &fieldWidth, const Prop<int> &fieldHeight) {
     input.bind({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
     input.bind({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });
 
-    const auto id = setInterval(200, [=]() mutable {
+    auto id = setInterval(200, [=]() mutable {
         auto newPositions = positions();
         auto headPosition = newPositions.front() + currentDirection();
 

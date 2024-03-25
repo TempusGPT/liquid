@@ -7,13 +7,13 @@
 namespace Liquid {
     class StringFormatter {
     public:
-        StringFormatter(const std::string &fmt);
+        StringFormatter(const std::string& fmt);
         operator std::string() const;
 
         template <typename T>
-        StringFormatter &operator%(T &&value) {
-            const auto oldValue = '%' + std::to_string(index) + '%';
-            const auto newValue = (std::ostringstream() << value).str();
+        auto operator%(T&& value) -> StringFormatter& {
+            auto oldValue = '%' + std::to_string(index) + '%';
+            auto newValue = (std::ostringstream() << value).str();
             auto pos = 0;
 
             while (std::string::npos != (pos = fmt.find(oldValue, pos))) {
@@ -30,7 +30,7 @@ namespace Liquid {
         std::string fmt;
     };
 
-    StringFormatter operator"" _f(const char *fmt, size_t);
+    auto operator""_f(const char* fmt, size_t) -> StringFormatter;
 }
 
 #endif

@@ -8,20 +8,19 @@
 
 namespace Liquid {
     namespace Internal {
-        void onCleanup(const std::function<void()> &callback);
+        auto onCleanup(const std::function<void()>& callback) -> void;
     }
 
     class Element {
-        friend void Internal::onCleanup(const std::function<void()> &callback);
+        friend auto Internal::onCleanup(const std::function<void()>& callback) -> void;
 
     public:
-        Element(const std::function<void(int, int)> &renderCallback = nullptr);
+        Element(const std::function<void(int, int)>& renderCallback = nullptr);
 
-        void render(int x, int y) const;
-        void cleanup() const;
+        auto render(int x, int y) const -> void;
+        auto cleanup() const -> void;
 
     private:
-        static Element *lastMounted;
         std::function<void(int, int)> renderCallback;
         std::vector<std::function<void()>> cleanupCallbacks;
     };

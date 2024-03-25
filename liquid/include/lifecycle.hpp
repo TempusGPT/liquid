@@ -6,15 +6,15 @@
 
 namespace Liquid {
     class Lifecycle;
-    Lifecycle useLifecycle();
+    auto useLifecycle() -> Lifecycle;
 
     class Lifecycle {
-        friend Lifecycle useLifecycle();
+        friend auto useLifecycle() -> Lifecycle;
 
     public:
         ~Lifecycle();
-        void mount(const std::function<void()> &callback);
-        void cleanup(const std::function<void()> &callback);
+        auto mount(const std::function<void()>& callback) -> void;
+        auto cleanup(const std::function<void()>& callback) -> void;
 
     private:
         std::vector<std::function<void()>> mountCallbacks;

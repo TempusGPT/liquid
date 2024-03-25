@@ -146,43 +146,42 @@ namespace Liquid {
     static auto inputMap = std::unordered_multimap<Key, InputData>();
     static auto garbageSet = std::unordered_set<int>();
 
-    Input useInput() {
+    auto useInput() -> Input {
         return Input();
     }
 
     Input::~Input() {
-        const auto idSet = this->idSet;
-        Internal::onCleanup([=]() {
-            garbageSet.insert(idSet.begin(), idSet.end());
+        Internal::onCleanup([set = idSet]() {
+            garbageSet.insert(set.begin(), set.end());
         });
     }
 
-    void Input::bind(
-        const std::vector<Key> &keys,
-        const std::function<void()> &callback
-    ) {
-        for (const auto key : keys) {
-            const auto id = inputId++;
+    auto Input::bind(
+        const std::vector<Key>& keys,
+        const std::function<void()>& callback
+    ) -> void {
+        for (auto key : keys) {
+            auto id = inputId++;
             inputMap.insert({ key, { id, callback } });
             idSet.insert(id);
         }
     }
 
     namespace Internal {
-        void initializeInput() {
+        auto initializeInput() -> void {
             keypad(stdscr, true);
             nodelay(stdscr, true);
             curs_set(0);
             noecho();
         }
 
-        void processInput() {
-            const auto key = keyMap.find(getch());
+        auto processInput() -> void {
+            auto key = keyMap.find(getch());
             if (key == keyMap.end()) {
                 return;
             }
 
-            const auto range = inputMap.equal_range(key->second);
+            auto range = inputMap.equal_range(key->second);
             for (auto it = range.first; it != range.second; ++it) {
                 it->second.callback();
             }

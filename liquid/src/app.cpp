@@ -1,8 +1,8 @@
 #include "include/app.hpp"
 #include "include/color.hpp"
 #include "include/input.hpp"
-#include "include/timer.hpp"
 #include "include/reactivity.hpp"
+#include "include/timer.hpp"
 
 #include <clocale>
 #include <ncurses.h>
@@ -14,7 +14,7 @@ namespace Liquid {
     static auto isActive = true;
     static auto currentPath = createSignal("/");
 
-    int render(const Element &element) {
+    auto render(const Element& element) -> int {
         setlocale(LC_ALL, "");
         initscr();
         Internal::initializeInput();
@@ -38,24 +38,24 @@ namespace Liquid {
         return 0;
     }
 
-    std::string path() {
+    auto path() -> std::string {
         return currentPath();
     }
 
-    void navigate(const std::string &path) {
+    auto navigate(const std::string& path) -> void {
         currentPath.set(path);
     }
 
-    void exit() {
+    auto exit() -> void {
         isActive = false;
     }
 
-    void beep() {
+    auto beep() -> void {
         ::beep();
     }
 
     namespace Internal {
-        void markDirty() {
+        auto markDirty() -> void {
             isDirty = true;
         }
     }

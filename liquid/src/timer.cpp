@@ -15,32 +15,30 @@ namespace Liquid {
         std::chrono::milliseconds delay;
         std::chrono::steady_clock::time_point invokeAt;
 
-        Timer(bool willRepeat, int delay, const std::function<void()> &callback)
-            : id(timerId++), willRepeat(willRepeat), callback(callback) {
-            const auto now = std::chrono::steady_clock::now();
-            const auto chronoDelay = std::chrono::milliseconds(delay);
-            this->delay = chronoDelay;
-            this->invokeAt = now + chronoDelay;
-        }
-
-        bool operator<(const Timer &other) const {
+        auto operator<(const Timer& other) const -> bool {
             return invokeAt == other.invokeAt ? id < other.id : invokeAt < other.invokeAt;
         }
     };
 
-    int setTimeout(int delay, const std::function<void()> &callback) {
-        const auto timer = Timer(false, delay, callback);
+    auto newTimer(bool willRepeat, int delay, const std::function<void()>& callback) -> Timer {
+        auto now = std::chrono::steady_clock::now();
+        auto chronoDelay = std::chrono::milliseconds(delay);
+        return { timerId++, willRepeat, callback, chronoDelay, now + chronoDelay };
+    }
+
+    auto setTimeout(int delay, const std::function<void()>& callback) -> int {
+        auto timer = newTimer(false, delay, callback);
         timerSet.insert(timer);
         return timer.id;
     }
 
-    int setInterval(int delay, const std::function<void()> &callback) {
-        const auto timer = Timer(true, delay, callback);
+    auto setInterval(int delay, const std::function<void()>& callback) -> int {
+        auto timer = newTimer(true, delay, callback);
         timerSet.insert(timer);
         return timer.id;
     }
 
-    void clearTimer(int id) {
+    auto clearTimer(int id) -> void {
         for (auto it = timerSet.begin(); it != timerSet.end();) {
             if (it->id == id) {
                 it = timerSet.erase(it);
@@ -51,8 +49,8 @@ namespace Liquid {
     }
 
     namespace Internal {
-        void processTimer() {
-            const auto now = std::chrono::steady_clock::now();
+        auto processTimer() -> void {
+            auto now = std::chrono::steady_clock::now();
             while (!timerSet.empty() && timerSet.begin()->invokeAt <= now) {
                 auto timer = *timerSet.begin();
                 timerSet.erase(timer);

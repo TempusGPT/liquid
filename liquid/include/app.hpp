@@ -6,15 +6,15 @@
 #include <string>
 
 namespace Liquid {
-    int render(const Element &element);
+    auto render(const Element& element) -> int;
 
-    std::string path();
-    void navigate(const std::string &path);
-    void exit();
-    void beep();
+    auto path() -> std::string;
+    auto navigate(const std::string& path) -> void;
+    auto exit() -> void;
+    auto beep() -> void;
 
     namespace Internal {
-        void markDirty();
+        auto markDirty() -> void;
     }
 }
 

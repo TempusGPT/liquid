@@ -1,3 +1,5 @@
+// TODO: Migrate to C++17
+
 #ifndef LIQUID_PROP_HPP
 #define LIQUID_PROP_HPP
 
@@ -8,24 +10,24 @@
 template <typename T>
 class Prop {
 public:
-    Prop(T &&value) {
+    Prop(T&& value) {
         getter = [=]() { return value; };
     }
 
     template <typename Fn>
     Prop(
-        Fn &&fn,
+        Fn&& fn,
         typename std::enable_if<std::is_convertible<
             typename std::result_of<Fn()>::type,
-            T>::value>::type * = nullptr
+            T>::value>::type* = nullptr
     ) {
         getter = fn;
     }
 
     template <typename Arg>
     Prop(
-        Arg &&arg,
-        typename std::enable_if<std::is_convertible<Arg, T>::value>::type * = nullptr
+        Arg&& arg,
+        typename std::enable_if<std::is_convertible<Arg, T>::value>::type* = nullptr
     ) {
         const auto value = T(std::forward<Arg>(arg));
         getter = [=]() { return value; };
@@ -33,9 +35,9 @@ public:
 
     template <typename Arg>
     Prop(
-        std::initializer_list<Arg> &&list,
+        std::initializer_list<Arg>&& list,
         typename std::enable_if<
-            std::is_convertible<std::initializer_list<Arg>, T>::value>::type * = nullptr
+            std::is_convertible<std::initializer_list<Arg>, T>::value>::type* = nullptr
     ) {
         const auto value = T(std::forward<std::initializer_list<Arg>>(list));
         getter = [=]() { return value; };

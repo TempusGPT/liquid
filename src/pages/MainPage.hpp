@@ -5,7 +5,7 @@
 
 using namespace Liquid;
 
-Element MainPage() {
+auto MainPage() -> Element {
     auto input = useInput();
 
     input.bind({ Key::Enter }, []() {

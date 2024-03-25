@@ -1,3 +1,5 @@
+// TODO: Migrate to C++17
+
 #ifndef LIQUID_CONTROL_HPP
 #define LIQUID_CONTROL_HPP
 
@@ -29,7 +31,7 @@
     elements.set({});                            \
     });                                          \
     return Element([=](int x, int y) mutable {   \
-        for (const auto &element : elements()) { \
+        for (const auto& element : elements()) { \
             element.render(x, y);                \
         }                                        \
     });                                          \
@@ -50,7 +52,7 @@
     createEffect([=]() mutable {                                       \
         auto newElements = std::vector<Element> {};                    \
         auto index = 0;                                                \
-        for (const auto &item : collection()) {                        \
+        for (const auto& item : collection()) {                        \
             const auto t = transform(item, index);                     \
             newElements.insert(newElements.end(), t.begin(), t.end()); \
             index += 1;                                                \
@@ -58,7 +60,7 @@
         elements.set(newElements);                                     \
     });                                                                \
     return Element([=](int x, int y) mutable {                         \
-        for (const auto &element : elements()) {                       \
+        for (const auto& element : elements()) {                       \
             element.render(x, y);                                      \
         }                                                              \
     });                                                                \
