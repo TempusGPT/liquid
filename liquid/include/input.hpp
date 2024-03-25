@@ -90,7 +90,7 @@ namespace Liquid {
 
     public:
         ~Input();
-        void operator()(const std::vector<Key> &keys, const std::function<void()> &callback);
+        void bind(const std::vector<Key> &keys, const std::function<void()> &callback);
 
     private:
         std::unordered_set<int> idSet;

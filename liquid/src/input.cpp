@@ -157,7 +157,7 @@ namespace Liquid {
         });
     }
 
-    void Input::operator()(
+    void Input::bind(
         const std::vector<Key> &keys,
         const std::function<void()> &callback
     ) {

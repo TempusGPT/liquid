@@ -8,7 +8,7 @@ using namespace Liquid;
 Element MainPage() {
     auto input = useInput();
 
-    input({ Key::Enter }, []() {
+    input.bind({ Key::Enter }, []() {
         beep();
         navigate("/play");
     });
