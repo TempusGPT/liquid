@@ -12,26 +12,30 @@ using namespace Liquid;
 auto Snake(const Prop<int>& fieldWidth, const Prop<int>& fieldHeight) -> Element {
     auto input = useInput();
     auto lifecycle = useLifecycle();
-
     auto positions = createSignal<std::list<Vector>>({ { 2, 0 }, { 1, 0 }, { 0, 0 } });
     auto direction = createSignal(Vector::right());
     auto directionQueue = createSignal<std::queue<Vector>>({});
-
-    auto currentDirection = [=]() mutable {
-        auto newDirectionQueue = directionQueue();
-        if (!newDirectionQueue.empty()) {
-            direction.set(directionQueue().front());
-            newDirectionQueue.pop();
-            directionQueue.set(newDirectionQueue);
-        }
-
-        return direction();
-    };
 
     auto enqueueDirection = [=](const Vector& direction) mutable {
         auto newDirectionQueue = directionQueue();
         newDirectionQueue.push(direction);
         directionQueue.set(newDirectionQueue);
+    };
+
+    input.bind({ Key::UpArrow }, [=]() mutable { enqueueDirection(Vector::up()); });
+    input.bind({ Key::DownArrow }, [=]() mutable { enqueueDirection(Vector::down()); });
+    input.bind({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
+    input.bind({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });
+
+    auto currentDirection = [=]() mutable {
+        auto newDirectionQueue = directionQueue();
+        if (!newDirectionQueue.empty()) {
+            direction.set(newDirectionQueue.front());
+            newDirectionQueue.pop();
+            directionQueue.set(newDirectionQueue);
+        }
+
+        return direction();
     };
 
     auto isOutOfField = [=](const Vector& head) {
@@ -42,11 +46,6 @@ auto Snake(const Prop<int>& fieldWidth, const Prop<int>& fieldHeight) -> Element
         const auto pos = positions();
         return std::find(++pos.begin(), pos.end(), head) != pos.end();
     };
-
-    input.bind({ Key::UpArrow }, [=]() mutable { enqueueDirection(Vector::up()); });
-    input.bind({ Key::DownArrow }, [=]() mutable { enqueueDirection(Vector::down()); });
-    input.bind({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
-    input.bind({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });
 
     auto id = setInterval(200, [=]() mutable {
         auto newPositions = positions();
