@@ -5,40 +5,49 @@
 #include "liquid.hpp"
 
 #include <list>
+#include <queue>
 
 using namespace Liquid;
 
-Element Snake() {
+Element Snake(const Vector &fieldSize) {
     auto input = useInput();
-    auto snake = createSignal<std::list<Vector>>({ { 2, 0 }, { 1, 0 }, { 0, 0 } });
+    auto positions = createSignal<std::list<Vector>>({ { 2, 0 }, { 1, 0 }, { 0, 0 } });
     auto direction = createSignal(Vector::right());
+    auto directionQueue = createSignal<std::queue<Vector>>({});
 
-    input.bind({ Key::UpArrow }, [=]() mutable {
-        direction.set(Vector::up());
-    });
+    auto currentDirection = [=]() mutable {
+        auto newDirectionQueue = directionQueue();
+        if (!newDirectionQueue.empty()) {
+            direction.set(directionQueue().front());
+            newDirectionQueue.pop();
+            directionQueue.set(newDirectionQueue);
+        }
 
-    input.bind({ Key::DownArrow }, [=]() mutable {
-        direction.set(Vector::down());
-    });
+        return direction();
+    };
 
-    input.bind({ Key::LeftArrow }, [=]() mutable {
-        direction.set(Vector::left());
-    });
+    auto enqueueDirection = [=](Vector direction) mutable {
+        auto newDirectionQueue = directionQueue();
+        newDirectionQueue.push(direction);
+        directionQueue.set(newDirectionQueue);
+    };
 
-    input.bind({ Key::RightArrow }, [=]() mutable {
-        direction.set(Vector::right());
-    });
+    input.bind({ Key::UpArrow }, [=]() mutable { enqueueDirection(Vector::up()); });
+    input.bind({ Key::DownArrow }, [=]() mutable { enqueueDirection(Vector::down()); });
+    input.bind({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
+    input.bind({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });
 
     setInterval(200, [=]() mutable {
-        auto newSnake = snake();
-        newSnake.push_front(newSnake.front() + direction());
-        newSnake.pop_back();
-        snake.set(newSnake);
+        auto newPositions = positions();
+        auto headPosition = newPositions.front() + currentDirection();
+        newPositions.pop_back();
+        newPositions.push_front(headPosition);
+        positions.set(newPositions);
     });
 
     return Group({
-        EACH(snake(), s, i) {
-            Goto(s.x * 2, s.y),
+        EACH(positions(), pos, i) {
+            Goto(pos.x * 2, pos.y),
             Text(i == 0 ? "ㅎ" : "ㅇ"),
         } END_EACH,
     });
