@@ -73,6 +73,7 @@
         "iomanip": "cpp",
         "chrono": "cpp",
         "compare": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "stack": "cpp"
     }
 }

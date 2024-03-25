@@ -9,7 +9,6 @@ Element MainPage() {
     auto input = useInput();
 
     input.bind({ Key::Enter }, []() {
-        beep();
         navigate("/play");
     });
 
