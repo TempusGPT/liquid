@@ -8,7 +8,7 @@ using namespace Liquid;
 
 Element PlayPage() {
     return Group({
-        Snake({ 20, 20 }),
+        Snake(20, 20),
     });
 }
 

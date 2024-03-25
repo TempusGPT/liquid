@@ -5,12 +5,23 @@ struct Vector {
     int x;
     int y;
 
+    Vector() : x(0), y(0) {}
+    Vector(int x, int y) : x(x), y(y) {}
+
     Vector operator+(const Vector &other) const {
         return { x + other.x, y + other.y };
     }
 
     Vector operator-(const Vector &other) const {
         return { x - other.x, y - other.y };
+    }
+
+    bool operator==(const Vector &other) const {
+        return x == other.x && y == other.y;
+    }
+
+    bool operator!=(const Vector &other) const {
+        return x != other.x || y != other.y;
     }
 
     static Vector zero() {
