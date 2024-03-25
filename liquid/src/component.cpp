@@ -6,13 +6,13 @@
 
 namespace Liquid {
     auto Goto(const Prop<int>& x, const Prop<int>& y) -> Element {
-        return Element([=](auto xOrigin, auto yOrigin) {
+        return Element([=](int xOrigin, int yOrigin) {
             move(yOrigin + y(), xOrigin + x());
         });
     }
 
     auto Group(const Prop<std::vector<Element>>& elements) -> Element {
-        return Element([=](auto, auto) {
+        return Element([=](int, int) {
             auto x = getcurx(stdscr);
             auto y = getcury(stdscr);
 
@@ -36,7 +36,7 @@ namespace Liquid {
         const Prop<Color>& foreground,
         const Prop<Color>& background
     ) -> Element {
-        return Element([=](auto, auto) {
+        return Element([=](int, int) {
             Internal::enableColor(foreground(), background());
             printw("%s", value().c_str());
             Internal::disableColor(foreground(), background());

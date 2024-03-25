@@ -22,4 +22,5 @@ add_executable(
     liquid/src/reactivity.cpp
     liquid/src/timer.cpp
 )
+
 target_link_libraries(build.out ${CURSES_LIBRARIES})
