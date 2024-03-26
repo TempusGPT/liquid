@@ -20,7 +20,7 @@ auto Snake(
     auto direction = createSignal(Vector::right());
     auto directionQueue = createSignal<std::queue<Vector>>({});
 
-    auto initialPosition = std::list<Vector> {};
+    auto initialPosition = std::list<Vector>();
     for (auto i = 0; i < initialLength(); i++) {
         initialPosition.push_front({ i + 1, fieldSize().y / 2 });
     }
