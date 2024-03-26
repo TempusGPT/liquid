@@ -10,10 +10,14 @@
 #define FN(expr) [=]() mutable { return expr; }
 
 #define WHEN(condition) \
-    [=]() mutable {                                                          \
-        auto elements = createSignal<std::vector<Element>>({});              \
-        createEffect([=]() mutable {                                         \
-            for (const auto &element : untrack(elements)) element.cleanup(); \
+    [=]() mutable {                                             \
+        auto elements = createSignal<std::vector<Element>>({}); \
+        auto cleanup = [=]() mutable {                          \
+            for (const auto& element : untrack(elements))       \
+                element.cleanup();                              \
+        };                                                      \
+        createEffect([=]() mutable {                            \
+            cleanup();                                          \
             if (condition) return elements.set(
 
 #define OR(condition) \
@@ -24,16 +28,19 @@
     );            \
     return elements.set(
 
-#define END_WHEN                                 \
-    );                                           \
-    elements.set({});                            \
-    });                                          \
-    return Element([=](int x, int y) {           \
-        for (const auto& element : elements()) { \
-            element.render(x, y);                \
-        }                                        \
-    });                                          \
-    }                                            \
+#define END_WHEN                                     \
+    );                                               \
+    elements.set({});                                \
+    });                                              \
+    return Element(                                  \
+        [=](int x, int y) mutable {                  \
+            for (const auto& element : elements()) { \
+                element.render(x, y);                \
+            }                                        \
+        },                                           \
+        { cleanup }                                  \
+    );                                               \
+    }                                                \
     ()
 
 #define EACH(items, item, index) \
@@ -47,7 +54,12 @@
     ;                                                                  \
     }                                                                  \
     ;                                                                  \
+    auto cleanup = [=]() mutable {                                     \
+        for (const auto& element : untrack(elements))                  \
+            element.cleanup();                                         \
+    };                                                                 \
     createEffect([=]() mutable {                                       \
+        cleanup();                                                     \
         auto newElements = std::vector<Element> {};                    \
         auto index = 0;                                                \
         for (const auto& item : collection()) {                        \
@@ -57,11 +69,14 @@
         }                                                              \
         elements.set(newElements);                                     \
     });                                                                \
-    return Element([=](int x, int y) mutable {                         \
-        for (const auto& element : elements()) {                       \
-            element.render(x, y);                                      \
-        }                                                              \
-    });                                                                \
+    return Element(                                                    \
+        [=](int x, int y) mutable {                                    \
+            for (const auto& element : elements()) {                   \
+                element.render(x, y);                                  \
+            }                                                          \
+        },                                                             \
+        { cleanup }                                                    \
+    );                                                                 \
     }                                                                  \
     ()
 

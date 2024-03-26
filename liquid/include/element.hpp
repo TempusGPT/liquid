@@ -15,7 +15,10 @@ namespace Liquid {
         friend auto Internal::onCleanup(const std::function<void()>& callback) -> void;
 
     public:
-        Element(const std::function<void(int, int)>& renderCallback = nullptr);
+        Element(
+            const std::function<void(int, int)>& renderCallback,
+            const std::vector<std::function<void()>>& cleanupCallbacks = {}
+        );
 
         auto render(int x, int y) const -> void;
         auto cleanup() const -> void;

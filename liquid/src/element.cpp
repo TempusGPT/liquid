@@ -12,8 +12,9 @@ namespace Liquid {
     }
 
     Element::Element(
-        const std::function<void(int, int)>& renderCallback
-    ) : renderCallback(renderCallback) {
+        const std::function<void(int, int)>& renderCallback,
+        const std::vector<std::function<void()>>& cleanupCallbacks
+    ) : renderCallback(renderCallback), cleanupCallbacks(cleanupCallbacks) {
         Internal::lastMounted = this;
     }
 

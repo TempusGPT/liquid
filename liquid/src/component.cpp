@@ -12,14 +12,23 @@ namespace Liquid {
     }
 
     auto Group(const Prop<std::vector<Element>>& elements) -> Element {
-        return Element([=](int, int) {
-            auto x = getcurx(stdscr);
-            auto y = getcury(stdscr);
+        return Element(
+            [=](int, int) {
+                auto x = getcurx(stdscr);
+                auto y = getcury(stdscr);
 
-            for (const auto& element : elements()) {
-                element.render(x, y);
+                for (const auto& element : elements()) {
+                    element.render(x, y);
+                }
+            },
+            {
+                [=]() {
+                    for (const auto& element : elements()) {
+                        element.cleanup();
+                    }
+                },
             }
-        });
+        );
     }
 
     auto Route(

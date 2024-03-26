@@ -9,7 +9,12 @@
 
 using namespace Liquid;
 
-auto Snake(const Prop<int>& initialLength, const Prop<Vector>& fieldSize) -> Element {
+auto Snake(
+    const Prop<int>& initialLength,
+    const Prop<Vector>& fieldSize,
+    const Prop<std::function<void(Vector)>>& onMove,
+    const Prop<std::function<void(int)>>& onDeath
+) -> Element {
     auto input = useInput();
     auto lifecycle = useLifecycle();
     auto direction = createSignal(Vector::right());
@@ -27,7 +32,7 @@ auto Snake(const Prop<int>& initialLength, const Prop<Vector>& fieldSize) -> Ele
         directionQueue.set(newDirectionQueue);
     };
 
-    input.bind({ Key::UpArrow }, [=]() mutable { enqueueDirection(Vector::up()); });
+    input.bind({ Key::UpArrow }, [=]() mutable { beep(); enqueueDirection(Vector::up()); });
     input.bind({ Key::DownArrow }, [=]() mutable { enqueueDirection(Vector::down()); });
     input.bind({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
     input.bind({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });
@@ -58,14 +63,14 @@ auto Snake(const Prop<int>& initialLength, const Prop<Vector>& fieldSize) -> Ele
         auto headPosition = newPosition.front() + currentDirection();
 
         if (isOutOfField(headPosition) || isSuicide(headPosition)) {
-            // TODO: Process death
-            beep();
+            onDeath()(newPosition.size());
             return;
         }
 
         newPosition.pop_back();
         newPosition.push_front(headPosition);
         position.set(newPosition);
+        onMove()(headPosition);
     });
 
     lifecycle.cleanup([=]() {
