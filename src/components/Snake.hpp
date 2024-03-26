@@ -9,12 +9,17 @@
 
 using namespace Liquid;
 
-auto Snake(const Prop<int>& fieldWidth, const Prop<int>& fieldHeight) -> Element {
+auto Snake(const Prop<int>& initialLength, const Prop<Vector>& fieldSize) -> Element {
     auto input = useInput();
     auto lifecycle = useLifecycle();
-    auto positions = createSignal<std::list<Vector>>({ { 2, 0 }, { 1, 0 }, { 0, 0 } });
     auto direction = createSignal(Vector::right());
     auto directionQueue = createSignal<std::queue<Vector>>({});
+
+    auto initialPosition = std::list<Vector> {};
+    for (auto i = 0; i < initialLength(); i++) {
+        initialPosition.push_front({ i + 1, fieldSize().y / 2 });
+    }
+    auto position = createSignal(initialPosition);
 
     auto enqueueDirection = [=](const Vector& direction) mutable {
         auto newDirectionQueue = directionQueue();
@@ -39,17 +44,18 @@ auto Snake(const Prop<int>& fieldWidth, const Prop<int>& fieldHeight) -> Element
     };
 
     auto isOutOfField = [=](const Vector& head) {
-        return head.x < 0 || head.x >= fieldWidth() || head.y < 0 || head.y >= fieldHeight();
+        auto [x, y] = fieldSize();
+        return head.x < 0 || head.x >= x || head.y < 0 || head.y >= y;
     };
 
     auto isSuicide = [=](const Vector& head) {
-        const auto pos = positions();
+        auto pos = position();
         return std::find(++pos.begin(), pos.end(), head) != pos.end();
     };
 
     auto id = setInterval(200, [=]() mutable {
-        auto newPositions = positions();
-        auto headPosition = newPositions.front() + currentDirection();
+        auto newPosition = position();
+        auto headPosition = newPosition.front() + currentDirection();
 
         if (isOutOfField(headPosition) || isSuicide(headPosition)) {
             // TODO: Process death
@@ -57,9 +63,9 @@ auto Snake(const Prop<int>& fieldWidth, const Prop<int>& fieldHeight) -> Element
             return;
         }
 
-        newPositions.pop_back();
-        newPositions.push_front(headPosition);
-        positions.set(newPositions);
+        newPosition.pop_back();
+        newPosition.push_front(headPosition);
+        position.set(newPosition);
     });
 
     lifecycle.cleanup([=]() {
@@ -67,9 +73,9 @@ auto Snake(const Prop<int>& fieldWidth, const Prop<int>& fieldHeight) -> Element
     });
 
     return Group({
-        EACH(positions(), pos, i) {
+        EACH(position(), pos, i) {
             Goto(pos.x * 2, pos.y),
-            Text(i == 0 ? "ㅎ" : "ㅇ"),
+            Text(i == 0 ? "●" : "○"),
         } END_EACH,
     });
 }
