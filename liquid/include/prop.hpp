@@ -1,5 +1,3 @@
-// TODO: Migrate to C++17
-
 #ifndef LIQUID_PROP_HPP
 #define LIQUID_PROP_HPP
 
@@ -7,48 +5,36 @@
 #include <initializer_list>
 #include <type_traits>
 
-template <typename T>
-class Prop {
-public:
-    Prop(T&& value) {
-        getter = [=]() { return value; };
-    }
+namespace Liquid {
+    template <typename T, typename... Args>
+    struct is_initializable {
+        template <typename... U>
+        static auto test(U&&... u) -> decltype(T { std::forward<U>(u)... }, std::true_type());
+        static auto test(...) -> std::false_type;
 
-    template <typename Fn>
-    Prop(
-        Fn&& fn,
-        typename std::enable_if<std::is_convertible<
-            typename std::result_of<Fn()>::type,
-            T>::value>::type* = nullptr
-    ) {
-        getter = fn;
-    }
+        static constexpr auto value = decltype(test(std::declval<Args>()...))::value;
+    };
 
-    template <typename Arg>
-    Prop(
-        Arg&& arg,
-        typename std::enable_if<std::is_convertible<Arg, T>::value>::type* = nullptr
-    ) {
-        const auto value = T(std::forward<Arg>(arg));
-        getter = [=]() { return value; };
-    }
+    template <typename T, typename... Args>
+    constexpr auto is_initializable_v = is_initializable<T, Args...>::value;
 
-    template <typename Arg>
-    Prop(
-        std::initializer_list<Arg>&& list,
-        typename std::enable_if<
-            std::is_convertible<std::initializer_list<Arg>, T>::value>::type* = nullptr
-    ) {
-        const auto value = T(std::forward<std::initializer_list<Arg>>(list));
-        getter = [=]() { return value; };
-    }
+    template <typename T>
+    class Prop {
+    public:
+        template <typename Fn, std::enable_if_t<std::is_invocable_r_v<T, Fn>, int> = 0>
+        Prop(Fn&& fn) : getter(fn) {}
 
-    T operator()() const {
-        return getter();
-    }
+        template <typename... Args, std::enable_if_t<is_initializable_v<T, Args...>, int> = 0>
+        Prop(Args&&... args)
+            : getter([value = T { std::forward<Args>(args)... }]() { return value; }) {}
 
-private:
-    std::function<T()> getter;
-};
+        T operator()() const {
+            return getter();
+        }
+
+    private:
+        const std::function<T()> getter;
+    };
+}
 
 #endif
