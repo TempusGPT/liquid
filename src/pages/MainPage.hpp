@@ -7,9 +7,10 @@ using namespace Liquid;
 
 auto MainPage() -> Element {
     auto input = useInput();
+    auto router = useRouter();
 
-    input.bind({ Key::Enter }, []() {
-        navigate("/play");
+    input.bind({ Key::Enter }, [=]() mutable {
+        router.navigate("/play");
     });
 
     return Group({

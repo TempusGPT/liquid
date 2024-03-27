@@ -7,11 +7,8 @@
 
 namespace Liquid {
     auto render(const Element& element) -> int;
-
-    auto path() -> std::string;
-    auto navigate(const std::string& path) -> void;
-    auto exit() -> void;
     auto beep() -> void;
+    auto exit() -> void;
 
     namespace Internal {
         auto markDirty() -> void;

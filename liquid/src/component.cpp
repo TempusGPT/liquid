@@ -31,15 +31,6 @@ namespace Liquid {
         );
     }
 
-    auto Route(
-        const Prop<std::string>& path,
-        const Prop<std::function<Element()>>& component
-    ) -> Element {
-        return WHEN(path() == Liquid::path()) {
-            component()(),
-        } END_WHEN;
-    }
-
     auto Text(
         const Prop<std::string>& value,
         const Prop<Color>& foreground,

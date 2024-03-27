@@ -1,8 +1,9 @@
 #ifndef COMPONENTS_SNAKE_HPP
 #define COMPONENTS_SNAKE_HPP
 
-#include "libs/vector.hpp"
 #include "liquid.hpp"
+
+#include "libs/vector.hpp"
 
 #include <list>
 #include <queue>

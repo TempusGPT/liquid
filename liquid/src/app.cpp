@@ -12,7 +12,6 @@
 namespace Liquid {
     static auto isDirty = true;
     static auto isActive = true;
-    static auto currentPath = createSignal("/");
 
     auto render(const Element& element) -> int {
         setlocale(LC_ALL, "");
@@ -38,20 +37,12 @@ namespace Liquid {
         return 0;
     }
 
-    auto path() -> std::string {
-        return currentPath();
-    }
-
-    auto navigate(const std::string& path) -> void {
-        currentPath.set(path);
+    auto beep() -> void {
+        ::beep();
     }
 
     auto exit() -> void {
         isActive = false;
-    }
-
-    auto beep() -> void {
-        ::beep();
     }
 
     namespace Internal {
