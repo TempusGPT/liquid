@@ -5,13 +5,13 @@
 #include <string>
 
 namespace Liquid {
-    class StringFormatter {
+    class FmtString {
     public:
-        StringFormatter(const std::string& fmt);
+        FmtString(const std::string& fmt);
         operator std::string() const;
 
         template <typename T>
-        auto operator%(T&& value) -> StringFormatter& {
+        auto operator%(T&& value) -> FmtString& {
             auto oldValue = '%' + std::to_string(index) + '%';
             auto newValue = (std::ostringstream() << value).str();
             auto pos = 0;
@@ -30,7 +30,7 @@ namespace Liquid {
         std::string fmt;
     };
 
-    auto operator""_f(const char* fmt, size_t) -> StringFormatter;
+    auto operator""_fmt(const char* fmt, size_t) -> FmtString;
 }
 
 #endif
