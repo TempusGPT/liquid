@@ -5,8 +5,8 @@
 
 namespace Liquid {
     struct Timer;
-    static auto timerSet = std::set<Timer>();
     static auto timerId = 0;
+    static auto timerSet = std::set<Timer>();
 
     struct Timer {
         int id;
@@ -53,8 +53,11 @@ namespace Liquid {
             auto now = std::chrono::steady_clock::now();
             while (!timerSet.empty() && timerSet.begin()->invokeAt <= now) {
                 auto timer = *timerSet.begin();
-                timerSet.erase(timer);
                 timer.callback();
+
+                if (timerSet.erase(timer) == 0) {
+                    continue;
+                }
 
                 if (timer.willRepeat) {
                     timer.invokeAt += timer.delay;

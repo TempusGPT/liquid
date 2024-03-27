@@ -15,6 +15,12 @@ auto PlayPage() -> Element {
         navigate("/");
     };
 
+    auto input = useInput();
+
+    input.bind({ Key::Enter }, []() {
+        navigate("/");
+    });
+
     return Group({
         Snake(4, { 20, 20 }, handleSnakeMove, handleSnakeDeath),
     });

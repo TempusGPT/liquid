@@ -49,8 +49,8 @@ auto Snake(
     };
 
     auto isOutOfField = [=](const Vector& head) {
-        auto [x, y] = fieldSize();
-        return head.x < 0 || head.x >= x || head.y < 0 || head.y >= y;
+        auto [width, height] = fieldSize();
+        return head.x < 0 || head.x >= width || head.y < 0 || head.y >= height;
     };
 
     auto isSuicide = [=](const Vector& head) {

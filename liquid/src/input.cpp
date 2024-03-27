@@ -144,15 +144,25 @@ namespace Liquid {
 
     static auto inputId = 0;
     static auto inputMap = std::unordered_multimap<Key, InputData>();
-    static auto garbageSet = std::unordered_set<int>();
+    static auto processQueue = std::queue<std::function<void()>>();
 
     auto useInput() -> Input {
         return Input();
     }
 
     Input::~Input() {
-        Internal::onCleanup([set = idSet]() {
-            garbageSet.insert(set.begin(), set.end());
+        auto cleanup = [idSet = this->idSet]() {
+            for (auto it = inputMap.begin(); it != inputMap.end();) {
+                if (idSet.find(it->second.id) != idSet.end()) {
+                    it = inputMap.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        };
+
+        Internal::onCleanup([=]() {
+            processQueue.push(cleanup);
         });
     }
 
@@ -162,8 +172,11 @@ namespace Liquid {
     ) -> void {
         for (auto key : keys) {
             auto id = inputId++;
-            inputMap.insert({ key, { id, callback } });
             idSet.insert(id);
+
+            processQueue.push([=]() {
+                inputMap.insert({ key, { id, callback } });
+            });
         }
     }
 
@@ -176,6 +189,11 @@ namespace Liquid {
         }
 
         auto processInput() -> void {
+            while (!processQueue.empty()) {
+                processQueue.front()();
+                processQueue.pop();
+            }
+
             auto key = keyMap.find(getch());
             if (key == keyMap.end()) {
                 return;
@@ -184,15 +202,6 @@ namespace Liquid {
             auto range = inputMap.equal_range(key->second);
             for (auto it = range.first; it != range.second; ++it) {
                 it->second.callback();
-            }
-
-            for (auto it = inputMap.begin(); it != inputMap.end();) {
-                if (garbageSet.find(it->second.id) != garbageSet.end()) {
-                    garbageSet.erase(it->second.id);
-                    it = inputMap.erase(it);
-                } else {
-                    ++it;
-                }
             }
         }
     }
