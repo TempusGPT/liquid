@@ -15,11 +15,12 @@ add_executable(
     liquid/src/app.cpp
     liquid/src/color.cpp
     liquid/src/component.cpp
+    liquid/src/effect.cpp
     liquid/src/element.cpp
     liquid/src/format.cpp
     liquid/src/input.cpp
     liquid/src/lifecycle.cpp
-    liquid/src/reactivity.cpp
+    liquid/src/signal.cpp
     liquid/src/timer.cpp
 )
 

@@ -2,7 +2,8 @@
 #define LIQUID_CONTROL_HPP
 
 #include "component.hpp"
-#include "reactivity.hpp"
+#include "effect.hpp"
+#include "signal.hpp"
 
 #include <tuple>
 #include <vector>
@@ -11,7 +12,7 @@
 
 #define WHEN(condition) \
     [=]() {                                                     \
-        auto elements = createSignal<std::vector<Element>>({}); \
+        auto elements = createSignal<std::vector<Element>>();   \
         auto cleanup = [=]() {                                  \
             for (const auto& element : untrack(elements))       \
                 element.cleanup();                              \
@@ -45,7 +46,7 @@
 
 #define EACH(items, item, index) \
     [=]() {                                                     \
-        auto elements = createSignal<std::vector<Element>>({}); \
+        auto elements = createSignal<std::vector<Element>>();   \
         auto cleanup = [=]() {                                  \
             for (const auto& element : untrack(elements))       \
                 element.cleanup();                              \

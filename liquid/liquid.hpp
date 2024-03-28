@@ -10,7 +10,7 @@
 #include "include/lifecycle.hpp"
 #include "include/macro.hpp"
 #include "include/prop.hpp"
-#include "include/reactivity.hpp"
+#include "include/signal.hpp"
 #include "include/timer.hpp"
 
 #endif

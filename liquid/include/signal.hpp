@@ -1,7 +1,8 @@
-#ifndef LIQUID_REACTIVITY_HPP
-#define LIQUID_REACTIVITY_HPP
+#ifndef LIQUID_SIGNAL_HPP
+#define LIQUID_SIGNAL_HPP
 
 #include "app.hpp"
+#include "effect.hpp"
 
 #include <functional>
 #include <map>
@@ -12,12 +13,7 @@
 namespace Liquid {
     namespace Internal {
         inline auto track = true;
-        inline auto effectId = 0;
-        inline auto effectCallback = std::function<void()>();
-        auto runEffect(int id, const std::function<void()>& callback) -> void;
     }
-
-    auto createEffect(const std::function<void()>& callback) -> void;
 
     template <typename T>
     class Signal {
@@ -60,7 +56,7 @@ namespace Liquid {
     }
 
     template <typename T>
-    auto createSignal(const T& value) -> Signal<T> {
+    auto createSignal(const T& value = T()) -> Signal<T> {
         return Signal<T>(value);
     }
 

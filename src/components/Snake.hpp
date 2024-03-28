@@ -10,7 +10,12 @@
 
 using namespace Liquid;
 
+struct SnakeRef {
+    std::function<void()> grow;
+};
+
 auto Snake(
+    Signal<SnakeRef>& ref,
     const Prop<int>& initialLength,
     const Prop<Vector>& fieldSize,
     const Prop<std::function<void(Vector)>>& onMove,
@@ -19,7 +24,7 @@ auto Snake(
     auto input = useInput();
     auto lifecycle = useLifecycle();
     auto direction = createSignal(Vector::right());
-    auto directionQueue = createSignal<std::queue<Vector>>({});
+    auto directionQueue = createSignal<std::queue<Vector>>();
 
     auto initialPosition = std::list<Vector>();
     for (auto i = 0; i < initialLength(); i++) {
@@ -27,13 +32,21 @@ auto Snake(
     }
     auto position = createSignal(initialPosition);
 
+    ref.set({
+        [=]() mutable {
+            auto newPosition = position();
+            newPosition.push_back(newPosition.back());
+            position.set(newPosition);
+        },
+    });
+
     auto enqueueDirection = [=](const Vector& direction) mutable {
         auto newDirectionQueue = directionQueue();
         newDirectionQueue.push(direction);
         directionQueue.set(newDirectionQueue);
     };
 
-    input.bind({ Key::UpArrow }, [=]() mutable { beep(); enqueueDirection(Vector::up()); });
+    input.bind({ Key::UpArrow }, [=]() mutable { enqueueDirection(Vector::up()); });
     input.bind({ Key::DownArrow }, [=]() mutable { enqueueDirection(Vector::down()); });
     input.bind({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
     input.bind({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });

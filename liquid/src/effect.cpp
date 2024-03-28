@@ -1,4 +1,4 @@
-#include "include/reactivity.hpp"
+#include "include/effect.hpp"
 
 namespace Liquid {
     static auto newId = 0;
@@ -14,9 +14,5 @@ namespace Liquid {
 
     auto createEffect(const std::function<void()>& callback) -> void {
         Internal::runEffect(newId++, callback);
-    }
-
-    auto createSignal(const char* value) -> Signal<std::string> {
-        return Signal<std::string>(value);
     }
 }

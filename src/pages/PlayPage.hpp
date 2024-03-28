@@ -10,17 +10,22 @@ using namespace Liquid;
 
 auto PlayPage() -> Element {
     auto router = useRouter();
+    auto lifecycle = useLifecycle();
+    auto snakeRef = createSignal<SnakeRef>();
 
-    auto handleSnakeMove = [](const Vector& position) {
-        // Process apple, poison
+    auto handleSnakeMove = [=](const Vector& position) {
     };
 
     auto handleSnakeDeath = [=](int length) mutable {
         router.navigate("/");
     };
 
+    lifecycle.mount([=]() {
+        snakeRef().grow();
+    });
+
     return Group({
-        Snake(4, { 20, 20 }, handleSnakeMove, handleSnakeDeath),
+        Snake(snakeRef, 4, { 20, 20 }, handleSnakeMove, handleSnakeDeath),
     });
 }
 
