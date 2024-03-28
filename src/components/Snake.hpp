@@ -1,9 +1,8 @@
 #ifndef COMPONENTS_SNAKE_HPP
 #define COMPONENTS_SNAKE_HPP
 
-#include "liquid.hpp"
-
 #include "libs/vector.hpp"
+#include "liquid.hpp"
 
 #include <list>
 #include <queue>
@@ -12,6 +11,7 @@ using namespace Liquid;
 
 struct SnakeRef {
     std::function<void()> grow;
+    std::function<bool(const Vector&)> isOverlap;
 };
 
 auto Snake(
@@ -26,17 +26,21 @@ auto Snake(
     auto direction = createSignal(Vector::right());
     auto directionQueue = createSignal<std::queue<Vector>>();
 
-    auto initialPosition = std::list<Vector>();
+    auto initialPos = std::list<Vector>();
     for (auto i = 0; i < initialLength(); i++) {
-        initialPosition.push_front({ i + 1, fieldSize().y / 2 });
+        initialPos.push_front({ i + 1, fieldSize().y / 2 });
     }
-    auto position = createSignal(initialPosition);
+    auto position = createSignal(initialPos);
 
     ref.set({
         [=]() mutable {
-            auto newPosition = position();
-            newPosition.push_back(newPosition.back());
-            position.set(newPosition);
+            auto newCoords = position();
+            newCoords.push_back(newCoords.back());
+            position.set(newCoords);
+        },
+        [=](const Vector& other) {
+            auto pos = position();
+            return std::find(pos.begin(), pos.end(), other) != pos.end();
         },
     });
 
@@ -62,29 +66,29 @@ auto Snake(
         return direction();
     };
 
-    auto isOutOfField = [=](const Vector& head) {
+    auto isOutOfField = [=](const Vector& headPos) {
         auto [width, height] = fieldSize();
-        return head.x < 0 || head.x >= width || head.y < 0 || head.y >= height;
+        return headPos.x < 0 || headPos.x >= width || headPos.y < 0 || headPos.y >= height;
     };
 
-    auto isSuicide = [=](const Vector& head) {
-        auto pos = position();
-        return std::find(++pos.begin(), pos.end(), head) != pos.end();
+    auto isSuicide = [=](const Vector& headPos) {
+        auto coords = position();
+        return std::find(++coords.begin(), coords.end(), headPos) != coords.end();
     };
 
     auto id = setInterval(200, [=]() mutable {
-        auto newPosition = position();
-        auto headPosition = newPosition.front() + currentDirection();
+        auto newPos = position();
+        auto headPos = newPos.front() + currentDirection();
 
-        if (isOutOfField(headPosition) || isSuicide(headPosition)) {
-            onDeath()(newPosition.size());
+        if (isOutOfField(headPos) || isSuicide(headPos)) {
+            onDeath()(newPos.size());
             return;
         }
 
-        newPosition.pop_back();
-        newPosition.push_front(headPosition);
-        position.set(newPosition);
-        onMove()(headPosition);
+        newPos.pop_back();
+        newPos.push_front(headPos);
+        position.set(newPos);
+        onMove()(headPos);
     });
 
     lifecycle.cleanup([=]() {
