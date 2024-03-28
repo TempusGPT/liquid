@@ -9,8 +9,6 @@ namespace Liquid {
     auto useLifecycle() -> Lifecycle;
 
     class Lifecycle {
-        friend auto useLifecycle() -> Lifecycle;
-
     public:
         ~Lifecycle();
         auto mount(const std::function<void()>& callback) -> void;

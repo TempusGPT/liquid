@@ -5,8 +5,8 @@
 
 namespace Liquid {
     struct Timer;
-    static auto timerId = 0;
     static auto timerSet = std::set<Timer>();
+    static auto newId = 0;
 
     struct Timer {
         int id;
@@ -23,7 +23,7 @@ namespace Liquid {
     auto newTimer(bool willRepeat, int delay, const std::function<void()>& callback) -> Timer {
         auto now = std::chrono::steady_clock::now();
         auto chronoDelay = std::chrono::milliseconds(delay);
-        return { timerId++, willRepeat, callback, chronoDelay, now + chronoDelay };
+        return { newId++, willRepeat, callback, chronoDelay, now + chronoDelay };
     }
 
     auto setTimeout(int delay, const std::function<void()>& callback) -> int {

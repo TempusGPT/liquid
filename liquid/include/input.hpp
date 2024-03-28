@@ -86,8 +86,6 @@ namespace Liquid {
     auto useInput() -> Input;
 
     class Input {
-        friend auto Liquid::useInput() -> Input;
-
     public:
         ~Input();
         auto bind(const std::vector<Key>& keys, const std::function<void()>& callback) -> void;

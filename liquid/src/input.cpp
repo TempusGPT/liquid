@@ -142,7 +142,7 @@ namespace Liquid {
         std::function<void()> callback;
     };
 
-    static auto inputId = 0;
+    static auto newId = 0;
     static auto inputMap = std::unordered_multimap<Key, InputData>();
     static auto processQueue = std::queue<std::function<void()>>();
 
@@ -161,7 +161,7 @@ namespace Liquid {
             }
         };
 
-        Internal::onCleanup([=]() {
+        Element::onCleanup([=]() {
             processQueue.push(cleanup);
         });
     }
@@ -171,7 +171,7 @@ namespace Liquid {
         const std::function<void()>& callback
     ) -> void {
         for (auto key : keys) {
-            auto id = inputId++;
+            auto id = newId++;
             idSet.insert(id);
 
             processQueue.push([=]() {

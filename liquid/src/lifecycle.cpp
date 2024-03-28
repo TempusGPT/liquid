@@ -12,7 +12,7 @@ namespace Liquid {
         }
 
         for (const auto& callback : cleanupCallbacks) {
-            Internal::onCleanup(callback);
+            Element::onCleanup(callback);
         }
     }
 

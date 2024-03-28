@@ -3,19 +3,15 @@
 #include <ncurses.h>
 
 namespace Liquid {
-    namespace Internal {
-        auto lastMounted = (Element*)nullptr;
-
-        auto onCleanup(const std::function<void()>& callback) -> void {
-            lastMounted->cleanupCallbacks.push_back(callback);
-        }
+    auto Element::onCleanup(const std::function<void()>& callback) -> void {
+        lastMounted->cleanupCallbacks.push_back(callback);
     }
 
     Element::Element(
         const std::function<void(int, int)>& renderCallback,
         const std::vector<std::function<void()>>& cleanupCallbacks
     ) : renderCallback(renderCallback), cleanupCallbacks(cleanupCallbacks) {
-        Internal::lastMounted = this;
+        lastMounted = this;
     }
 
     auto Element::render(int x, int y) const -> void {

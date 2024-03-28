@@ -11,38 +11,26 @@
 
 namespace Liquid {
     namespace Internal {
-        auto currentEffect() -> std::tuple<int, std::function<void()>>;
+        inline auto track = true;
+        inline auto effectId = 0;
+        inline auto effectCallback = std::function<void()>();
         auto runEffect(int id, const std::function<void()>& callback) -> void;
     }
 
     auto createEffect(const std::function<void()>& callback) -> void;
 
     template <typename T>
-    class Signal;
-
-    template <typename T>
-    auto untrack(const Signal<T>& signal) -> T {
-        return *signal.value;
-    }
-
-    template <typename T>
-    auto createSignal(const T& value) -> Signal<T> {
-        return Signal<T>(value);
-    }
-
-    auto createSignal(const char* value) -> Signal<std::string>;
-
-    template <typename T>
     class Signal {
-        friend auto untrack<T>(const Signal<T>& signal) -> T;
-        friend auto createSignal<T>(const T& value) -> Signal<T>;
-        friend auto createSignal(const char* value) -> Signal<std::string>;
-
     public:
+        Signal(const T& value) : value(std::make_shared<T>(value)) {}
+
         auto operator()() const -> T {
-            auto [id, callback] = Internal::currentEffect();
-            if (callback && effectMap->find(id) == effectMap->end()) {
-                effectMap->insert({ id, callback });
+            if (
+                Internal::track &&
+                Internal::effectCallback &&
+                effectMap->find(Internal::effectId) == effectMap->end()
+            ) {
+                effectMap->insert({ Internal::effectId, Internal::effectCallback });
             }
 
             return *value;
@@ -59,12 +47,24 @@ namespace Liquid {
 
     private:
         const std::shared_ptr<T> value;
-        const std::shared_ptr<std::map<int, std::function<void()>>> effectMap;
-
-        Signal(const T& value)
-            : value(std::make_shared<T>(value)),
-              effectMap(std::make_shared<std::map<int, std::function<void()>>>()) {}
+        const std::shared_ptr<std::map<int, std::function<void()>>> effectMap =
+            std::make_shared<std::map<int, std::function<void()>>>();
     };
+
+    template <typename T>
+    auto untrack(const Signal<T>& signal) -> T {
+        Internal::track = false;
+        auto value = signal();
+        Internal::track = true;
+        return value;
+    }
+
+    template <typename T>
+    auto createSignal(const T& value) -> Signal<T> {
+        return Signal<T>(value);
+    }
+
+    auto createSignal(const char* value) -> Signal<std::string>;
 }
 
 #endif
