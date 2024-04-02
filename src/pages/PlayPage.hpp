@@ -16,12 +16,12 @@ auto PlayPage() -> Element {
     auto snake = createSignal<SnakeRef>();
 
     auto handleSnakeMove = [=](const Vector& head) {
-        if (head != apple().position()) {
-            return;
+        if (head == apple().position()) {
+            snake().grow();
+            do {
+                apple().refresh();
+            } while (snake().isOverlap(apple().position()));
         }
-
-        snake().grow();
-        apple().refresh();
     };
 
     auto handleSnakeDeath = [=](int) mutable {
