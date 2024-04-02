@@ -8,11 +8,10 @@
 
 using namespace Liquid;
 
-auto PlayPage() -> Element {
-    static constexpr Vector fieldSize = { 20, 20 };
+constexpr Vector FIELD_SIZE = { 20, 20 };
 
+auto PlayPage() -> Element {
     auto router = useRouter();
-    auto lifecycle = useLifecycle();
     auto apple = createSignal<AppleRef>();
     auto snake = createSignal<SnakeRef>();
 
@@ -30,11 +29,9 @@ auto PlayPage() -> Element {
     };
 
     return Group({
-        Apple(apple, fieldSize),
+        Apple(apple, FIELD_SIZE),
         Goto(0, 0),
-        Snake(snake, 4, fieldSize, handleSnakeMove, handleSnakeDeath),
-        Goto(0, 0),
-        Text(FN("x: %0%, y: %1%"_fmt % apple().position().x % apple().position().y)),
+        Snake(snake, 4, FIELD_SIZE, handleSnakeMove, handleSnakeDeath),
     });
 }
 
