@@ -13,7 +13,7 @@ struct AppleRef {
 };
 
 auto Apple(Signal<AppleRef>& ref, const Prop<Vector>& fieldSize) -> Element {
-    auto position = createSignal<Vector>({ fieldSize().x - 2, fieldSize().y / 2 });
+    auto position = createSignal<Vector>({ fieldSize().x / 2, fieldSize().y / 2 });
 
     ref.set({
         [=]() {
@@ -28,7 +28,7 @@ auto Apple(Signal<AppleRef>& ref, const Prop<Vector>& fieldSize) -> Element {
     });
 
     return Group({
-        Goto(FN(position().x * 2), FN(position().y)),
+        Goto(RP(position().x * 2), RP(position().y)),
         Text("", Color::Red),
     });
 }

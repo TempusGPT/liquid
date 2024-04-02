@@ -28,7 +28,7 @@ namespace Liquid {
         Prop(Args&&... args)
             : getter([value = T { std::forward<Args>(args)... }]() { return value; }) {}
 
-        T operator()() const {
+        auto operator()() const -> T {
             return getter();
         }
 

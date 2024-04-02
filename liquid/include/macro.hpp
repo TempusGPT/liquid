@@ -8,7 +8,7 @@
 #include <tuple>
 #include <vector>
 
-#define FN(expr) [=]() mutable { return expr; }
+#define RP(expr) [=]() mutable { return expr; }
 
 #define WHEN(condition) \
     [=]() {                                                     \
