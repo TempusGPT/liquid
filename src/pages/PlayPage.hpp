@@ -12,25 +12,50 @@ using namespace liquid;
 constexpr Vector FIELD_SIZE = { 23, 23 };
 
 auto PlayPage() -> Element {
+    auto effect = Effect();
     auto snake = Signal<SnakeRef>();
     auto apple = Signal<AppleRef>();
     auto poisonedApple = Signal<AppleRef>();
 
+    auto isAppleOverlap = [=]() {
+        return apple().position() == poisonedApple().position() ||
+               snake().isOverlap(apple().position()) ||
+               snake().isOverlap(poisonedApple().position());
+    };
+
+    auto refreshApple = [=]() {
+        do {
+            apple().refresh();
+        } while (isAppleOverlap());
+    };
+
+    auto refreshPoisonedApple = [=]() {
+        do {
+            poisonedApple().refresh();
+        } while (isAppleOverlap());
+    };
+
     auto handleSnakeMove = [=](const Vector& head) {
         if (head == apple().position()) {
             snake().grow();
-            apple().refresh();
+            refreshApple();
         }
 
         if (head == poisonedApple().position()) {
             snake().shrink();
-            poisonedApple().refresh();
+            refreshPoisonedApple();
         }
     };
 
     auto handleSnakeDeath = [](int) {
         navigate("/");
     };
+
+    // TODO: effect.create segfaults
+    setTimeout(0, [=]() {
+        refreshApple();
+        refreshPoisonedApple();
+    });
 
     return Group({
         Frame("■", FIELD_SIZE + Vector { 2, 2 }, Color::Green),

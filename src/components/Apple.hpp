@@ -29,8 +29,6 @@ auto Apple(
         },
     });
 
-    ref().refresh();
-
     return Group({
         Goto(RP(position().x * 2), RP(position().y)),
         Text("●", RP(color())),
