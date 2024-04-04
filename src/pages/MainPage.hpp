@@ -6,11 +6,10 @@
 using namespace Liquid;
 
 auto MainPage() -> Element {
-    auto input = useInput();
-    auto router = useRouter();
+    auto input = Input();
 
     input.bind({ Key::Enter }, [=]() mutable {
-        router.navigate("/play");
+        navigate("/play");
     });
 
     return Group({

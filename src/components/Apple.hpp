@@ -13,7 +13,7 @@ struct AppleRef {
 };
 
 auto Apple(Signal<AppleRef>& ref, const Prop<Vector>& fieldSize) -> Element {
-    auto position = createSignal<Vector>({ fieldSize().x / 2, fieldSize().y / 2 });
+    auto position = Signal<Vector>({ fieldSize().x / 2, fieldSize().y / 2 });
 
     ref.set({
         [=]() {

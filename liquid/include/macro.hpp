@@ -12,12 +12,13 @@
 
 #define WHEN(condition) \
     [=]() {                                                     \
-        auto elements = createSignal<std::vector<Element>>();   \
+        auto effect = Effect();                                 \
+        auto elements = Signal<std::vector<Element>>();         \
         auto cleanup = [=]() {                                  \
             for (const auto& element : untrack(elements))       \
                 element.cleanup();                              \
         };                                                      \
-        createEffect([=]() mutable {                            \
+        effect.create([=]() mutable {                           \
             cleanup();                                          \
             if (condition) return elements.set(
 
@@ -46,12 +47,13 @@
 
 #define EACH(items, item, index) \
     [=]() {                                                     \
-        auto elements = createSignal<std::vector<Element>>();   \
+        auto effect = Effect();                                 \
+        auto elements = Signal<std::vector<Element>>();         \
         auto cleanup = [=]() {                                  \
             for (const auto& element : untrack(elements))       \
                 element.cleanup();                              \
         };                                                      \
-        createEffect([=]() mutable {                            \
+        effect.create([=]() mutable {                           \
             cleanup();                                          \
             auto index = -1;                                    \
             auto newElements = std::vector<Element>();          \

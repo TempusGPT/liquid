@@ -8,31 +8,23 @@
 
 using namespace Liquid;
 
-class Router {
-public:
-    auto path() const -> std::string {
-        return currentPath();
-    };
+namespace Internal {
+    auto currentPath = Signal("/");
+}
 
-    auto navigate(const std::string& newPath) -> void {
-        currentPath.set(newPath);
-    };
-
-private:
-    static inline auto currentPath = createSignal("/");
+auto path() -> std::string {
+    return ::Internal::currentPath();
 };
 
-auto useRouter() -> Router {
-    return Router();
-}
+auto navigate(const std::string& newPath) -> void {
+    ::Internal::currentPath.set(newPath);
+};
 
 auto Route(
     const Prop<std::string>& path,
     const Prop<std::function<Element()>>& component
 ) -> Element {
-    auto router = useRouter();
-
-    return WHEN(path() == router.path()) {
+    return WHEN(path() == ::path()) {
         component()(),
     } END_WHEN;
 }

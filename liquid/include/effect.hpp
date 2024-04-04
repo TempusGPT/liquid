@@ -10,7 +10,16 @@ namespace Liquid {
         auto runEffect(int id, const std::function<void()>& callback) -> void;
     }
 
-    auto createEffect(const std::function<void()>& callback) -> void;
+    class Effect {
+    public:
+        ~Effect();
+        auto create(const std::function<void()>& callback) -> void;
+        auto cleanup(const std::function<void()>& callback) -> void;
+
+    private:
+        std::vector<std::function<void()>> callbacks;
+        std::vector<std::function<void()>> cleanupCallbacks;
+    };
 }
 
 #endif

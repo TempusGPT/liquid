@@ -11,9 +11,8 @@ using namespace Liquid;
 constexpr Vector FIELD_SIZE = { 20, 20 };
 
 auto PlayPage() -> Element {
-    auto router = useRouter();
-    auto apple = createSignal<AppleRef>();
-    auto snake = createSignal<SnakeRef>();
+    auto apple = Signal<AppleRef>();
+    auto snake = Signal<SnakeRef>();
 
     auto handleSnakeMove = [=](const Vector& head) {
         if (head == apple().position()) {
@@ -25,7 +24,7 @@ auto PlayPage() -> Element {
     };
 
     auto handleSnakeDeath = [=](int) mutable {
-        router.navigate("/");
+        navigate("/");
     };
 
     return Group({

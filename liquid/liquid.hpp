@@ -7,7 +7,6 @@
 #include "include/element.hpp"
 #include "include/format.hpp"
 #include "include/input.hpp"
-#include "include/lifecycle.hpp"
 #include "include/macro.hpp"
 #include "include/prop.hpp"
 #include "include/signal.hpp"

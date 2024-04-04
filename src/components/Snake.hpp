@@ -21,16 +21,16 @@ auto Snake(
     const Prop<std::function<void(Vector)>>& onMove,
     const Prop<std::function<void(int)>>& onDeath
 ) -> Element {
-    auto input = useInput();
-    auto lifecycle = useLifecycle();
-    auto direction = createSignal(Vector::right());
-    auto directionQueue = createSignal<std::queue<Vector>>();
+    auto input = Input();
+    auto effect = Effect();
+    auto direction = Signal(Vector::right());
+    auto directionQueue = Signal<std::queue<Vector>>();
 
     auto initialPos = std::list<Vector>();
     for (auto i = 0; i < initialLength(); i++) {
         initialPos.push_front({ i + 1, fieldSize().y / 2 });
     }
-    auto position = createSignal(initialPos);
+    auto position = Signal(initialPos);
 
     ref.set({
         [=]() mutable {
@@ -91,7 +91,7 @@ auto Snake(
         onMove()(headPos);
     });
 
-    lifecycle.cleanup([=]() {
+    effect.cleanup([=]() {
         clearTimer(id);
     });
 

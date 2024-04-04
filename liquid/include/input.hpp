@@ -82,9 +82,6 @@ namespace Liquid {
         RightArrow,
     };
 
-    class Input;
-    auto useInput() -> Input;
-
     class Input {
     public:
         ~Input();

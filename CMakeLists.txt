@@ -19,8 +19,6 @@ add_executable(
     liquid/src/element.cpp
     liquid/src/format.cpp
     liquid/src/input.cpp
-    liquid/src/lifecycle.cpp
-    liquid/src/signal.cpp
     liquid/src/timer.cpp
 )
 

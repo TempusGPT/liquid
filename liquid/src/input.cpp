@@ -146,10 +146,6 @@ namespace Liquid {
     static auto inputMap = std::unordered_multimap<Key, InputData>();
     static auto processQueue = std::queue<std::function<void()>>();
 
-    auto useInput() -> Input {
-        return Input();
-    }
-
     Input::~Input() {
         auto cleanup = [idSet = this->idSet]() {
             for (auto it = inputMap.begin(); it != inputMap.end();) {
