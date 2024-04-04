@@ -11,6 +11,7 @@ using namespace liquid;
 
 struct SnakeRef {
     std::function<void()> grow;
+    std::function<void()> shrink;
     std::function<bool(const Vector&)> isOverlap;
 };
 
@@ -36,6 +37,11 @@ auto Snake(
         [=]() mutable {
             auto newCoords = position();
             newCoords.push_back(newCoords.back());
+            position.set(newCoords);
+        },
+        [=]() mutable {
+            auto newCoords = position();
+            newCoords.pop_back();
             position.set(newCoords);
         },
         [=](const Vector& other) {

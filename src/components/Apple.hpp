@@ -12,13 +12,15 @@ struct AppleRef {
     std::function<void()> refresh;
 };
 
-auto Apple(Signal<AppleRef>& ref, const Prop<Vector>& fieldSize) -> Element {
+auto Apple(
+    Signal<AppleRef>& ref,
+    const Prop<Vector>& fieldSize,
+    const Prop<Color>& color
+) -> Element {
     auto position = Signal<Vector>({ fieldSize().x / 2, fieldSize().y / 2 });
 
     ref.set({
-        [=]() {
-            return position();
-        },
+        [=]() { return position(); },
         [=]() mutable {
             position.set({
                 random(0, fieldSize().x - 1),
@@ -27,9 +29,11 @@ auto Apple(Signal<AppleRef>& ref, const Prop<Vector>& fieldSize) -> Element {
         },
     });
 
+    ref().refresh();
+
     return Group({
         Goto(RP(position().x * 2), RP(position().y)),
-        Text("●", Color::Red),
+        Text("●", RP(color())),
     });
 }
 
