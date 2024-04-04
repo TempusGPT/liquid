@@ -29,7 +29,7 @@ auto Apple(Signal<AppleRef>& ref, const Prop<Vector>& fieldSize) -> Element {
 
     return Group({
         Goto(RP(position().x * 2), RP(position().y)),
-        Text("", Color::Red),
+        Text("●", Color::Red),
     });
 }
 

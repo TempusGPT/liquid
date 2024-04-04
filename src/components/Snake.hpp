@@ -98,7 +98,7 @@ auto Snake(
     return Group({
         EACH(position(), pos, i) {
             Goto(pos.x * 2, pos.y),
-            Text(i == 0 ? "●" : "○"),
+            Text(i == 0 ? "●" : "○", Color::Cyan),
         } END_EACH,
     });
 }
