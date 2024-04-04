@@ -5,7 +5,7 @@
 #include "libs/vector.hpp"
 #include "liquid.hpp"
 
-using namespace Liquid;
+using namespace liquid;
 
 struct AppleRef {
     std::function<Vector()> position;

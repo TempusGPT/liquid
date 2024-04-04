@@ -1,10 +1,10 @@
 #include "include/effect.hpp"
 #include "include/element.hpp"
 
-namespace Liquid {
+namespace liquid {
     static auto newId = 0;
 
-    namespace Internal {
+    namespace detail {
         auto runEffect(int id, const std::function<void()>& callback) -> void {
             effectId = id;
             effectCallback = callback;
@@ -15,7 +15,7 @@ namespace Liquid {
 
     Effect::~Effect() {
         for (const auto& callback : callbacks) {
-            Internal::runEffect(newId++, callback);
+            detail::runEffect(newId++, callback);
         }
 
         for (const auto& callback : cleanupCallbacks) {

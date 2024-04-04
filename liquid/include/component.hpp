@@ -4,7 +4,7 @@
 #include "element.hpp"
 #include "prop.hpp"
 
-namespace Liquid {
+namespace liquid {
     auto Goto(const Prop<int>& x, const Prop<int>& y) -> Element;
     auto Group(const Prop<std::vector<Element>>& elements) -> Element;
 

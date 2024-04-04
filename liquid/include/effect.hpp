@@ -3,8 +3,8 @@
 
 #include <functional>
 
-namespace Liquid {
-    namespace Internal {
+namespace liquid {
+    namespace detail {
         inline auto effectId = 0;
         inline auto effectCallback = std::function<void()>();
         auto runEffect(int id, const std::function<void()>& callback) -> void;

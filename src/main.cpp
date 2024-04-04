@@ -3,7 +3,7 @@
 #include "pages/MainPage.hpp"
 #include "pages/PlayPage.hpp"
 
-using namespace Liquid;
+using namespace liquid;
 
 auto main() -> int {
     auto element = Group({

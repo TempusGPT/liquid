@@ -1,14 +1,15 @@
 #ifndef PAGES_MAINPAGE_HPP
 #define PAGES_MAINPAGE_HPP
 
+#include "libs/router.hpp"
 #include "liquid.hpp"
 
-using namespace Liquid;
+using namespace liquid;
 
 auto MainPage() -> Element {
     auto input = Input();
 
-    input.bind({ Key::Enter }, [=]() mutable {
+    input.bind({ Key::Enter }, []() {
         navigate("/play");
     });
 

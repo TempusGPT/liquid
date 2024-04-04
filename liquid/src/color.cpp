@@ -2,14 +2,14 @@
 
 #include <ncurses.h>
 
-namespace Liquid {
+namespace liquid {
     auto colorAttribute(Color foreground, Color background) -> short {
         auto lhs = static_cast<int>(foreground) * 10;
         auto rhs = static_cast<int>(background);
         return lhs + rhs;
     }
 
-    namespace Internal {
+    namespace detail {
         auto initializeColor() -> void {
             start_color();
 

@@ -6,18 +6,18 @@
 #include <string>
 #include <tuple>
 
-using namespace Liquid;
+using namespace liquid;
 
-namespace Internal {
+namespace router {
     auto currentPath = Signal("/");
 }
 
 auto path() -> std::string {
-    return ::Internal::currentPath();
+    return router::currentPath();
 };
 
 auto navigate(const std::string& newPath) -> void {
-    ::Internal::currentPath.set(newPath);
+    router::currentPath.set(newPath);
 };
 
 auto Route(

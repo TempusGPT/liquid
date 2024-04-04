@@ -4,7 +4,7 @@
 #include <sstream>
 #include <string>
 
-namespace Liquid {
+namespace liquid {
     class FmtString {
     public:
         FmtString(const std::string& fmt);

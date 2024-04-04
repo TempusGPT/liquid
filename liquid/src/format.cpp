@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace Liquid {
+namespace liquid {
     FmtString::FmtString(const std::string& fmt) : fmt(fmt) {}
 
     FmtString::operator std::string() const {

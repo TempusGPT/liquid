@@ -6,7 +6,7 @@
 #include "libs/router.hpp"
 #include "liquid.hpp"
 
-using namespace Liquid;
+using namespace liquid;
 
 constexpr Vector FIELD_SIZE = { 20, 20 };
 
@@ -23,7 +23,7 @@ auto PlayPage() -> Element {
         }
     };
 
-    auto handleSnakeDeath = [=](int) mutable {
+    auto handleSnakeDeath = [](int) {
         navigate("/");
     };
 

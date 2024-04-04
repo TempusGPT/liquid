@@ -7,7 +7,7 @@
 #include <list>
 #include <queue>
 
-using namespace Liquid;
+using namespace liquid;
 
 struct SnakeRef {
     std::function<void()> grow;

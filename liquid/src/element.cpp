@@ -2,7 +2,7 @@
 
 #include <ncurses.h>
 
-namespace Liquid {
+namespace liquid {
     auto Element::onCleanup(const std::function<void()>& callback) -> void {
         lastMounted->cleanupCallbacks.push_back(callback);
     }

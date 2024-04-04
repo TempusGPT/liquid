@@ -5,7 +5,7 @@
 #include <queue>
 #include <unordered_map>
 
-namespace Liquid {
+namespace liquid {
     static const auto keyMap = std::unordered_map<int, Key> {
         { 'a', Key::A },
         { 'A', Key::A },
@@ -176,7 +176,7 @@ namespace Liquid {
         }
     }
 
-    namespace Internal {
+    namespace detail {
         auto initializeInput() -> void {
             keypad(stdscr, true);
             nodelay(stdscr, true);

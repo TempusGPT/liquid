@@ -4,7 +4,7 @@
 
 #include <ncurses.h>
 
-namespace Liquid {
+namespace liquid {
     auto Goto(const Prop<int>& x, const Prop<int>& y) -> Element {
         return Element([=](int xOrigin, int yOrigin) {
             move(yOrigin + y(), xOrigin + x());
@@ -37,9 +37,9 @@ namespace Liquid {
         const Prop<Color>& background
     ) -> Element {
         return Element([=](int, int) {
-            Internal::enableColor(foreground(), background());
+            detail::enableColor(foreground(), background());
             printw("%s", value().c_str());
-            Internal::disableColor(foreground(), background());
+            detail::disableColor(foreground(), background());
         });
     }
 }

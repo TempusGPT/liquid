@@ -1,7 +1,7 @@
 #ifndef LIQUID_COLOR_HPP
 #define LIQUID_COLOR_HPP
 
-namespace Liquid {
+namespace liquid {
     enum class Color {
         Black,
         Red,
@@ -13,7 +13,7 @@ namespace Liquid {
         White,
     };
 
-    namespace Internal {
+    namespace detail {
         auto initializeColor() -> void;
         auto enableColor(Color foreground, Color background) -> void;
         auto disableColor(Color foreground, Color background) -> void;

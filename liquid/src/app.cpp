@@ -8,19 +8,19 @@
 #include <string>
 #include <thread>
 
-namespace Liquid {
+namespace liquid {
     static auto isDirty = true;
     static auto isActive = true;
 
     auto render(const Element& element) -> int {
         setlocale(LC_ALL, "");
         initscr();
-        Internal::initializeInput();
-        Internal::initializeColor();
+        detail::initializeInput();
+        detail::initializeColor();
 
         while (isActive) {
-            Internal::processInput();
-            Internal::processTimer();
+            detail::processInput();
+            detail::processTimer();
 
             if (isDirty) {
                 isDirty = false;
@@ -44,7 +44,7 @@ namespace Liquid {
         isActive = false;
     }
 
-    namespace Internal {
+    namespace detail {
         auto markDirty() -> void {
             isDirty = true;
         }

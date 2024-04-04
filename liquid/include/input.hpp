@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <vector>
 
-namespace Liquid {
+namespace liquid {
     enum class Key {
         A,
         B,
@@ -91,7 +91,7 @@ namespace Liquid {
         std::unordered_set<int> idSet;
     };
 
-    namespace Internal {
+    namespace detail {
         auto initializeInput() -> void;
         auto processInput() -> void;
     }

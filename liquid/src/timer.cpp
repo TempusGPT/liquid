@@ -3,7 +3,7 @@
 #include <chrono>
 #include <set>
 
-namespace Liquid {
+namespace liquid {
     struct Timer;
     static auto timerSet = std::set<Timer>();
     static auto newId = 0;
@@ -48,7 +48,7 @@ namespace Liquid {
         }
     }
 
-    namespace Internal {
+    namespace detail {
         auto processTimer() -> void {
             auto now = std::chrono::steady_clock::now();
             while (!timerSet.empty() && timerSet.begin()->invokeAt <= now) {

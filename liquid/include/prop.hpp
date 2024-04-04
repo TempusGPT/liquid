@@ -5,7 +5,7 @@
 #include <initializer_list>
 #include <type_traits>
 
-namespace Liquid {
+namespace liquid {
     template <typename T, typename... Args>
     struct is_initializable {
         template <typename... U>

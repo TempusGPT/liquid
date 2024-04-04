@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 
-namespace Liquid {
+namespace liquid {
     class Element {
     public:
         static auto onCleanup(const std::function<void()>& callback) -> void;

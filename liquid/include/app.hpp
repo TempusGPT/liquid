@@ -5,12 +5,12 @@
 
 #include <string>
 
-namespace Liquid {
+namespace liquid {
     auto render(const Element& element) -> int;
     auto beep() -> void;
     auto exit() -> void;
 
-    namespace Internal {
+    namespace detail {
         auto markDirty() -> void;
     }
 }

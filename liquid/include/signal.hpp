@@ -10,8 +10,8 @@
 #include <string>
 #include <vector>
 
-namespace Liquid {
-    namespace Internal {
+namespace liquid {
+    namespace detail {
         inline auto track = true;
     }
 
@@ -23,22 +23,22 @@ namespace Liquid {
 
         auto operator()() const -> T {
             if (
-                Internal::track &&
-                Internal::effectCallback &&
-                effectMap->find(Internal::effectId) == effectMap->end()
+                detail::track &&
+                detail::effectCallback &&
+                effectMap->find(detail::effectId) == effectMap->end()
             ) {
-                effectMap->insert({ Internal::effectId, Internal::effectCallback });
+                effectMap->insert({ detail::effectId, detail::effectCallback });
             }
 
             return *value;
         }
 
         auto set(const T& newValue) -> void {
-            Internal::markDirty();
+            detail::markDirty();
             *value = newValue;
 
             for (const auto& [id, callback] : *effectMap) {
-                Internal::runEffect(id, callback);
+                detail::runEffect(id, callback);
             }
         }
 
@@ -54,9 +54,9 @@ namespace Liquid {
 
     template <typename T>
     auto untrack(const Signal<T>& signal) -> T {
-        Internal::track = false;
+        detail::track = false;
         auto value = signal();
-        Internal::track = true;
+        detail::track = true;
         return value;
     }
 }
