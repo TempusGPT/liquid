@@ -82,22 +82,22 @@ auto Snake(
         return std::find(++coords.begin(), coords.end(), headPos) != coords.end();
     };
 
-    auto id = setInterval(200, [=]() mutable {
-        auto newPos = position();
-        auto headPos = newPos.front() + currentDirection();
-
-        if (isOutOfField(headPos) || isSuicide(headPos)) {
-            onDeath()(newPos.size());
-            return;
-        }
-
-        newPos.pop_back();
-        newPos.push_front(headPos);
-        position.set(newPos);
-        onMove()(headPos);
-    });
-
     effect([=]() {
+        auto id = setInterval(200, [=]() mutable {
+            auto newPos = position();
+            auto headPos = newPos.front() + currentDirection();
+
+            if (isOutOfField(headPos) || isSuicide(headPos)) {
+                onDeath()(newPos.size());
+                return;
+            }
+
+            newPos.pop_back();
+            newPos.push_front(headPos);
+            position.set(newPos);
+            onMove()(headPos);
+        });
+
         return [=]() {
             clearTimer(id);
         };
