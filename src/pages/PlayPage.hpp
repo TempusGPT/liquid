@@ -51,7 +51,7 @@ auto PlayPage() -> Element {
         navigate("/");
     };
 
-    effect.create([=]() {
+    effect([=]() {
         untrack([=]() {
             refreshApple();
             refreshPoisonedApple();

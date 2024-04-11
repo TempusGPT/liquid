@@ -44,8 +44,8 @@ namespace liquid {
 
     private:
         const std::shared_ptr<T> value;
-        const std::shared_ptr<std::map<int, std::function<void()>>> effectMap =
-            std::make_shared<std::map<int, std::function<void()>>>();
+        const std::shared_ptr<std::map<int, std::function<std::function<void()>()>>> effectMap =
+            std::make_shared<std::map<int, std::function<std::function<void()>()>>>();
     };
 
     template <typename T>
@@ -53,9 +53,9 @@ namespace liquid {
     State(const char*) -> State<std::string>;
 
     template <typename T>
-    auto untrack(const State<T>& signal) -> T {
+    auto untrack(const State<T>& state) -> T {
         detail::track = false;
-        auto value = signal();
+        auto value = state();
         detail::track = true;
         return value;
     }

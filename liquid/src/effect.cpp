@@ -5,29 +5,24 @@ namespace liquid {
     static auto newId = 0;
 
     namespace detail {
-        auto runEffect(int id, const std::function<void()>& callback) -> void {
+        auto runEffect(
+            int id,
+            const std::function<std::function<void()>()>& callback
+        ) -> std::function<void()> {
             effectId = id;
             effectCallback = callback;
-            callback();
+            auto cleanup = callback();
             effectCallback = nullptr;
+            return cleanup;
         }
     }
 
     Effect::~Effect() {
         for (const auto& callback : callbacks) {
-            detail::runEffect(newId++, callback);
+            auto cleanup = detail::runEffect(newId++, callback);
+            if (cleanup) {
+                Element::onCleanup(cleanup);
+            }
         }
-
-        for (const auto& callback : cleanupCallbacks) {
-            Element::onCleanup(callback);
-        }
-    }
-
-    auto Effect::create(const std::function<void()>& callback) -> void {
-        callbacks.push_back(callback);
-    }
-
-    auto Effect::cleanup(const std::function<void()>& callback) -> void {
-        cleanupCallbacks.push_back(callback);
     }
 }

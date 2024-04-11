@@ -97,8 +97,10 @@ auto Snake(
         onMove()(headPos);
     });
 
-    effect.cleanup([=]() {
-        clearTimer(id);
+    effect([=]() {
+        return [=]() {
+            clearTimer(id);
+        };
     });
 
     return Group({

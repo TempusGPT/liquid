@@ -13,12 +13,12 @@
 #define WHEN(condition) \
     [=]() {                                                     \
         auto effect = Effect();                                 \
-        auto elements = State<std::vector<Element>>();         \
+        auto elements = State<std::vector<Element>>();          \
         auto cleanup = [=]() {                                  \
             for (const auto& element : elements())              \
                 element.cleanup();                              \
         };                                                      \
-        effect.create([=]() mutable {                           \
+        effect([=]() mutable {                                  \
             untrack([=]() { cleanup(); });                      \
             if (condition) return elements.set(
 
@@ -48,12 +48,12 @@
 #define EACH(items, item, index) \
     [=]() {                                                     \
         auto effect = Effect();                                 \
-        auto elements = State<std::vector<Element>>();         \
+        auto elements = State<std::vector<Element>>();          \
         auto cleanup = [=]() {                                  \
             for (const auto& element : elements())              \
                 element.cleanup();                              \
         };                                                      \
-        effect.create([=]() mutable {                           \
+        effect([=]() mutable {                                  \
             untrack([=]() { cleanup(); });                      \
             auto index = -1;                                    \
             auto newElements = std::vector<Element>();          \
