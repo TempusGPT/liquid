@@ -3,7 +3,7 @@
 
 #include "component.hpp"
 #include "effect.hpp"
-#include "signal.hpp"
+#include "state.hpp"
 
 #include <tuple>
 #include <vector>
@@ -13,13 +13,13 @@
 #define WHEN(condition) \
     [=]() {                                                     \
         auto effect = Effect();                                 \
-        auto elements = Signal<std::vector<Element>>();         \
+        auto elements = State<std::vector<Element>>();         \
         auto cleanup = [=]() {                                  \
-            for (const auto& element : untrack(elements))       \
+            for (const auto& element : elements())              \
                 element.cleanup();                              \
         };                                                      \
         effect.create([=]() mutable {                           \
-            cleanup();                                          \
+            untrack([=]() { cleanup(); });                      \
             if (condition) return elements.set(
 
 #define OR(condition) \
@@ -48,13 +48,13 @@
 #define EACH(items, item, index) \
     [=]() {                                                     \
         auto effect = Effect();                                 \
-        auto elements = Signal<std::vector<Element>>();         \
+        auto elements = State<std::vector<Element>>();         \
         auto cleanup = [=]() {                                  \
-            for (const auto& element : untrack(elements))       \
+            for (const auto& element : elements())              \
                 element.cleanup();                              \
         };                                                      \
         effect.create([=]() mutable {                           \
-            cleanup();                                          \
+            untrack([=]() { cleanup(); });                      \
             auto index = -1;                                    \
             auto newElements = std::vector<Element>();          \
             for (const auto &item : items) {                    \

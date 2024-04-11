@@ -16,10 +16,10 @@ namespace liquid {
     }
 
     template <typename T>
-    class Signal {
+    class State {
     public:
-        Signal(const T& value = T()) : value(std::make_shared<T>(value)) {}
-        Signal(const char* value) : value(std::make_shared<std::string>(value)) {}
+        State(const T& value = T()) : value(std::make_shared<T>(value)) {}
+        State(const char* value) : value(std::make_shared<std::string>(value)) {}
 
         auto operator()() const -> T {
             if (
@@ -49,16 +49,18 @@ namespace liquid {
     };
 
     template <typename T>
-    Signal(const T&) -> Signal<T>;
-    Signal(const char*) -> Signal<std::string>;
+    State(const T&) -> State<T>;
+    State(const char*) -> State<std::string>;
 
     template <typename T>
-    auto untrack(const Signal<T>& signal) -> T {
+    auto untrack(const State<T>& signal) -> T {
         detail::track = false;
         auto value = signal();
         detail::track = true;
         return value;
     }
+
+    auto untrack(const std::function<void()>& callback) -> void;
 }
 
 #endif

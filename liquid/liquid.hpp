@@ -9,7 +9,7 @@
 #include "include/input.hpp"
 #include "include/macro.hpp"
 #include "include/prop.hpp"
-#include "include/signal.hpp"
+#include "include/state.hpp"
 #include "include/timer.hpp"
 
 #endif

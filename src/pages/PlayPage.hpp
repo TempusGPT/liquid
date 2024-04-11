@@ -13,9 +13,9 @@ constexpr Vector FIELD_SIZE = { 23, 23 };
 
 auto PlayPage() -> Element {
     auto effect = Effect();
-    auto snake = Signal<SnakeRef>();
-    auto apple = Signal<AppleRef>();
-    auto poisonedApple = Signal<AppleRef>();
+    auto snake = State<SnakeRef>();
+    auto apple = State<AppleRef>();
+    auto poisonedApple = State<AppleRef>();
 
     auto isAppleOverlap = [=]() {
         return apple().position() == poisonedApple().position() ||
@@ -51,10 +51,11 @@ auto PlayPage() -> Element {
         navigate("/");
     };
 
-    // TODO: effect.create segfaults
-    setTimeout(0, [=]() {
-        refreshApple();
-        refreshPoisonedApple();
+    effect.create([=]() {
+        untrack([=]() {
+            refreshApple();
+            refreshPoisonedApple();
+        });
     });
 
     return Group({

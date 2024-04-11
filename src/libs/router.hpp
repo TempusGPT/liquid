@@ -9,7 +9,7 @@
 using namespace liquid;
 
 namespace router {
-    auto currentPath = Signal("/");
+    auto currentPath = State("/");
 }
 
 auto path() -> std::string {

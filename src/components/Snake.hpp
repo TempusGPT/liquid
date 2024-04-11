@@ -16,7 +16,7 @@ struct SnakeRef {
 };
 
 auto Snake(
-    Signal<SnakeRef>& ref,
+    State<SnakeRef>& ref,
     const Prop<int>& initialLength,
     const Prop<Vector>& fieldSize,
     const Prop<std::function<void(Vector)>>& onMove,
@@ -24,14 +24,14 @@ auto Snake(
 ) -> Element {
     auto input = Input();
     auto effect = Effect();
-    auto direction = Signal(Vector::right());
-    auto directionQueue = Signal<std::queue<Vector>>();
+    auto direction = State(Vector::right());
+    auto directionQueue = State<std::queue<Vector>>();
 
     auto initialPos = std::list<Vector>();
     for (auto i = 0; i < initialLength(); i++) {
         initialPos.push_front({ i + 1, fieldSize().y / 2 });
     }
-    auto position = Signal(initialPos);
+    auto position = State(initialPos);
 
     ref.set({
         [=]() mutable {
