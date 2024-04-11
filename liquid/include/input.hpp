@@ -85,7 +85,10 @@ namespace liquid {
     class Input {
     public:
         ~Input();
-        auto bind(const std::vector<Key>& keys, const std::function<void()>& callback) -> void;
+        auto operator()(
+            const std::vector<Key>& keys,
+            const std::function<void()>& callback
+        ) -> void;
 
     private:
         std::unordered_set<int> idSet;

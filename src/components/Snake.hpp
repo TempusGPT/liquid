@@ -56,10 +56,10 @@ auto Snake(
         directionQueue.set(newDirectionQueue);
     };
 
-    input.bind({ Key::UpArrow }, [=]() mutable { enqueueDirection(Vector::up()); });
-    input.bind({ Key::DownArrow }, [=]() mutable { enqueueDirection(Vector::down()); });
-    input.bind({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
-    input.bind({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });
+    input({ Key::UpArrow }, [=]() mutable { enqueueDirection(Vector::up()); });
+    input({ Key::DownArrow }, [=]() mutable { enqueueDirection(Vector::down()); });
+    input({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
+    input({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });
 
     auto currentDirection = [=]() mutable {
         auto newDirectionQueue = directionQueue();

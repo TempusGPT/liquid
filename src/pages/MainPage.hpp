@@ -9,7 +9,7 @@ using namespace liquid;
 auto MainPage() -> Element {
     auto input = Input();
 
-    input.bind({ Key::Enter }, []() {
+    input({ Key::Enter }, []() {
         navigate("/play");
     });
 

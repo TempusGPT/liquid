@@ -7,14 +7,20 @@ namespace liquid {
     namespace detail {
         inline auto effectId = 0;
         inline auto effectCallback = std::function<std::function<void()>()>();
-        auto runEffect(int id, const std::function<std::function<void()>()>& callback) -> std::function<void()>;
+
+        auto runEffect(
+            int id,
+            const std::function<std::function<void()>()>& callback
+        ) -> std::function<void()>;
     }
 
     class Effect {
     public:
         ~Effect();
 
-        template <typename Fn, std::enable_if_t<std::is_same_v<void, std::invoke_result_t<Fn>>, int> = 0>
+        template <
+            typename Fn,
+            std::enable_if_t<std::is_same_v<void, std::invoke_result_t<Fn>>, int> = 0>
         auto operator()(Fn&& callback) -> void {
             callbacks.push_back([=]() mutable {
                 callback();
@@ -22,7 +28,9 @@ namespace liquid {
             });
         }
 
-        template <typename Fn, std::enable_if_t<std::is_invocable_v<std::invoke_result_t<Fn>>, int> = 0>
+        template <
+            typename Fn,
+            std::enable_if_t<std::is_invocable_v<std::invoke_result_t<Fn>>, int> = 0>
         auto operator()(Fn&& callback) -> void {
             callbacks.push_back(callback);
         }
