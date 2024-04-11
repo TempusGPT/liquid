@@ -5,7 +5,7 @@
 #include <ncurses.h>
 
 namespace liquid {
-    auto Goto(const Prop<int>& x, const Prop<int>& y) -> Element {
+    auto Cursor(const Prop<int>& x, const Prop<int>& y) -> Element {
         return Element([=](int xOrigin, int yOrigin) {
             move(yOrigin + y(), xOrigin + x());
         });

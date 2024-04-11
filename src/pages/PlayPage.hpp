@@ -60,11 +60,11 @@ auto PlayPage() -> Element {
 
     return Group({
         Frame("■", FIELD_SIZE + Vector { 2, 2 }, Color::Green),
-        Goto(2, 1),
+        Cursor(2, 1),
         Snake(snake, 4, FIELD_SIZE, handleSnakeMove, handleSnakeDeath),
-        Goto(2, 1),
+        Cursor(2, 1),
         Apple(apple, FIELD_SIZE, Color::Red),
-        Goto(2, 1),
+        Cursor(2, 1),
         Apple(poisonedApple, FIELD_SIZE, Color::Magenta),
     });
 }

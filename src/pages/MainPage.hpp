@@ -15,9 +15,9 @@ auto MainPage() -> Element {
 
     return Group({
         Text("Snake Game!"),
-        Goto(0, 2),
+        Cursor(0, 2),
         Text("Move the snake with the arrow keys to eat as many apples as possible."),
-        Goto(0, 3),
+        Cursor(0, 3),
         Text("Press enter to continue..."),
     });
 }

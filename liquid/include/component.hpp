@@ -5,7 +5,7 @@
 #include "prop.hpp"
 
 namespace liquid {
-    auto Goto(const Prop<int>& x, const Prop<int>& y) -> Element;
+    auto Cursor(const Prop<int>& x, const Prop<int>& y) -> Element;
     auto Group(const Prop<std::vector<Element>>& elements) -> Element;
 
     auto Text(

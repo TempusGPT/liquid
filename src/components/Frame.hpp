@@ -15,16 +15,16 @@ auto Frame(
 ) -> Element {
     return Group({
         EACH(Range(0, size().x), x, _) {
-            Goto(x * 2, 0),
+            Cursor(x * 2, 0),
             Text(RP(ch()), foreground, background),
-            Goto(x * 2, RP(size().y - 1)),
+            Cursor(x * 2, RP(size().y - 1)),
             Text(RP(ch()), foreground, background),
         } END_EACH,
 
         EACH(Range(0, size().y), y, _) {
-            Goto(0, y),
+            Cursor(0, y),
             Text(RP(ch()), foreground, background),
-            Goto(RP((size().x - 1) * 2), y),
+            Cursor(RP((size().x - 1) * 2), y),
             Text(RP(ch()), foreground, background),
         } END_EACH,
     });

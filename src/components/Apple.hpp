@@ -30,7 +30,7 @@ auto Apple(
     });
 
     return Group({
-        Goto(RP(position().x * 2), RP(position().y)),
+        Cursor(RP(position().x * 2), RP(position().y)),
         Text("●", RP(color())),
     });
 }
