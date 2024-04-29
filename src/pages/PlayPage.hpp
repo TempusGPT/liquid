@@ -1,9 +1,9 @@
 #ifndef PAGES_PLAYPAGE_HPP
 #define PAGES_PLAYPAGE_HPP
 
-#include "components/Apple.hpp"
-#include "components/Frame.hpp"
-#include "components/Snake.hpp"
+#include "libs/components/Apple.hpp"
+#include "libs/components/Frame.hpp"
+#include "libs/components/Snake.hpp"
 #include "libs/router.hpp"
 #include "liquid.hpp"
 

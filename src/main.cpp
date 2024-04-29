@@ -6,9 +6,9 @@
 using namespace liquid;
 
 auto main() -> int {
-    auto element = Group({
-        Route("/", MainPage),
-        Route("/play", PlayPage),
+    auto element = Router({
+        { "/", MainPage },
+        { "/play", PlayPage },
     });
 
     return render(element);
