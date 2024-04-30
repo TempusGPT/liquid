@@ -33,33 +33,13 @@ auto Snake(
     }
     auto position = State(initialPos);
 
-    ref.set({
-        [=]() mutable {
-            auto newCoords = position();
-            newCoords.push_back(newCoords.back());
-            position.set(newCoords);
-        },
-        [=]() mutable {
-            auto newCoords = position();
-            newCoords.pop_back();
-            position.set(newCoords);
-        },
-        [=](const Vector& other) {
-            auto pos = position();
-            return std::find(pos.begin(), pos.end(), other) != pos.end();
-        },
-    });
-
-    auto enqueueDirection = [=](const Vector& direction) mutable {
-        auto newDirectionQueue = directionQueue();
-        newDirectionQueue.push(direction);
-        directionQueue.set(newDirectionQueue);
+    auto handleDirectionChange = [&](const Vector& direction) {
+        return [=]() mutable {
+            auto newDirectionQueue = directionQueue();
+            newDirectionQueue.push(direction);
+            directionQueue.set(newDirectionQueue);
+        };
     };
-
-    input({ Key::UpArrow }, [=]() mutable { enqueueDirection(Vector::up()); });
-    input({ Key::DownArrow }, [=]() mutable { enqueueDirection(Vector::down()); });
-    input({ Key::LeftArrow }, [=]() mutable { enqueueDirection(Vector::left()); });
-    input({ Key::RightArrow }, [=]() mutable { enqueueDirection(Vector::right()); });
 
     auto currentDirection = [=]() mutable {
         auto newDirectionQueue = directionQueue();
@@ -78,9 +58,32 @@ auto Snake(
     };
 
     auto isSuicide = [=](const Vector& headPos) {
-        auto coords = position();
-        return std::find(++coords.begin(), coords.end(), headPos) != coords.end();
+        auto pos = position();
+        return std::find(++pos.begin(), pos.end(), headPos) != pos.end();
     };
+
+    auto grow = [=]() mutable {
+        auto newCoords = position();
+        newCoords.push_back(newCoords.back());
+        position.set(newCoords);
+    };
+
+    auto shrink = [=]() mutable {
+        auto newCoords = position();
+        newCoords.pop_back();
+        position.set(newCoords);
+    };
+
+    auto isOverlap = [=](const Vector& other) {
+        auto pos = position();
+        return std::find(pos.begin(), pos.end(), other) != pos.end();
+    };
+
+    ref.set({ grow, shrink, isOverlap });
+    input({ Key::UpArrow }, handleDirectionChange(Vector::up()));
+    input({ Key::DownArrow }, handleDirectionChange(Vector::down()));
+    input({ Key::LeftArrow }, handleDirectionChange(Vector::left()));
+    input({ Key::RightArrow }, handleDirectionChange(Vector::right()));
 
     effect([=]() {
         auto id = setInterval(200, [=]() mutable {
