@@ -21,7 +21,32 @@ namespace liquid {
         State(const T& value = T()) : value(std::make_shared<T>(value)) {}
         State(const char* value) : value(std::make_shared<std::string>(value)) {}
 
-        auto operator()() const -> T {
+        auto operator*() const -> T& {
+            registerEffect();
+            return *value;
+        }
+
+        auto operator->() const -> T* {
+            registerEffect();
+            return value.get();
+        }
+
+        auto operator=(const T& newValue) -> State<T>& {
+            detail::markDirty();
+            *value = newValue;
+
+            for (const auto& [id, callback] : *effectMap) {
+                detail::runEffect(id, callback);
+            }
+            return *this;
+        }
+
+    private:
+        const std::shared_ptr<T> value;
+        const std::shared_ptr<std::map<int, std::function<std::function<void()>()>>> effectMap =
+            std::make_shared<std::map<int, std::function<std::function<void()>()>>>();
+
+        auto registerEffect() const -> void {
             if (
                 detail::track &&
                 detail::effectCallback &&
@@ -29,23 +54,7 @@ namespace liquid {
             ) {
                 effectMap->insert({ detail::effectId, detail::effectCallback });
             }
-
-            return *value;
         }
-
-        auto set(const T& newValue) -> void {
-            detail::markDirty();
-            *value = newValue;
-
-            for (const auto& [id, callback] : *effectMap) {
-                detail::runEffect(id, callback);
-            }
-        }
-
-    private:
-        const std::shared_ptr<T> value;
-        const std::shared_ptr<std::map<int, std::function<std::function<void()>()>>> effectMap =
-            std::make_shared<std::map<int, std::function<std::function<void()>()>>>();
     };
 
     template <typename T>

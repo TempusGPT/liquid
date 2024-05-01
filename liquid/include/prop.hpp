@@ -1,6 +1,8 @@
 #ifndef LIQUID_PROP_HPP
 #define LIQUID_PROP_HPP
 
+#include "computed.hpp"
+
 #include <functional>
 #include <initializer_list>
 #include <type_traits>
@@ -22,18 +24,22 @@ namespace liquid {
     class Prop {
     public:
         template <typename Fn, std::enable_if_t<std::is_invocable_r_v<T, Fn>, int> = 0>
-        Prop(Fn&& fn) : getter(fn) {}
+        Prop(Fn&& fn) : computed(fn) {}
 
         template <typename... Args, std::enable_if_t<is_initializable_v<T, Args...>, int> = 0>
         Prop(Args&&... args)
-            : getter([value = T { std::forward<Args>(args)... }]() { return value; }) {}
+            : computed([value = T { std::forward<Args>(args)... }]() { return value; }) {}
 
-        auto operator()() const -> T {
-            return getter();
+        auto operator*() const -> T& {
+            return *computed;
+        }
+
+        auto operator->() const -> T* {
+            return computed.operator->();
         }
 
     private:
-        const std::function<T()> getter;
+        const Computed<T> computed;
     };
 }
 

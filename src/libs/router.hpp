@@ -13,11 +13,11 @@ namespace router {
 }
 
 auto location() -> std::string {
-    return router::location();
+    return *router::location;
 };
 
 auto navigate(const std::string& newLocation) -> void {
-    router::location.set(newLocation);
+    router::location = newLocation;
 };
 
 auto Router(

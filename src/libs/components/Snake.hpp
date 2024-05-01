@@ -28,11 +28,11 @@ auto Snake(
     auto directionQueue = std::make_shared<std::queue<Vector>>();
 
     auto initialPos = std::list<Vector>();
-    for (auto i = 0; i < initialLength(); i++) {
-        initialPos.push_front({ i + 1, fieldSize().y / 2 });
+    for (auto i = 0; i < *initialLength; i++) {
+        initialPos.push_front({ i + 1, fieldSize->y / 2 });
     }
     auto position = State(initialPos);
-    auto headPosition = Derived<Vector>(GET(position().front()));
+    auto headPosition = Computed<Vector>(GET(position->front()));
 
     auto handleDirectionChange = [&](const Vector& direction) {
         return [=]() mutable {
@@ -42,37 +42,35 @@ auto Snake(
 
     auto currentDirection = [=]() mutable {
         if (!directionQueue->empty()) {
-            direction.set(directionQueue->front());
+            direction = directionQueue->front();
             directionQueue->pop();
         }
 
-        return direction();
+        return *direction;
     };
 
     auto isOutOfField = [=](const Vector& headPos) {
-        auto [width, height] = fieldSize();
+        auto [width, height] = *fieldSize;
         return headPos.x < 0 || headPos.x >= width || headPos.y < 0 || headPos.y >= height;
     };
 
     auto isSuicide = [=](const Vector& headPos) {
-        auto pos = position();
+        auto pos = *position;
         return std::find(++pos.begin(), pos.end(), headPos) != pos.end();
     };
 
     auto grow = [=]() mutable {
-        auto newCoords = position();
-        newCoords.push_back(newCoords.back());
-        position.set(newCoords);
+        position->push_back(position->back());
+        position = *position;
     };
 
     auto shrink = [=]() mutable {
-        auto newCoords = position();
-        newCoords.pop_back();
-        position.set(newCoords);
+        position->pop_back();
+        position = *position;
     };
 
     auto isOverlap = [=](const Vector& other) {
-        auto pos = position();
+        auto pos = *position;
         return std::find(pos.begin(), pos.end(), other) != pos.end();
     };
 
@@ -84,18 +82,18 @@ auto Snake(
 
     effect([=]() {
         auto id = setInterval(200, [=]() mutable {
-            auto newPos = position();
+            auto newPos = *position;
             auto headPos = newPos.front() + currentDirection();
 
             if (isOutOfField(headPos) || isSuicide(headPos)) {
-                onDeath()(newPos.size());
+                onDeath->operator()(newPos.size());
                 return;
             }
 
             newPos.pop_back();
             newPos.push_front(headPos);
-            position.set(newPos);
-            onMove()(headPos);
+            position = newPos;
+            onMove->operator()(headPos);
         });
 
         return [=]() {
@@ -104,9 +102,9 @@ auto Snake(
     });
 
     return Group({
-        Text(GET("(%0%, %1%)"_f % headPosition().x % headPosition().y)),
+        Text(GET("(%0%, %1%)"_f % headPosition->x % headPosition->y)),
 
-        EACH(position(), pos, i) {
+        EACH(*position, pos, i) {
             Cursor(pos.x * 2, pos.y),
             Text(i == 0 ? "●" : "○", Color::Cyan),
         } END_EACH,

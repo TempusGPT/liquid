@@ -15,34 +15,43 @@
         auto effect = Effect();                                 \
         auto elements = State<std::vector<Element>>();          \
         auto cleanup = [=]() {                                  \
-            for (const auto& element : elements())              \
+            for (const auto& element : *elements)               \
                 element.cleanup();                              \
         };                                                      \
         effect([=]() mutable {                                  \
             untrack([=]() { cleanup(); });                      \
-            if (condition) return elements.set(
+            if (condition) {                                    \
+                elements =
 
 #define OR(condition) \
-    );                \
-    if (condition) return elements.set(
+    ;                 \
+    return;           \
+    }                 \
+    if (condition) {  \
+    elements =
 
 #define OTHERWISE \
-    );            \
-    return elements.set(
+    ;             \
+    return;       \
+    }             \
+    {             \
+        elements =
 
-#define END_WHEN                                     \
-    );                                               \
-    elements.set({});                                \
-    });                                              \
-    return Element(                                  \
-        [=](int x, int y) {                          \
-            for (const auto& element : elements()) { \
-                element.render(x, y);                \
-            }                                        \
-        },                                           \
-        { cleanup }                                  \
-    );                                               \
-    }                                                \
+#define END_WHEN                                    \
+    ;                                               \
+    return;                                         \
+    }                                               \
+    elements = std::vector<Element>();              \
+    });                                             \
+    return Element(                                 \
+        [=](int x, int y) {                         \
+            for (const auto& element : *elements) { \
+                element.render(x, y);               \
+            }                                       \
+        },                                          \
+        { cleanup }                                 \
+    );                                              \
+    }                                               \
     ()
 
 #define EACH(items, item, index) \
@@ -50,7 +59,7 @@
         auto effect = Effect();                                 \
         auto elements = State<std::vector<Element>>();          \
         auto cleanup = [=]() {                                  \
-            for (const auto& element : elements())              \
+            for (const auto& element : *elements)               \
                 element.cleanup();                              \
         };                                                      \
         effect([=]() mutable {                                  \
@@ -61,20 +70,20 @@
                 index += 1;                                     \
                 newElements.insert(newElements.end(),
 
-#define END_EACH                                     \
-    );                                               \
-    }                                                \
-    elements.set(newElements);                       \
-    });                                              \
-    return Element(                                  \
-        [=](int x, int y) {                          \
-            for (const auto& element : elements()) { \
-                element.render(x, y);                \
-            }                                        \
-        },                                           \
-        { cleanup }                                  \
-    );                                               \
-    }                                                \
+#define END_EACH                                    \
+    );                                              \
+    }                                               \
+    elements = newElements;                         \
+    });                                             \
+    return Element(                                 \
+        [=](int x, int y) {                         \
+            for (const auto& element : *elements) { \
+                element.render(x, y);               \
+            }                                       \
+        },                                          \
+        { cleanup }                                 \
+    );                                              \
+    }                                               \
     ()
 
 #endif

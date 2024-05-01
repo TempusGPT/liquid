@@ -14,18 +14,18 @@ auto Frame(
     Color background = Color::Black
 ) -> Element {
     return Group({
-        EACH(Range(0, size().x), x, _) {
+        EACH(Range(0, size->x), x, _) {
             Cursor(x * 2, 0),
-            Text(GET(ch()), foreground, background),
-            Cursor(x * 2, GET(size().y - 1)),
-            Text(GET(ch()), foreground, background),
+            Text(GET(*ch), foreground, background),
+            Cursor(x * 2, GET(size->y - 1)),
+            Text(GET(*ch), foreground, background),
         } END_EACH,
 
-        EACH(Range(0, size().y), y, _) {
+        EACH(Range(0, size->y), y, _) {
             Cursor(0, y),
-            Text(GET(ch()), foreground, background),
-            Cursor(GET((size().x - 1) * 2), y),
-            Text(GET(ch()), foreground, background),
+            Text(GET(*ch), foreground, background),
+            Cursor(GET((size->x - 1) * 2), y),
+            Text(GET(*ch), foreground, background),
         } END_EACH,
     });
 }

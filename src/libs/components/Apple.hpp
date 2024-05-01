@@ -17,21 +17,21 @@ auto Apple(
     const Prop<Vector>& fieldSize,
     const Prop<Color>& color
 ) -> Element {
-    auto position = State<Vector>({ fieldSize().x / 2, fieldSize().y / 2 });
+    auto position = State<Vector>({ fieldSize->x / 2, fieldSize->y / 2 });
 
     *ref = {
-        [=]() { return position(); },
+        [=]() { return *position; },
         [=]() mutable {
-            position.set({
-                random(0, fieldSize().x - 1),
-                random(0, fieldSize().y - 1),
-            });
+            position = {
+                random(0, fieldSize->x - 1),
+                random(0, fieldSize->y - 1),
+            };
         },
     };
 
     return Group({
-        Cursor(GET(position().x * 2), GET(position().y)),
-        Text("●", GET(color())),
+        Cursor(GET(position->x * 2), GET(position->y)),
+        Text("●", GET(*color)),
     });
 }
 

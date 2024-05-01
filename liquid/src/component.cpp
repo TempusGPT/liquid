@@ -7,7 +7,7 @@
 namespace liquid {
     auto Cursor(const Prop<int>& x, const Prop<int>& y) -> Element {
         return Element([=](int xOrigin, int yOrigin) {
-            move(yOrigin + y(), xOrigin + x());
+            move(yOrigin + *y, xOrigin + *x);
         });
     }
 
@@ -17,13 +17,13 @@ namespace liquid {
                 auto x = getcurx(stdscr);
                 auto y = getcury(stdscr);
 
-                for (const auto& element : elements()) {
+                for (const auto& element : *elements) {
                     element.render(x, y);
                 }
             },
             {
                 [=]() {
-                    for (const auto& element : elements()) {
+                    for (const auto& element : *elements) {
                         element.cleanup();
                     }
                 },
@@ -37,9 +37,9 @@ namespace liquid {
         const Prop<Color>& background
     ) -> Element {
         return Element([=](int, int) {
-            detail::enableColor(foreground(), background());
-            printw("%s", value().c_str());
-            detail::disableColor(foreground(), background());
+            detail::enableColor(*foreground, *background);
+            printw("%s", value->c_str());
+            detail::disableColor(*foreground, *background);
         });
     }
 }
