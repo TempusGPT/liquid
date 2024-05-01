@@ -33,6 +33,8 @@ auto Snake(
     }
     auto position = State(initialPos);
 
+    auto headPosition = Derived<Vector>(RP(position().front()));
+
     auto handleDirectionChange = [&](const Vector& direction) {
         return [=]() mutable {
             directionQueue->push(direction);
@@ -103,6 +105,8 @@ auto Snake(
     });
 
     return Group({
+        Text(RP("(%0%, %1%)"_fmt % headPosition().x % headPosition().y)),
+
         EACH(position(), pos, i) {
             Cursor(pos.x * 2, pos.y),
             Text(i == 0 ? "●" : "○", Color::Cyan),

@@ -18,9 +18,11 @@ auto PlayPage() -> Element {
     auto poisonedApple = std::make_shared<AppleRef>();
 
     auto isAppleOverlap = [=]() {
-        return apple->position() == poisonedApple->position() ||
-               snake->isOverlap(apple->position()) ||
-               snake->isOverlap(poisonedApple->position());
+        return (
+            apple->position() == poisonedApple->position() ||
+            snake->isOverlap(apple->position()) ||
+            snake->isOverlap(poisonedApple->position())
+        );
     };
 
     auto refreshApple = [=]() {

@@ -6,6 +6,12 @@ namespace liquid {
 
     namespace detail {
         auto runEffect(
+            const std::function<std::function<void()>()>& callback
+        ) -> std::function<void()> {
+            return runEffect(newId++, callback);
+        }
+
+        auto runEffect(
             int id,
             const std::function<std::function<void()>()>& callback
         ) -> std::function<void()> {
@@ -19,7 +25,7 @@ namespace liquid {
 
     Effect::~Effect() {
         for (const auto& callback : callbacks) {
-            auto cleanup = detail::runEffect(newId++, callback);
+            auto cleanup = detail::runEffect(callback);
             if (cleanup) {
                 Element::onCleanup(cleanup);
             }
