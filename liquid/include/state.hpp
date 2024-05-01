@@ -19,7 +19,6 @@ namespace liquid {
     class State {
     public:
         State(const T& value = T()) : value(std::make_shared<T>(value)) {}
-        State(const char* value) : value(std::make_shared<std::string>(value)) {}
 
         auto operator*() const -> T& {
             registerEffect();
@@ -56,10 +55,6 @@ namespace liquid {
             }
         }
     };
-
-    template <typename T>
-    State(const T&) -> State<T>;
-    State(const char*) -> State<std::string>;
 
     template <typename T>
     auto untrack(const State<T>& state) -> T {

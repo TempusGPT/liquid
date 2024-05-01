@@ -9,7 +9,7 @@
 using namespace liquid;
 
 namespace router {
-    auto location = State("/");
+    auto location = State<std::string>("/");
 }
 
 auto location() -> std::string {
