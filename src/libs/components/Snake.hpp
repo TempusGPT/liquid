@@ -16,7 +16,7 @@ struct SnakeRef {
 };
 
 auto Snake(
-    State<SnakeRef>& ref,
+    const std::shared_ptr<SnakeRef>& ref,
     const Prop<int>& initialLength,
     const Prop<Vector>& fieldSize,
     const Prop<std::function<void(Vector)>>& onMove,
@@ -25,7 +25,7 @@ auto Snake(
     auto input = Input();
     auto effect = Effect();
     auto direction = State(Vector::right());
-    auto directionQueue = State<std::queue<Vector>>();
+    auto directionQueue = std::make_shared<std::queue<Vector>>();
 
     auto initialPos = std::list<Vector>();
     for (auto i = 0; i < initialLength(); i++) {
@@ -35,18 +35,14 @@ auto Snake(
 
     auto handleDirectionChange = [&](const Vector& direction) {
         return [=]() mutable {
-            auto newDirectionQueue = directionQueue();
-            newDirectionQueue.push(direction);
-            directionQueue.set(newDirectionQueue);
+            directionQueue->push(direction);
         };
     };
 
     auto currentDirection = [=]() mutable {
-        auto newDirectionQueue = directionQueue();
-        if (!newDirectionQueue.empty()) {
-            direction.set(newDirectionQueue.front());
-            newDirectionQueue.pop();
-            directionQueue.set(newDirectionQueue);
+        if (!directionQueue->empty()) {
+            direction.set(directionQueue->front());
+            directionQueue->pop();
         }
 
         return direction();
@@ -79,7 +75,7 @@ auto Snake(
         return std::find(pos.begin(), pos.end(), other) != pos.end();
     };
 
-    ref.set({ grow, shrink, isOverlap });
+    *ref = { grow, shrink, isOverlap };
     input({ Key::UpArrow }, handleDirectionChange(Vector::up()));
     input({ Key::DownArrow }, handleDirectionChange(Vector::down()));
     input({ Key::LeftArrow }, handleDirectionChange(Vector::left()));

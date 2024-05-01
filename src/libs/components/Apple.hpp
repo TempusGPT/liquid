@@ -13,13 +13,13 @@ struct AppleRef {
 };
 
 auto Apple(
-    State<AppleRef>& ref,
+    const std::shared_ptr<AppleRef>& ref,
     const Prop<Vector>& fieldSize,
     const Prop<Color>& color
 ) -> Element {
     auto position = State<Vector>({ fieldSize().x / 2, fieldSize().y / 2 });
 
-    ref.set({
+    *ref = {
         [=]() { return position(); },
         [=]() mutable {
             position.set({
@@ -27,7 +27,7 @@ auto Apple(
                 random(0, fieldSize().y - 1),
             });
         },
-    });
+    };
 
     return Group({
         Cursor(RP(position().x * 2), RP(position().y)),

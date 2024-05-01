@@ -13,36 +13,36 @@ constexpr Vector FIELD_SIZE = { 23, 23 };
 
 auto PlayPage() -> Element {
     auto effect = Effect();
-    auto snake = State<SnakeRef>();
-    auto apple = State<AppleRef>();
-    auto poisonedApple = State<AppleRef>();
+    auto snake = std::make_shared<SnakeRef>();
+    auto apple = std::make_shared<AppleRef>();
+    auto poisonedApple = std::make_shared<AppleRef>();
 
     auto isAppleOverlap = [=]() {
-        return apple().position() == poisonedApple().position() ||
-               snake().isOverlap(apple().position()) ||
-               snake().isOverlap(poisonedApple().position());
+        return apple->position() == poisonedApple->position() ||
+               snake->isOverlap(apple->position()) ||
+               snake->isOverlap(poisonedApple->position());
     };
 
     auto refreshApple = [=]() {
         do {
-            apple().refresh();
+            apple->refresh();
         } while (isAppleOverlap());
     };
 
     auto refreshPoisonedApple = [=]() {
         do {
-            poisonedApple().refresh();
+            poisonedApple->refresh();
         } while (isAppleOverlap());
     };
 
     auto handleSnakeMove = [=](const Vector& head) {
-        if (head == apple().position()) {
-            snake().grow();
+        if (head == apple->position()) {
+            snake->grow();
             refreshApple();
         }
 
-        if (head == poisonedApple().position()) {
-            snake().shrink();
+        if (head == poisonedApple->position()) {
+            snake->shrink();
             refreshPoisonedApple();
         }
     };
