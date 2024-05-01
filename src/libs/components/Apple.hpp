@@ -30,8 +30,8 @@ auto Apple(
     };
 
     return Group({
-        Cursor(RP(position().x * 2), RP(position().y)),
-        Text("●", RP(color())),
+        Cursor(GET(position().x * 2), GET(position().y)),
+        Text("●", GET(color())),
     });
 }
 

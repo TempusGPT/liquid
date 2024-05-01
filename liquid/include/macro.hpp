@@ -8,7 +8,7 @@
 #include <tuple>
 #include <vector>
 
-#define RP(expr) [=]() mutable { return expr; }
+#define GET(expr) [=]() mutable { return expr; }
 
 #define WHEN(condition) \
     [=]() {                                                     \

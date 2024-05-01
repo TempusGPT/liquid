@@ -16,16 +16,16 @@ auto Frame(
     return Group({
         EACH(Range(0, size().x), x, _) {
             Cursor(x * 2, 0),
-            Text(RP(ch()), foreground, background),
-            Cursor(x * 2, RP(size().y - 1)),
-            Text(RP(ch()), foreground, background),
+            Text(GET(ch()), foreground, background),
+            Cursor(x * 2, GET(size().y - 1)),
+            Text(GET(ch()), foreground, background),
         } END_EACH,
 
         EACH(Range(0, size().y), y, _) {
             Cursor(0, y),
-            Text(RP(ch()), foreground, background),
-            Cursor(RP((size().x - 1) * 2), y),
-            Text(RP(ch()), foreground, background),
+            Text(GET(ch()), foreground, background),
+            Cursor(GET((size().x - 1) * 2), y),
+            Text(GET(ch()), foreground, background),
         } END_EACH,
     });
 }

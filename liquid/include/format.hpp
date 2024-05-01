@@ -30,7 +30,7 @@ namespace liquid {
         std::string fmt;
     };
 
-    auto operator""_fmt(const char* fmt, size_t) -> FmtString;
+    auto operator""_f(const char* fmt, size_t) -> FmtString;
 }
 
 #endif

@@ -9,7 +9,7 @@ namespace liquid {
         return fmt;
     }
 
-    auto operator"" _fmt(const char* fmt, size_t) -> FmtString {
+    auto operator""_f(const char* fmt, size_t) -> FmtString {
         return FmtString(fmt);
     }
 }
