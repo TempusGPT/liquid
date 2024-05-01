@@ -3,8 +3,9 @@
 
 #include "liquid.hpp"
 
+#include <functional>
 #include <string>
-#include <tuple>
+#include <unordered_map>
 
 using namespace liquid;
 
@@ -20,14 +21,10 @@ auto navigate(const std::string& newLocation) -> void {
     router::location = newLocation;
 };
 
-auto Router(
-    const std::initializer_list<std::pair<std::string, std::function<Element()>>>& routes
-) -> Element {
-    return EACH(routes, route, _) {
-        WHEN(route.first == location()) {
-            route.second(),
-        } END_WHEN,
-    } END_EACH;
+auto Router(const std::unordered_map<std::string, std::function<Element()>>& routes) -> Element {
+    return WHEN(routes.find(location()) != routes.end()) {
+        routes.at(location())(),
+    } END_WHEN;
 }
 
 #endif
