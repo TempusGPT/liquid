@@ -16,11 +16,11 @@ public:
             return *this;
         }
 
-        bool operator==(const Iterator& other) const {
+        auto operator==(const Iterator& other) const -> bool {
             return index == other.index;
         }
 
-        bool operator!=(const Iterator& other) const {
+        auto operator!=(const Iterator& other) const -> bool {
             return index != other.index;
         }
 
@@ -28,11 +28,11 @@ public:
         int index;
     };
 
-    Iterator begin() const {
+    auto begin() const -> Iterator {
         return beginIterator;
     }
 
-    Iterator end() const {
+    auto end() const -> Iterator {
         return endIterator;
     }
 
