@@ -10,6 +10,7 @@
 #include "include/input.hpp"
 #include "include/macro.hpp"
 #include "include/prop.hpp"
+#include "include/ref.hpp"
 #include "include/state.hpp"
 #include "include/timer.hpp"
 

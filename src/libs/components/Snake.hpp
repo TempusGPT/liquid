@@ -16,7 +16,7 @@ struct SnakeRef {
 };
 
 auto Snake(
-    const std::shared_ptr<SnakeRef>& ref,
+    const Ref<SnakeRef>& ref,
     const Prop<int>& initialLength,
     const Prop<Vector>& fieldSize,
     const Prop<std::function<void(Vector)>>& onMove,
@@ -25,7 +25,7 @@ auto Snake(
     auto input = Input();
     auto effect = Effect();
     auto direction = State(Vector::right());
-    auto directionQueue = std::make_shared<std::queue<Vector>>();
+    auto directionQueue = Ref<std::queue<Vector>>();
 
     auto initialPos = std::list<Vector>();
     for (auto i = 0; i < *initialLength; i++) {
@@ -86,14 +86,14 @@ auto Snake(
             auto headPos = newPos.front() + currentDirection();
 
             if (isOutOfField(headPos) || isSuicide(headPos)) {
-                onDeath->operator()(newPos.size());
+                (*onDeath)(newPos.size());
                 return;
             }
 
             newPos.pop_back();
             newPos.push_front(headPos);
             position = newPos;
-            onMove->operator()(headPos);
+            (*onMove)(headPos);
         });
 
         return [=]() {

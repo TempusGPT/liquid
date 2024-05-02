@@ -13,9 +13,9 @@ constexpr Vector FIELD_SIZE = { 23, 23 };
 
 auto PlayPage() -> Element {
     auto effect = Effect();
-    auto snake = std::make_shared<SnakeRef>();
-    auto apple = std::make_shared<AppleRef>();
-    auto poisonedApple = std::make_shared<AppleRef>();
+    auto snake = Ref<SnakeRef>();
+    auto apple = Ref<AppleRef>();
+    auto poisonedApple = Ref<AppleRef>();
 
     auto isAppleOverlap = [=]() {
         return (

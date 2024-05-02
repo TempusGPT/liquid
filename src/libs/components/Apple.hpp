@@ -13,7 +13,7 @@ struct AppleRef {
 };
 
 auto Apple(
-    const std::shared_ptr<AppleRef>& ref,
+    const Ref<AppleRef>& ref,
     const Prop<Vector>& fieldSize,
     const Prop<Color>& color
 ) -> Element {
