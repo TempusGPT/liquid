@@ -12,6 +12,8 @@ struct AppleRef {
     std::function<void()> refresh;
 };
 
+auto apples = std::vector<State<Vector>>();
+
 auto Apple(
     const Ref<AppleRef>& ref,
     const Prop<Vector>& fieldSize,

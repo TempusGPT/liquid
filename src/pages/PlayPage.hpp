@@ -14,20 +14,20 @@ constexpr Vector FIELD_SIZE = { 23, 23 };
 auto PlayPage() -> Element {
     auto effect = Effect();
     auto snake = Ref<SnakeRef>();
-    auto apple = Ref<AppleRef>();
+    auto honeyApple = Ref<AppleRef>();
     auto poisonedApple = Ref<AppleRef>();
 
     auto isAppleOverlap = [=]() {
         return (
-            apple->position() == poisonedApple->position() ||
-            snake->isOverlap(apple->position()) ||
+            honeyApple->position() == poisonedApple->position() ||
+            snake->isOverlap(honeyApple->position()) ||
             snake->isOverlap(poisonedApple->position())
         );
     };
 
-    auto refreshApple = [=]() {
+    auto refreshHoneyApple = [=]() {
         do {
-            apple->refresh();
+            honeyApple->refresh();
         } while (isAppleOverlap());
     };
 
@@ -38,9 +38,9 @@ auto PlayPage() -> Element {
     };
 
     auto handleSnakeMove = [=](const Vector& head) {
-        if (head == apple->position()) {
+        if (head == honeyApple->position()) {
             snake->grow();
-            refreshApple();
+            refreshHoneyApple();
         }
 
         if (head == poisonedApple->position()) {
@@ -55,7 +55,7 @@ auto PlayPage() -> Element {
 
     effect([=]() {
         untrack([=]() {
-            refreshApple();
+            refreshHoneyApple();
             refreshPoisonedApple();
         });
     });
@@ -65,7 +65,7 @@ auto PlayPage() -> Element {
         Cursor(2, 1),
         Snake(snake, 4, FIELD_SIZE, handleSnakeMove, handleSnakeDeath),
         Cursor(2, 1),
-        Apple(apple, FIELD_SIZE, Color::Red),
+        Apple(honeyApple, FIELD_SIZE, Color::Red),
         Cursor(2, 1),
         Apple(poisonedApple, FIELD_SIZE, Color::Magenta),
     });
