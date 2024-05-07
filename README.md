@@ -2,7 +2,7 @@
 
 1. [Introduction](#introduction)
 2. [Reactivity](#reactivity)
-3. [Components](#components)
+3. [Component](#component)
 4. [Control Flow](#control-flow)
 
 ## Introduction
