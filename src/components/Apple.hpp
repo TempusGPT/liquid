@@ -13,7 +13,7 @@ struct AppleRef {
 };
 
 auto Apple(
-    const Ref<AppleRef>& ref,
+    Ref<AppleRef>& ref,
     const Prop<Vector>& fieldSize,
     const Prop<Color>& color
 ) -> Element {

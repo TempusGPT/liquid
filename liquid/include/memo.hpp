@@ -15,11 +15,11 @@ namespace liquid {
             });
         }
 
-        auto operator*() const -> T& {
+        auto operator*() const -> const T& {
             return *state;
         }
 
-        auto operator->() const -> T* {
+        auto operator->() const -> const T* {
             return state.operator->();
         }
 

@@ -16,7 +16,7 @@ struct SnakeRef {
 };
 
 auto Snake(
-    const Ref<SnakeRef>& ref,
+    Ref<SnakeRef>& ref,
     const Prop<int>& initialLength,
     const Prop<Vector>& fieldSize,
     const Prop<std::function<void(Vector)>>& onMove,

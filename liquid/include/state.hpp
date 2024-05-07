@@ -20,12 +20,22 @@ namespace liquid {
     public:
         State(const T& value = T()) : value(std::make_shared<T>(value)) {}
 
-        auto operator*() const -> T& {
+        auto operator*() -> T& {
             registerEffect();
             return *value;
         }
 
-        auto operator->() const -> T* {
+        auto operator*() const -> const T& {
+            registerEffect();
+            return *value;
+        }
+
+        auto operator->() -> T* {
+            registerEffect();
+            return value.get();
+        }
+
+        auto operator->() const -> const T* {
             registerEffect();
             return value.get();
         }

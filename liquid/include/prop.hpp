@@ -34,11 +34,11 @@ namespace liquid {
         Prop(Args&&... args)
             : memo([value = T { std::forward<Args>(args)... }]() { return value; }) {}
 
-        auto operator*() const -> T& {
+        auto operator*() const -> const T& {
             return *memo;
         }
 
-        auto operator->() const -> T* {
+        auto operator->() const -> const T* {
             return memo.operator->();
         }
 
