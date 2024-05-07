@@ -71,7 +71,7 @@ effect([=]() {
         count = *count + 1;
     });
 
-    return [=]() { clearTimer(timer) };
+    return [=]() { clearTimer(timer); };
 });
 ```
 
