@@ -12,9 +12,11 @@ namespace liquid {
     static auto isDirty = true;
     static auto isActive = true;
 
-    auto render(const Element& element) -> int {
+    auto render(const Element& element, const Options& options) -> int {
         setlocale(LC_ALL, "");
         initscr();
+        resize_term(options.height, options.width);
+
         detail::initializeInput();
         detail::initializeColor();
 

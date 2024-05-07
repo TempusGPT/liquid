@@ -6,7 +6,12 @@
 #include <string>
 
 namespace liquid {
-    auto render(const Element& element) -> int;
+    struct Options {
+        int width;
+        int height;
+    };
+
+    auto render(const Element& element, const Options& options) -> int;
     auto beep() -> void;
     auto exit() -> void;
 

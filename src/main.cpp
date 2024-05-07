@@ -11,5 +11,5 @@ auto main() -> int {
         { "/play", PlayPage },
     });
 
-    return render(element);
+    return render(element, { 80, 25 });
 }
