@@ -89,6 +89,8 @@ auto doubled = Memo(GET(*count * 2));
 
 ### Props
 
+### Input
+
 ## Control Flow
 
 ### When
