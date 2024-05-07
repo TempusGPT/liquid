@@ -7,8 +7,6 @@
 #include <list>
 #include <queue>
 
-using namespace liquid;
-
 struct SnakeRef {
     std::function<void()> grow;
     std::function<void()> shrink;

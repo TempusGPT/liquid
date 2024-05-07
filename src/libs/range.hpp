@@ -28,6 +28,8 @@ public:
         int index;
     };
 
+    Range(int begin, int end) : beginIterator(begin), endIterator(end) {}
+
     auto begin() const -> Iterator {
         return beginIterator;
     }
@@ -35,8 +37,6 @@ public:
     auto end() const -> Iterator {
         return endIterator;
     }
-
-    Range(int begin, int end) : beginIterator(begin), endIterator(end) {}
 
 private:
     Iterator beginIterator;

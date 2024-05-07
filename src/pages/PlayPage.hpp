@@ -1,13 +1,11 @@
 #ifndef PAGES_PLAYPAGE_HPP
 #define PAGES_PLAYPAGE_HPP
 
-#include "libs/components/Apple.hpp"
-#include "libs/components/Frame.hpp"
-#include "libs/components/Snake.hpp"
-#include "libs/router.hpp"
+#include "components/Apple.hpp"
+#include "components/Frame.hpp"
+#include "components/Router.hpp"
+#include "components/Snake.hpp"
 #include "liquid.hpp"
-
-using namespace liquid;
 
 constexpr Vector FIELD_SIZE = { 23, 23 };
 

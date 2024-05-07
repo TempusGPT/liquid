@@ -1,10 +1,8 @@
 #ifndef PAGES_MAINPAGE_HPP
 #define PAGES_MAINPAGE_HPP
 
-#include "libs/router.hpp"
+#include "components/Router.hpp"
 #include "liquid.hpp"
-
-using namespace liquid;
 
 auto MainPage() -> Element {
     auto input = Input();

@@ -1,4 +1,4 @@
-#include "libs/router.hpp"
+#include "components/Router.hpp"
 #include "liquid.hpp"
 #include "pages/MainPage.hpp"
 #include "pages/PlayPage.hpp"

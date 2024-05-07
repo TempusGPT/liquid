@@ -4,10 +4,10 @@
 #include <random>
 
 auto random(int min, int max) -> int {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> dist(min, max);
-    return dist(gen);
+    static auto device = std::random_device();
+    static auto engine = std::mt19937(device());
+    auto dist = std::uniform_int_distribution(min, max);
+    return dist(engine);
 }
 
 #endif

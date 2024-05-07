@@ -5,8 +5,6 @@
 #include "libs/vector.hpp"
 #include "liquid.hpp"
 
-using namespace liquid;
-
 auto Frame(
     const Prop<std::string>& ch,
     const Prop<Vector>& size,

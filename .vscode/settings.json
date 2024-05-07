@@ -75,7 +75,8 @@
         "compare": "cpp",
         "map": "cpp",
         "stack": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "random": "cpp"
     },
     "C_Cpp.default.cppStandard": "c++17"
 }
