@@ -1,5 +1,5 @@
-#ifndef LIQUID_SIGNAL_HPP
-#define LIQUID_SIGNAL_HPP
+#ifndef LIQUID_STATE_HPP
+#define LIQUID_STATE_HPP
 
 #include "app.hpp"
 #include "effect.hpp"

@@ -1,7 +1,7 @@
 #ifndef LIQUID_PROP_HPP
 #define LIQUID_PROP_HPP
 
-#include "computed.hpp"
+#include "memo.hpp"
 
 #include <functional>
 #include <initializer_list>
@@ -26,24 +26,24 @@ namespace liquid {
     class Prop {
     public:
         template <typename Fn, std::enable_if_t<std::is_invocable_r_v<T, Fn>, int> = 0>
-        Prop(Fn&& fn) : computed(fn) {}
+        Prop(Fn&& fn) : memo(fn) {}
 
         template <
             typename... Args,
             std::enable_if_t<detail::is_initializable_v<T, Args...>, int> = 0>
         Prop(Args&&... args)
-            : computed([value = T { std::forward<Args>(args)... }]() { return value; }) {}
+            : memo([value = T { std::forward<Args>(args)... }]() { return value; }) {}
 
         auto operator*() const -> T& {
-            return *computed;
+            return *memo;
         }
 
         auto operator->() const -> T* {
-            return computed.operator->();
+            return memo.operator->();
         }
 
     private:
-        const Computed<T> computed;
+        const Memo<T> memo;
     };
 }
 
