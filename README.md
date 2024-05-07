@@ -45,7 +45,7 @@ auto doubled = State(0);
 return Text("Count: %0%"_f % *count);
 ```
 
-State를 단순히 컴포넌트의 인자로 넘기면 해당 State 값이 변경될 때 자동으로 업데이트되지 않습니다. `GET` 매크로를 사용하여 State 값이 변경될 때 실제로 화면에 반영되도록 할 수 있습니다.
+State의 값을 컴포넌트의 인자로 넘기는 과정에서 반응성이 사라지게 됩니다. `GET` 매크로를 사용하여 값이 아닌 Getter를 넘기면 반응성을 유지할 수 있습니다.
 
 ```cpp
 return Text(GET("Count: %0%"_f % *count));
