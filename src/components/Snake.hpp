@@ -81,17 +81,16 @@ auto Snake(
 
     effect([=]() {
         auto id = setInterval(150, [=]() mutable {
-            auto newPos = *position;
-            auto headPos = newPos.front() + currentDirection();
+            auto headPos = position->front() + currentDirection();
 
             if (isOutOfField(headPos) || isSuicide(headPos)) {
-                (*onDeath)(newPos.size());
+                (*onDeath)(position->size());
                 return;
             }
 
-            newPos.pop_back();
-            newPos.push_front(headPos);
-            position = newPos;
+            position->pop_back();
+            position->push_front(headPos);
+            position = *position;
             (*onMove)(headPos);
         });
 
