@@ -80,7 +80,7 @@ auto Snake(
     input({ Key::RightArrow }, handleDirectionChange(Vector::right()));
 
     effect([=]() {
-        auto id = setInterval(150, [=]() mutable {
+        auto id = setInterval(100, [=]() mutable {
             auto headPos = position->front() + currentDirection();
             if (isOutOfField(headPos) || isSuicide(headPos)) {
                 (*onDeath)(position->size());
