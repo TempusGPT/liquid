@@ -3,6 +3,7 @@
 
 #include "app.hpp"
 #include "effect.hpp"
+#include "ref.hpp"
 
 #include <functional>
 #include <map>
@@ -18,31 +19,31 @@ namespace liquid {
     template <typename T>
     class State {
     public:
-        State(const T& value = T()) : value(std::make_shared<T>(value)) {}
+        State(const T& value = T()) : ref(value) {}
 
         auto operator*() -> T& {
             registerEffect();
-            return *value;
+            return *ref;
         }
 
         auto operator*() const -> const T& {
             registerEffect();
-            return *value;
+            return *ref;
         }
 
         auto operator->() -> T* {
             registerEffect();
-            return value.get();
+            return ref.operator->();
         }
 
         auto operator->() const -> const T* {
             registerEffect();
-            return value.get();
+            return ref.operator->();
         }
 
         auto operator=(const T& newValue) -> State<T>& {
             detail::markDirty();
-            *value = newValue;
+            *ref = newValue;
 
             for (const auto& [id, callback] : *effectMap) {
                 detail::runEffect(id, callback);
@@ -51,7 +52,7 @@ namespace liquid {
         }
 
     private:
-        const std::shared_ptr<T> value;
+        Ref<T> ref;
         const std::shared_ptr<std::map<int, std::function<std::function<void()>()>>> effectMap =
             std::make_shared<std::map<int, std::function<std::function<void()>()>>>();
 
