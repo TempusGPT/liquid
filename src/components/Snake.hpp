@@ -27,11 +27,10 @@ auto Snake(
     auto direction = State(Vector::right());
     auto directionQueue = Ref<std::queue<Vector>>();
 
-    auto initialPos = std::list<Vector>();
+    auto position = State<std::list<Vector>>();
     for (auto i = 0; i < *initialLength; i++) {
-        initialPos.push_front({ i + 1, fieldSize->y / 2 });
+        position->push_front({ i + 1, fieldSize->y / 2 });
     }
-    auto position = State(initialPos);
 
     auto handleDirectionChange = [&](const Vector& direction) {
         return [=]() mutable {
