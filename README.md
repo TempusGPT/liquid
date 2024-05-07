@@ -63,6 +63,18 @@ effect([=]() {
 });
 ```
 
+Liquid는 Effect 함수의 반환값을 클린업 함수로 사용합니다. 클린업 함수는 컴포넌트가 언마운트될 때 실행되며, 사용한 리소스를 정리하는 용도로 사용할 수 있습니다.
+
+```cpp
+effect([=]() {
+    auto timer = setInterval(1000, [=]() mutable {
+        count = *count + 1;
+    });
+
+    return [=]() { clearTimer(timer) };
+});
+```
+
 ### Memo
 
 Memo는 캐시된 계산 값으로, State와 Effect의 속성을 공유합니다. 관련 State가 변경되었을 때만 다시 실행되며, Memo 자체도 추적 가능한 State입니다.
