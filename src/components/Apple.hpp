@@ -30,7 +30,7 @@ auto Apple(
 
     return Group({
         Cursor(GET(position->x * 2), GET(position->y)),
-        Text("●", GET(*color)),
+        Text("●", color),
     });
 }
 

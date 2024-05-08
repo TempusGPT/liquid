@@ -10,22 +10,22 @@ using namespace liquid;
 auto Frame(
     const Prop<std::string>& ch,
     const Prop<Vector>& size,
-    Color foreground = Color::White,
-    Color background = Color::Black
+    const Prop<Color>& foreground = Color::White,
+    const Prop<Color>& background = Color::Black
 ) -> Element {
     return Group({
         EACH(Range(0, size->x), x, _) {
             Cursor(x * 2, 0),
-            Text(GET(*ch), foreground, background),
+            Text(ch, foreground, background),
             Cursor(x * 2, GET(size->y - 1)),
-            Text(GET(*ch), foreground, background),
+            Text(ch, foreground, background),
         } END_EACH,
 
         EACH(Range(0, size->y), y, _) {
             Cursor(0, y),
-            Text(GET(*ch), foreground, background),
+            Text(ch, foreground, background),
             Cursor(GET((size->x - 1) * 2), y),
-            Text(GET(*ch), foreground, background),
+            Text(ch, foreground, background),
         } END_EACH,
     });
 }
