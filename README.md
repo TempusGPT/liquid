@@ -154,7 +154,7 @@ input({ Key::Enter }, [=]() mutable {
 WHEN(*user == User::Admin) {
     Text("You are an admin."),
 } OR(*user == User::User) {
-    Text("You are an user."),
+    Text("You are a user."),
 } OTHERWISE {
     Text("You are not logged in."),
 } END_WHEN,
