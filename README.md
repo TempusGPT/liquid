@@ -165,9 +165,7 @@ WHEN(*user == User::Admin) {
 `EACH`, `END_EACH` 매크로를 사용해 컬렉션에 대해 반복을 편하게 할 수 있습니다. 컬렉션이 변경되면, 항목들을 다시 생성하고 렌더링합니다.
 
 ```cpp
-auto cats = std::vector<Cat> { Cat("Poppy"), Cat("Bella"), Cat("Misty") };
-
-return EACH(*cats, cat, i) {
+EACH(*cats, cat, i) {
     Text("%0%: %1%"_f % i + 1 % cat.name),
 } END_EACH,
 ```
