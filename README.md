@@ -87,13 +87,9 @@ auto doubled = Memo(GET(*count * 2));
 
 ### Basics
 
-애플리케이션을 빌드할 때, 더 나은 모듈화와 재사용성을 위해 코드를 분리하고 싶을 것입니다 Liquid에서는 이를 위해 컴포넌트를 만듭니다.
+애플리케이션을 빌드할 때, 더 나은 모듈화와 재사용성을 위해 코드를 분리하고 싶을 것입니다. Liquid에서는 이를 위해 컴포넌트를 만듭니다.
 
 ```cpp
-auto Parent() -> Element {
-    return Label("Hello", "John");
-}
-
 auto Label(
     const Prop<std::string>& greeting,
     const Prop<std::string>& name
@@ -103,6 +99,10 @@ auto Label(
         Cursor(0, 1),
         Text(GET("%0%, %1%!"_f % *greeting % *name)),
     });
+}
+
+auto Parent() -> Element {
+    return Label("Hello", "John");
 }
 ```
 
@@ -133,7 +133,7 @@ auto Label(
 
 ### Input
 
-컴포넌트는 키보드 입력을 받아서 지정된 동작을 수행할 수 있습니다. 해당 동작은 컴포넌트가 마운트된 상태에서만 수행됩니다.
+컴포넌트는 키보드 입력을 받아서 지정된 동작을 수행할 수 있습니다. 해당 동작은 컴포넌트가 마운트된 상태에서만 수행되며, 컴포넌트가 언마운트될 시 작동하지 않습니다.
 
 ```cpp
 auto input = Input();
@@ -148,7 +148,7 @@ input({ Key::Enter }, [=]() mutable {
 
 ### When
 
-가장 기본적엔 Control Flow는 조건문입니다. Liquid의 `WHEN` 매크로를 사용하여 `if-elif-else`문을 표현할 수 있습니다.
+가장 기본적인 Control Flow는 조건문입니다. Liquid의 `WHEN`, `OR`, `OTHERWISE`, `END_WHEN` 매크로를 사용하여 `if-elif-else`문을 표현할 수 있습니다.
 
 ```cpp
 WHEN(*user == User::Admin) {
@@ -162,7 +162,7 @@ WHEN(*user == User::Admin) {
 
 ### Each
 
-`EACH` 매크로를 사용해 컬렉션에 대해 반복을 편하게 할 수 있습니다. 컬렉션이 변경되면, 항목들을 다시 생성하고 렌더링합니다.
+`EACH`, `END_EACH` 매크로를 사용해 컬렉션에 대해 반복을 편하게 할 수 있습니다. 컬렉션이 변경되면, 항목들을 다시 생성하고 렌더링합니다.
 
 ```cpp
 auto cats = std::vector<Cat> { Cat("Poppy"), Cat("Bella"), Cat("Misty") };
