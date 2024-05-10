@@ -8,17 +8,18 @@
 #include <unordered_map>
 
 using namespace liquid;
+using namespace std::string_literals;
 
 namespace router {
-    auto location = State<std::string>("/");
+    auto location = State("/"s);
 }
 
 auto location() -> std::string {
     return *router::location;
 };
 
-auto navigate(const std::string& newLocation) -> void {
-    router::location = newLocation;
+auto navigate(const std::string& location) -> void {
+    router::location = location;
 };
 
 auto Router(const std::unordered_map<std::string, std::function<Element()>>& routes) -> Element {
