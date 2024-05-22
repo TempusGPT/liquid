@@ -76,7 +76,8 @@
         "map": "cpp",
         "stack": "cpp",
         "list": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "execution": "cpp"
     },
     "C_Cpp.default.cppStandard": "c++17"
 }
