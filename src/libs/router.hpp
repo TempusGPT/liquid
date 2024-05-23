@@ -1,5 +1,5 @@
-#ifndef COMPONENTS_ROUTER_HPP
-#define COMPONENTS_ROUTER_HPP
+#ifndef LIBS_COMPONENTS_ROUTER_HPP
+#define LIBS_COMPONENTS_ROUTER_HPP
 
 #include "liquid.hpp"
 

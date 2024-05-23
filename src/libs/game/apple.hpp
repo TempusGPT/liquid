@@ -1,5 +1,5 @@
-#ifndef COMPONENTS_APPLE_HPP
-#define COMPONENTS_APPLE_HPP
+#ifndef LIBS_GAME_APPLE_HPP
+#define LIBS_GAME_APPLE_HPP
 
 #include "libs/random.hpp"
 #include "libs/vector.hpp"

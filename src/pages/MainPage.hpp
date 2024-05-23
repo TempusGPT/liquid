@@ -1,7 +1,7 @@
 #ifndef PAGES_MAINPAGE_HPP
 #define PAGES_MAINPAGE_HPP
 
-#include "components/Router.hpp"
+#include "libs/router.hpp"
 #include "liquid.hpp"
 
 auto MainPage() -> Element {

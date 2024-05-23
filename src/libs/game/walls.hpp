@@ -1,5 +1,5 @@
-#ifndef COMPONENTS_FRAME_HPP
-#define COMPONENTS_FRAME_HPP
+#ifndef LIBS_GAME_FRAME_HPP
+#define LIBS_GAME_FRAME_HPP
 
 #include "libs/range.hpp"
 #include "libs/vector.hpp"
@@ -7,7 +7,7 @@
 
 using namespace liquid;
 
-auto Frame(
+auto Walls(
     const Prop<std::string>& ch,
     const Prop<Vector>& size,
     const Prop<Color>& foreground = Color::White,

@@ -1,10 +1,10 @@
 #ifndef PAGES_PLAYPAGE_HPP
 #define PAGES_PLAYPAGE_HPP
 
-#include "components/Apple.hpp"
-#include "components/Frame.hpp"
-#include "components/Router.hpp"
-#include "components/Snake.hpp"
+#include "libs/game/apple.hpp"
+#include "libs/game/snake.hpp"
+#include "libs/game/walls.hpp"
+#include "libs/router.hpp"
 #include "liquid.hpp"
 
 constexpr Vector FIELD_SIZE = { 23, 23 };
@@ -59,7 +59,7 @@ auto PlayPage() -> Element {
     });
 
     return Group({
-        Frame("■", FIELD_SIZE + Vector { 2, 2 }, Color::Green),
+        Walls("■", FIELD_SIZE + Vector { 2, 2 }, Color::Green),
         Cursor(2, 1),
         Snake(snake, 4, FIELD_SIZE, handleSnakeMove, handleSnakeDeath),
         Cursor(2, 1),

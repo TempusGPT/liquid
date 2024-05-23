@@ -1,5 +1,5 @@
-#ifndef COMPONENTS_SNAKE_HPP
-#define COMPONENTS_SNAKE_HPP
+#ifndef LIBS_GAME_SNAKE_HPP
+#define LIBS_GAME_SNAKE_HPP
 
 #include "libs/vector.hpp"
 #include "liquid.hpp"
