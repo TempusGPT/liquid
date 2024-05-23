@@ -3,7 +3,7 @@
 using namespace liquid;
 using namespace std::string_literals;
 
-inline auto locationValue = State("/"s);
+auto locationValue = State("/"s);
 
 auto location() -> std::string {
     return *locationValue;

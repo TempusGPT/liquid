@@ -6,6 +6,8 @@
 
 using namespace liquid;
 
+constexpr Vector FIELD_SIZE = { 23, 23 };
+
 auto PlayPage() -> Element {
     auto effect = Effect();
     auto snake = Ref<SnakeRef>();
