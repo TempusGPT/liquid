@@ -7,11 +7,7 @@
 
 using namespace liquid;
 
-auto Walls(
-    const Prop<Vector>& size,
-    const Prop<Color>& wallColor,
-    const Prop<Color>& gateColor
-) -> Element {
+auto Walls(const Prop<Vector>& size, const Prop<Color>& color) -> Element {
     auto positions = std::vector<Vector>();
 
     for (auto x : Range(0, size->x)) {
@@ -49,10 +45,8 @@ auto Walls(
 
     return EACH(positions, pos, _) {
         Cursor(pos.x * 2, pos.y),
-        WHEN(pos == gatePositions[0] || pos == gatePositions[1]) {
-            Text("  ", gateColor, gateColor),
-        } OTHERWISE {
-            Text("  ", wallColor, wallColor),
+        WHEN(pos != gatePositions[0] && pos != gatePositions[1]) {
+            Text("■", color),
         } END_WHEN,
     } END_EACH;
 }

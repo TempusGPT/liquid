@@ -14,6 +14,7 @@ auto Snake(
     liquid::Ref<SnakeRef>& ref,
     const liquid::Prop<int>& initialLength,
     const liquid::Prop<Vector>& fieldSize,
+    const liquid::Prop<liquid::Color>& color,
     const liquid::Prop<std::function<void(Vector)>>& onMove,
     const liquid::Prop<std::function<void(int)>>& onDeath
 ) -> liquid::Element;

@@ -59,9 +59,9 @@ auto PlayPage() -> Element {
     });
 
     return Group({
-        Walls(FIELD_SIZE + Vector { 2, 2 }, Color::White, Color::Black),
+        Walls(FIELD_SIZE + Vector { 2, 2 }, Color::White),
         Cursor(2, 1),
-        Snake(snake, 4, FIELD_SIZE, handleSnakeMove, handleSnakeDeath),
+        Snake(snake, 4, FIELD_SIZE, Color::Cyan, handleSnakeMove, handleSnakeDeath),
         Cursor(2, 1),
         Apple(honeyApple, FIELD_SIZE, Color::Red),
         Cursor(2, 1),

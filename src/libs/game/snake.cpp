@@ -9,6 +9,7 @@ auto Snake(
     Ref<SnakeRef>& ref,
     const Prop<int>& initialLength,
     const Prop<Vector>& fieldSize,
+    const Prop<Color>& color,
     const Prop<std::function<void(Vector)>>& onMove,
     const Prop<std::function<void(int)>>& onDeath
 ) -> Element {

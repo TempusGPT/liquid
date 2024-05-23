@@ -8,8 +8,7 @@
 
 auto Walls(
     const liquid::Prop<Vector>& size,
-    const liquid::Prop<liquid::Color>& color,
-    const liquid::Prop<liquid::Color>& gateColor
+    const liquid::Prop<liquid::Color>& color
 ) -> liquid::Element;
 
 #endif
