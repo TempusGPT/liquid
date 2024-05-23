@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_COMPILER "clang++")
@@ -7,31 +7,8 @@ set(CMAKE_CXX_STANDARD 17)
 project(snake-game)
 include_directories(liquid)
 include_directories(src)
-
-add_executable(
-    build.out
-
-    liquid/src/app.cpp
-    liquid/src/color.cpp
-    liquid/src/component.cpp
-    liquid/src/effect.cpp
-    liquid/src/element.cpp
-    liquid/src/format.cpp
-    liquid/src/input.cpp
-    liquid/src/state.cpp
-    liquid/src/timer.cpp
-
-    src/libs/game/apple.cpp
-    src/libs/game/snake.cpp
-    src/libs/game/walls.cpp
-    src/libs/random.cpp
-    src/libs/range.cpp
-    src/libs/router.cpp
-    src/libs/vector.cpp
-    src/pages/MainPage.cpp
-    src/pages/PlayPage.cpp
-    src/main.cpp
-)
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS liquid/*.cpp src/*.cpp)
+add_executable(build.out ${SOURCES})
 
 if(APPLE)
     set(CMAKE_PREFIX_PATH /opt/homebrew/opt/ncurses)
