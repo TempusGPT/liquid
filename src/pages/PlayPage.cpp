@@ -3,6 +3,7 @@
 #include "libs/game/snake.hpp"
 #include "libs/game/walls.hpp"
 #include "libs/router.hpp"
+#include "libs/vector.hpp"
 
 using namespace liquid;
 
