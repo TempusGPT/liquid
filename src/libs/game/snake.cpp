@@ -90,7 +90,12 @@ auto Snake(
     return Group({
         EACH(*position, pos, i) {
             Cursor(pos.x * 2, pos.y),
-            Text(i == 0 ? "●" : "○", Color::Cyan),
+
+            WHEN(i == 0) {
+                Text("●", Color::Cyan),
+            } OTHERWISE {
+                Text("○", Color::Cyan),
+            } END_WHEN,
         } END_EACH,
     });
 }
