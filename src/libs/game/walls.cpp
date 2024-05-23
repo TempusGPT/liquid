@@ -1,27 +1,58 @@
 #include "walls.hpp"
+#include "libs/random.hpp"
 #include "libs/range.hpp"
+
+#include <array>
+#include <vector>
 
 using namespace liquid;
 
 auto Walls(
-    const Prop<std::string>& ch,
     const Prop<Vector>& size,
-    const Prop<Color>& foreground,
-    const Prop<Color>& background
+    const Prop<Color>& wallColor,
+    const Prop<Color>& gateColor
 ) -> Element {
-    return Group({
-        EACH(Range(0, size->x), x, _) {
-            Cursor(x * 2, 0),
-            Text(ch, foreground, background),
-            Cursor(x * 2, GET(size->y - 1)),
-            Text(ch, foreground, background),
-        } END_EACH,
+    auto positions = std::vector<Vector>();
 
-        EACH(Range(0, size->y), y, _) {
-            Cursor(0, y),
-            Text(ch, foreground, background),
-            Cursor(GET((size->x - 1) * 2), y),
-            Text(ch, foreground, background),
-        } END_EACH,
-    });
+    for (auto x : Range(0, size->x)) {
+        positions.push_back(Vector { x, 0 });
+        positions.push_back(Vector { x, size->y - 1 });
+    }
+
+    for (auto y : Range(0, size->y)) {
+        positions.push_back(Vector { 0, y });
+        positions.push_back(Vector { size->x - 1, y });
+    }
+
+    auto calculateGatePosition = [=]() {
+        auto pos = positions[random(0, positions.size() - 1)];
+
+        while (
+            pos.x == 0 && pos.y == 0 ||
+            pos.x == size->x - 1 && pos.y == 0 ||
+            pos.x == size->x - 1 && pos.y == size->y - 1 ||
+            pos.x == 0 && pos.y == size->y - 1
+        ) {
+            pos = positions[random(0, positions.size() - 1)];
+        }
+
+        return pos;
+    };
+
+    auto gatePositions = std::array<Vector, 2>();
+    gatePositions[0] = calculateGatePosition();
+    gatePositions[1] = calculateGatePosition();
+
+    while (gatePositions[0] == gatePositions[1]) {
+        gatePositions[1] = calculateGatePosition();
+    }
+
+    return EACH(positions, pos, _) {
+        Cursor(pos.x * 2, pos.y),
+        WHEN(pos == gatePositions[0] || pos == gatePositions[1]) {
+            Text("  ", gateColor, gateColor),
+        } OTHERWISE {
+            Text("  ", wallColor, wallColor),
+        } END_WHEN,
+    } END_EACH;
 }

@@ -59,7 +59,7 @@ auto PlayPage() -> Element {
     });
 
     return Group({
-        Walls("■", FIELD_SIZE + Vector { 2, 2 }, Color::Green),
+        Walls(FIELD_SIZE + Vector { 2, 2 }, Color::White, Color::Black),
         Cursor(2, 1),
         Snake(snake, 4, FIELD_SIZE, handleSnakeMove, handleSnakeDeath),
         Cursor(2, 1),
