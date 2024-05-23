@@ -1,8 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
+
 set(CMAKE_C_COMPILER "clang")
 set(CMAKE_CXX_COMPILER "clang++")
 set(CMAKE_CXX_STANDARD 17)
+
 project(snake-game)
+include_directories(liquid)
+include_directories(src)
 
 add_executable(
     build.out
@@ -18,9 +22,12 @@ add_executable(
     liquid/src/timer.cpp
 )
 
-find_package(Curses)
-include_directories(${CURSES_INCLUDE_DIR})
-include_directories(liquid)
-include_directories(src)
+if(APPLE)
+    set(CMAKE_PREFIX_PATH /opt/homebrew/opt/ncurses)
+endif()
+set(CURSES_NEED_NCURSES TRUE)
 set(CURSES_NEED_WIDE TRUE)
+
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
 target_link_libraries(build.out ${CURSES_LIBRARIES})
