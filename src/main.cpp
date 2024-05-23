@@ -3,13 +3,11 @@
 #include "pages/MainPage.hpp"
 #include "pages/PlayPage.hpp"
 
-using namespace liquid;
-
 auto main() -> int {
     auto element = Router({
         { "/", MainPage },
         { "/play", PlayPage },
     });
 
-    return render(element, { 80, 25 });
+    return liquid::render(element, { 80, 25 });
 }

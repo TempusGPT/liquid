@@ -10,7 +10,7 @@ include_directories(src)
 
 add_executable(
     build.out
-    src/main.cpp
+
     liquid/src/app.cpp
     liquid/src/color.cpp
     liquid/src/component.cpp
@@ -20,6 +20,17 @@ add_executable(
     liquid/src/input.cpp
     liquid/src/state.cpp
     liquid/src/timer.cpp
+
+    src/libs/game/apple.cpp
+    src/libs/game/snake.cpp
+    src/libs/game/walls.cpp
+    src/libs/random.cpp
+    src/libs/range.cpp
+    src/libs/router.cpp
+    src/libs/vector.cpp
+    src/pages/MainPage.cpp
+    src/pages/PlayPage.cpp
+    src/main.cpp
 )
 
 if(APPLE)

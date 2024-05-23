@@ -1,11 +1,10 @@
 #ifndef LIBS_GAME_APPLE_HPP
 #define LIBS_GAME_APPLE_HPP
 
-#include "libs/random.hpp"
 #include "libs/vector.hpp"
 #include "liquid.hpp"
 
-using namespace liquid;
+#include <functional>
 
 struct AppleRef {
     std::function<Vector()> position;
@@ -13,25 +12,9 @@ struct AppleRef {
 };
 
 auto Apple(
-    Ref<AppleRef>& ref,
-    const Prop<Vector>& fieldSize,
-    const Prop<Color>& color
-) -> Element {
-    auto position = State<Vector>({ fieldSize->x / 2, fieldSize->y / 2 });
-
-    auto refresh = [=]() mutable {
-        position = {
-            random(0, fieldSize->x - 1),
-            random(0, fieldSize->y - 1),
-        };
-    };
-
-    *ref = { GET(*position), refresh };
-
-    return Group({
-        Cursor(GET(position->x * 2), GET(position->y)),
-        Text("●", color),
-    });
-}
+    liquid::Ref<AppleRef>& ref,
+    const liquid::Prop<Vector>& fieldSize,
+    const liquid::Prop<liquid::Color>& color
+) -> liquid::Element;
 
 #endif

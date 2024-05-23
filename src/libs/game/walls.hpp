@@ -1,33 +1,16 @@
 #ifndef LIBS_GAME_FRAME_HPP
 #define LIBS_GAME_FRAME_HPP
 
-#include "libs/range.hpp"
 #include "libs/vector.hpp"
 #include "liquid.hpp"
 
-using namespace liquid;
+#include <string>
 
 auto Walls(
-    const Prop<std::string>& ch,
-    const Prop<Vector>& size,
-    const Prop<Color>& foreground = Color::White,
-    const Prop<Color>& background = Color::Black
-) -> Element {
-    return Group({
-        EACH(Range(0, size->x), x, _) {
-            Cursor(x * 2, 0),
-            Text(ch, foreground, background),
-            Cursor(x * 2, GET(size->y - 1)),
-            Text(ch, foreground, background),
-        } END_EACH,
-
-        EACH(Range(0, size->y), y, _) {
-            Cursor(0, y),
-            Text(ch, foreground, background),
-            Cursor(GET((size->x - 1) * 2), y),
-            Text(ch, foreground, background),
-        } END_EACH,
-    });
-}
+    const liquid::Prop<std::string>& ch,
+    const liquid::Prop<Vector>& size,
+    const liquid::Prop<liquid::Color>& foreground = liquid::Color::White,
+    const liquid::Prop<liquid::Color>& background = liquid::Color::Black
+) -> liquid::Element;
 
 #endif
