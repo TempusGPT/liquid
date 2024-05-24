@@ -10,6 +10,7 @@ using namespace liquid;
 constexpr Vector FIELD_SIZE = { 23, 23 };
 
 auto PlayPage() -> Element {
+    auto input = Input();
     auto effect = Effect();
 
     auto walls = Ref<WallsRef>();
@@ -50,7 +51,7 @@ auto PlayPage() -> Element {
 
         auto gate = walls->getGate(head);
         if (gate) {
-            snake->fixDirection(gate->direction);
+            snake->changeDirection(gate->direction);
             return gate->position + gate->direction;
         }
 
@@ -60,6 +61,17 @@ auto PlayPage() -> Element {
     auto handleSnakeDeath = []() {
         navigate("/");
     };
+
+    auto changeDirection = [&](const Vector& direction) {
+        return [=]() mutable {
+            snake->changeDirection(direction);
+        };
+    };
+
+    input({ Key::UpArrow }, changeDirection(Vector::up()));
+    input({ Key::DownArrow }, changeDirection(Vector::down()));
+    input({ Key::LeftArrow }, changeDirection(Vector::left()));
+    input({ Key::RightArrow }, changeDirection(Vector::right()));
 
     effect([=]() {
         untrack([=]() {

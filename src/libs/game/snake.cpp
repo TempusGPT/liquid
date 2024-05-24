@@ -14,7 +14,6 @@ auto Snake(
     const Prop<std::function<void()>>& onDeath,
     Ref<SnakeRef>& ref
 ) -> Element {
-    auto input = Input();
     auto effect = Effect();
     auto direction = State(Vector::right());
     auto directionQueue = Ref<std::queue<Vector>>();
@@ -23,12 +22,6 @@ auto Snake(
     for (auto i = 0; i < *initialLength; i++) {
         position->push_front({ i + 1, fieldSize->y / 2 });
     }
-
-    auto handleDirectionChange = [&](const Vector& direction) {
-        return [=]() mutable {
-            directionQueue->push(direction);
-        };
-    };
 
     auto currentDirection = [=]() mutable {
         if (!directionQueue->empty()) {
@@ -69,11 +62,7 @@ auto Snake(
         directionQueue->push(dir);
     };
 
-    *ref = { grow, shrink, isOverlap, changeDirection };
-    input({ Key::UpArrow }, handleDirectionChange(Vector::up()));
-    input({ Key::DownArrow }, handleDirectionChange(Vector::down()));
-    input({ Key::LeftArrow }, handleDirectionChange(Vector::left()));
-    input({ Key::RightArrow }, handleDirectionChange(Vector::right()));
+    *ref = { grow, shrink, changeDirection, isOverlap };
 
     effect([=]() {
         auto id = setInterval(100, [=]() mutable {
@@ -98,9 +87,9 @@ auto Snake(
             Cursor(pos.x * 2, pos.y),
 
             WHEN(i == 0) {
-                Text("●", Color::Cyan),
+                Text("●", color),
             } OTHERWISE {
-                Text("○", Color::Cyan),
+                Text("○", color),
             } END_WHEN,
         } END_EACH,
     });

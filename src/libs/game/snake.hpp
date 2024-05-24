@@ -7,8 +7,8 @@
 struct SnakeRef {
     std::function<void()> grow;
     std::function<void()> shrink;
+    std::function<void(Vector)> changeDirection;
     std::function<bool(Vector)> isOverlap;
-    std::function<void(Vector)> fixDirection;
 };
 
 auto Snake(
