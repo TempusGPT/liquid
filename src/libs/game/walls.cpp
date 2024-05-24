@@ -7,7 +7,12 @@
 
 using namespace liquid;
 
-auto Walls(const Prop<Vector>& fieldSize, const Prop<Color>& color, Ref<WallsRef>& ref) -> Element {
+auto Walls(
+    const Prop<Vector>& fieldSize,
+    const Prop<Color>& wallColor,
+    const Prop<Color>& gateColor,
+    Ref<WallsRef>& ref
+) -> Element {
     auto positions = std::vector<Vector>();
 
     for (auto x = -1; x <= fieldSize->x; x += 1) {
@@ -68,8 +73,11 @@ auto Walls(const Prop<Vector>& fieldSize, const Prop<Color>& color, Ref<WallsRef
     return Group({
         EACH(positions, pos, _) {
             Cursor(pos.x * 2, pos.y),
-            WHEN(pos != gates[0].position && pos != gates[1].position) {
-                Text("■", color),
+
+            WHEN(pos == gates[0].position || pos == gates[1].position) {
+                Text("■", gateColor),
+            } OTHERWISE {
+                Text("■", wallColor),
             } END_WHEN,
         } END_EACH,
     });

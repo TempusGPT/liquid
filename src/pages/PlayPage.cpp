@@ -70,12 +70,12 @@ auto PlayPage() -> Element {
 
     return Group({
         Cursor(2, 1),
-        Walls(FIELD_SIZE, Color::White, walls),
+        Walls(FIELD_SIZE, Color::White, Color::Blue, walls),
+        Cursor(2, 1),
+        Snake(4, FIELD_SIZE, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
         Cursor(2, 1),
         Apple(FIELD_SIZE, Color::Red, honeyApple),
         Cursor(2, 1),
         Apple(FIELD_SIZE, Color::Magenta, poisonedApple),
-        Cursor(2, 1),
-        Snake(4, FIELD_SIZE, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
     });
 }

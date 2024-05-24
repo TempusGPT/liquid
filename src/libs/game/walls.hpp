@@ -19,7 +19,8 @@ struct WallsRef {
 
 auto Walls(
     const liquid::Prop<Vector>& size,
-    const liquid::Prop<liquid::Color>& color,
+    const liquid::Prop<liquid::Color>& wallColor,
+    const liquid::Prop<liquid::Color>& gateColor,
     liquid::Ref<WallsRef>& ref
 ) -> liquid::Element;
 
