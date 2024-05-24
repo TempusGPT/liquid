@@ -2,7 +2,6 @@
 #include "libs/random.hpp"
 #include "libs/range.hpp"
 
-#include <array>
 #include <vector>
 
 using namespace liquid;
@@ -48,21 +47,19 @@ auto Walls(
         }
     };
 
-    auto gates = std::array<Gate, 2>();
-    gates[0] = createGate();
-    gates[1] = createGate();
-
-    while (gates[0].position == gates[1].position) {
-        gates[1] = createGate();
+    auto blueGate = createGate();
+    auto orangeGate = createGate();
+    while (blueGate.position == orangeGate.position) {
+        orangeGate = createGate();
     }
 
     auto getGate = [=](const Vector& pos) -> std::optional<Gate> {
-        if (pos == gates[0].position) {
-            return gates[1];
+        if (pos == blueGate.position) {
+            return orangeGate;
         }
 
-        if (pos == gates[1].position) {
-            return gates[0];
+        if (pos == orangeGate.position) {
+            return blueGate;
         }
 
         return std::nullopt;
@@ -74,7 +71,7 @@ auto Walls(
         EACH(positions, pos, _) {
             Cursor(pos.x * 2, pos.y),
 
-            WHEN(pos == gates[0].position || pos == gates[1].position) {
+            WHEN(pos == blueGate.position || pos == orangeGate.position) {
                 Text("■", gateColor),
             } OTHERWISE {
                 Text("■", wallColor),
