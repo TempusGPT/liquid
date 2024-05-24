@@ -7,12 +7,12 @@
 using namespace liquid;
 
 auto Snake(
-    Ref<SnakeRef>& ref,
     const Prop<int>& initialLength,
     const Prop<Vector>& fieldSize,
     const Prop<Color>& color,
     const Prop<std::function<Vector(Vector)>>& onMove,
-    const Prop<std::function<void()>>& onDeath
+    const Prop<std::function<void()>>& onDeath,
+    Ref<SnakeRef>& ref
 ) -> Element {
     auto input = Input();
     auto effect = Effect();

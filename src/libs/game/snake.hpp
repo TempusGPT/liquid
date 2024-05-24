@@ -12,12 +12,12 @@ struct SnakeRef {
 };
 
 auto Snake(
-    liquid::Ref<SnakeRef>& ref,
     const liquid::Prop<int>& initialLength,
     const liquid::Prop<Vector>& fieldSize,
     const liquid::Prop<liquid::Color>& color,
     const liquid::Prop<std::function<Vector(Vector)>>& onMove,
-    const liquid::Prop<std::function<void()>>& onDeath
+    const liquid::Prop<std::function<void()>>& onDeath,
+    liquid::Ref<SnakeRef>& ref
 ) -> liquid::Element;
 
 #endif

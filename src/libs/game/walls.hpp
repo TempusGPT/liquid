@@ -14,7 +14,7 @@ struct Gate {
 };
 
 struct WallsRef {
-    std::function<std::optional<Gate>(Vector)> gate;
+    std::function<std::optional<Gate>(Vector)> getGate;
 };
 
 auto Walls(

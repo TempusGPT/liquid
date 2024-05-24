@@ -4,9 +4,9 @@
 using namespace liquid;
 
 auto Apple(
-    Ref<AppleRef>& ref,
     const Prop<Vector>& fieldSize,
-    const Prop<Color>& color
+    const Prop<Color>& color,
+    Ref<AppleRef>& ref
 ) -> Element {
     auto position = State<Vector>({ fieldSize->x / 2, fieldSize->y / 2 });
 

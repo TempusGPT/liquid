@@ -48,7 +48,7 @@ auto PlayPage() -> Element {
             refreshPoisonedApple();
         }
 
-        auto gate = walls->gate(head);
+        auto gate = walls->getGate(head);
         if (gate) {
             snake->fixDirection(gate->direction);
             return gate->position + gate->direction;
@@ -72,10 +72,10 @@ auto PlayPage() -> Element {
         Cursor(2, 1),
         Walls(FIELD_SIZE, Color::White, walls),
         Cursor(2, 1),
-        Apple(honeyApple, FIELD_SIZE, Color::Red),
+        Apple(FIELD_SIZE, Color::Red, honeyApple),
         Cursor(2, 1),
-        Apple(poisonedApple, FIELD_SIZE, Color::Magenta),
+        Apple(FIELD_SIZE, Color::Magenta, poisonedApple),
         Cursor(2, 1),
-        Snake(snake, 4, FIELD_SIZE, Color::Cyan, handleSnakeMove, handleSnakeDeath),
+        Snake(4, FIELD_SIZE, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
     });
 }

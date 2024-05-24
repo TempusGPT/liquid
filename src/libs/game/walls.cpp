@@ -20,7 +20,7 @@ auto Walls(const Prop<Vector>& fieldSize, const Prop<Color>& color, Ref<WallsRef
         positions.push_back(Vector { fieldSize->x, y });
     }
 
-    auto calculateGate = [=]() {
+    auto createGate = [=]() -> Gate {
         auto pos = positions[random(0, positions.size() - 1)];
 
         while (
@@ -33,25 +33,25 @@ auto Walls(const Prop<Vector>& fieldSize, const Prop<Color>& color, Ref<WallsRef
         }
 
         if (pos.x == -1) {
-            return Gate { pos, Vector::right() };
+            return { pos, Vector::right() };
         } else if (pos.x == fieldSize->x) {
-            return Gate { pos, Vector::left() };
+            return { pos, Vector::left() };
         } else if (pos.y == -1) {
-            return Gate { pos, Vector::down() };
+            return { pos, Vector::down() };
         } else {
-            return Gate { pos, Vector::up() };
+            return { pos, Vector::up() };
         }
     };
 
     auto gates = std::array<Gate, 2>();
-    gates[0] = calculateGate();
-    gates[1] = calculateGate();
+    gates[0] = createGate();
+    gates[1] = createGate();
 
     while (gates[0].position == gates[1].position) {
-        gates[1] = calculateGate();
+        gates[1] = createGate();
     }
 
-    auto gate = [=](const Vector& pos) -> std::optional<Gate> {
+    auto getGate = [=](const Vector& pos) -> std::optional<Gate> {
         if (pos == gates[0].position) {
             return gates[1];
         }
@@ -63,7 +63,7 @@ auto Walls(const Prop<Vector>& fieldSize, const Prop<Color>& color, Ref<WallsRef
         return std::nullopt;
     };
 
-    *ref = { gate };
+    *ref = { getGate };
 
     return Group({
         EACH(positions, pos, _) {

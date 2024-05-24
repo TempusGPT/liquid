@@ -12,9 +12,9 @@ struct AppleRef {
 };
 
 auto Apple(
-    liquid::Ref<AppleRef>& ref,
     const liquid::Prop<Vector>& fieldSize,
-    const liquid::Prop<liquid::Color>& color
+    const liquid::Prop<liquid::Color>& color,
+    liquid::Ref<AppleRef>& ref
 ) -> liquid::Element;
 
 #endif
