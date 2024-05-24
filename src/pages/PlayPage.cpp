@@ -11,6 +11,8 @@ constexpr Vector FIELD_SIZE = { 23, 23 };
 
 auto PlayPage() -> Element {
     auto effect = Effect();
+
+    auto walls = Ref<WallsRef>();
     auto snake = Ref<SnakeRef>();
     auto honeyApple = Ref<AppleRef>();
     auto poisonedApple = Ref<AppleRef>();
@@ -45,9 +47,17 @@ auto PlayPage() -> Element {
             snake->shrink();
             refreshPoisonedApple();
         }
+
+        auto gate = walls->gate(head);
+        if (gate) {
+            snake->fixDirection(gate->direction);
+            return gate->position + gate->direction;
+        }
+
+        return head;
     };
 
-    auto handleSnakeDeath = [](int) {
+    auto handleSnakeDeath = []() {
         navigate("/");
     };
 
@@ -59,12 +69,13 @@ auto PlayPage() -> Element {
     });
 
     return Group({
-        Walls(FIELD_SIZE + Vector { 2, 2 }, Color::White),
         Cursor(2, 1),
-        Snake(snake, 4, FIELD_SIZE, Color::Cyan, handleSnakeMove, handleSnakeDeath),
+        Walls(FIELD_SIZE, Color::White, walls),
         Cursor(2, 1),
         Apple(honeyApple, FIELD_SIZE, Color::Red),
         Cursor(2, 1),
         Apple(poisonedApple, FIELD_SIZE, Color::Magenta),
+        Cursor(2, 1),
+        Snake(snake, 4, FIELD_SIZE, Color::Cyan, handleSnakeMove, handleSnakeDeath),
     });
 }

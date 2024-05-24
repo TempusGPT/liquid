@@ -2,6 +2,7 @@
 
 #include <list>
 #include <queue>
+#include <unordered_set>
 
 using namespace liquid;
 
@@ -10,8 +11,8 @@ auto Snake(
     const Prop<int>& initialLength,
     const Prop<Vector>& fieldSize,
     const Prop<Color>& color,
-    const Prop<std::function<void(Vector)>>& onMove,
-    const Prop<std::function<void(int)>>& onDeath
+    const Prop<std::function<Vector(Vector)>>& onMove,
+    const Prop<std::function<void()>>& onDeath
 ) -> Element {
     auto input = Input();
     auto effect = Effect();
@@ -38,14 +39,15 @@ auto Snake(
         return *direction;
     };
 
-    auto isOutOfField = [=](const Vector& headPos) {
+    auto isOutOfField = [=]() {
+        auto headPos = position->front();
         auto [width, height] = *fieldSize;
         return headPos.x < 0 || headPos.x >= width || headPos.y < 0 || headPos.y >= height;
     };
 
-    auto isSuicide = [=](const Vector& headPos) {
-        auto pos = *position;
-        return std::find(++pos.begin(), pos.end(), headPos) != pos.end();
+    auto isSuicide = [=]() {
+        auto set = std::unordered_set(position->begin(), position->end());
+        return set.size() != position->size();
     };
 
     auto grow = [=]() mutable {
@@ -63,7 +65,11 @@ auto Snake(
         return std::find(pos.begin(), pos.end(), other) != pos.end();
     };
 
-    *ref = { grow, shrink, isOverlap };
+    auto changeDirection = [=](const Vector& dir) mutable {
+        directionQueue->push(dir);
+    };
+
+    *ref = { grow, shrink, isOverlap, changeDirection };
     input({ Key::UpArrow }, handleDirectionChange(Vector::up()));
     input({ Key::DownArrow }, handleDirectionChange(Vector::down()));
     input({ Key::LeftArrow }, handleDirectionChange(Vector::left()));
@@ -71,16 +77,15 @@ auto Snake(
 
     effect([=]() {
         auto id = setInterval(100, [=]() mutable {
-            auto headPos = position->front() + currentDirection();
-            if (isOutOfField(headPos) || isSuicide(headPos)) {
-                (*onDeath)(position->size());
+            auto head = (*onMove)(position->front() + currentDirection());
+            position->pop_back();
+            position->push_front(head);
+            position = *position;
+
+            if (isOutOfField() || isSuicide()) {
+                (*onDeath)();
                 return;
             }
-
-            position->pop_back();
-            position->push_front(headPos);
-            position = *position;
-            (*onMove)(headPos);
         });
 
         return [=]() {

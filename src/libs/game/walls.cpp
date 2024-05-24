@@ -7,46 +7,70 @@
 
 using namespace liquid;
 
-auto Walls(const Prop<Vector>& size, const Prop<Color>& color) -> Element {
+auto Walls(const Prop<Vector>& fieldSize, const Prop<Color>& color, Ref<WallsRef>& ref) -> Element {
     auto positions = std::vector<Vector>();
 
-    for (auto x : Range(0, size->x)) {
-        positions.push_back(Vector { x, 0 });
-        positions.push_back(Vector { x, size->y - 1 });
+    for (auto x = -1; x <= fieldSize->x; x += 1) {
+        positions.push_back(Vector { x, -1 });
+        positions.push_back(Vector { x, fieldSize->y });
     }
 
-    for (auto y : Range(0, size->y)) {
-        positions.push_back(Vector { 0, y });
-        positions.push_back(Vector { size->x - 1, y });
+    for (auto y = -1; y <= fieldSize->y; y += 1) {
+        positions.push_back(Vector { -1, y });
+        positions.push_back(Vector { fieldSize->x, y });
     }
 
-    auto calculateGatePosition = [=]() {
+    auto calculateGate = [=]() {
         auto pos = positions[random(0, positions.size() - 1)];
 
         while (
-            pos.x == 0 && pos.y == 0 ||
-            pos.x == size->x - 1 && pos.y == 0 ||
-            pos.x == size->x - 1 && pos.y == size->y - 1 ||
-            pos.x == 0 && pos.y == size->y - 1
+            pos.x == -1 && pos.y == -1 ||
+            pos.x == fieldSize->x && pos.y == -1 ||
+            pos.x == fieldSize->x && pos.y == fieldSize->y ||
+            pos.x == -1 && pos.y == fieldSize->y
         ) {
             pos = positions[random(0, positions.size() - 1)];
         }
 
-        return pos;
+        if (pos.x == -1) {
+            return Gate { pos, Vector::right() };
+        } else if (pos.x == fieldSize->x) {
+            return Gate { pos, Vector::left() };
+        } else if (pos.y == -1) {
+            return Gate { pos, Vector::down() };
+        } else {
+            return Gate { pos, Vector::up() };
+        }
     };
 
-    auto gatePositions = std::array<Vector, 2>();
-    gatePositions[0] = calculateGatePosition();
-    gatePositions[1] = calculateGatePosition();
+    auto gates = std::array<Gate, 2>();
+    gates[0] = calculateGate();
+    gates[1] = calculateGate();
 
-    while (gatePositions[0] == gatePositions[1]) {
-        gatePositions[1] = calculateGatePosition();
+    while (gates[0].position == gates[1].position) {
+        gates[1] = calculateGate();
     }
 
-    return EACH(positions, pos, _) {
-        Cursor(pos.x * 2, pos.y),
-        WHEN(pos != gatePositions[0] && pos != gatePositions[1]) {
-            Text("■", color),
-        } END_WHEN,
-    } END_EACH;
+    auto gate = [=](const Vector& pos) -> std::optional<Gate> {
+        if (pos == gates[0].position) {
+            return gates[1];
+        }
+
+        if (pos == gates[1].position) {
+            return gates[0];
+        }
+
+        return std::nullopt;
+    };
+
+    *ref = { gate };
+
+    return Group({
+        EACH(positions, pos, _) {
+            Cursor(pos.x * 2, pos.y),
+            WHEN(pos != gates[0].position && pos != gates[1].position) {
+                Text("■", color),
+            } END_WHEN,
+        } END_EACH,
+    });
 }

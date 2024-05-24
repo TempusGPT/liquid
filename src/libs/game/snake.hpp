@@ -7,7 +7,8 @@
 struct SnakeRef {
     std::function<void()> grow;
     std::function<void()> shrink;
-    std::function<bool(const Vector&)> isOverlap;
+    std::function<bool(Vector)> isOverlap;
+    std::function<void(Vector)> fixDirection;
 };
 
 auto Snake(
@@ -15,8 +16,8 @@ auto Snake(
     const liquid::Prop<int>& initialLength,
     const liquid::Prop<Vector>& fieldSize,
     const liquid::Prop<liquid::Color>& color,
-    const liquid::Prop<std::function<void(Vector)>>& onMove,
-    const liquid::Prop<std::function<void(int)>>& onDeath
+    const liquid::Prop<std::function<Vector(Vector)>>& onMove,
+    const liquid::Prop<std::function<void()>>& onDeath
 ) -> liquid::Element;
 
 #endif
