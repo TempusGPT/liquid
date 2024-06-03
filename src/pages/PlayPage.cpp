@@ -4,6 +4,7 @@
 #include "libs/game/walls.hpp"
 #include "libs/router.hpp"
 #include "libs/vector.hpp"
+#include <list>
 
 using namespace liquid;
 
@@ -22,7 +23,9 @@ auto PlayPage() -> Element {
         return (
             honeyApple->position() == poisonedApple->position() ||
             snake->isOverlap(honeyApple->position()) ||
-            snake->isOverlap(poisonedApple->position())
+            snake->isOverlap(poisonedApple->position()) ||
+            walls->isOverlap(honeyApple->position()) ||
+            walls->isOverlap(poisonedApple->position())
         );
     };
 
@@ -38,24 +41,24 @@ auto PlayPage() -> Element {
         } while (isAppleOverlap());
     };
 
-    auto handleSnakeMove = [=](const Vector& head) {
-        if (head == honeyApple->position()) {
+    auto handleSnakeMove = [=](const Transform& transform) {
+        if (transform.position == honeyApple->position()) {
             snake->grow();
             refreshHoneyApple();
         }
 
-        if (head == poisonedApple->position()) {
+        if (transform.position == poisonedApple->position()) {
             snake->shrink();
             refreshPoisonedApple();
         }
 
-        auto gate = walls->getGate(head);
+        auto gate = walls->getGate(transform);
         if (gate) {
             snake->changeDirection(gate->direction);
             return gate->position + gate->direction;
         }
 
-        return head;
+        return transform.position;
     };
 
     auto handleSnakeDeath = []() {
@@ -80,11 +83,38 @@ auto PlayPage() -> Element {
         });
     });
 
+#pragma region Temp
+
+    auto wallPositions = std::unordered_set<Vector>();
+    auto immuneWallPositions = std::unordered_set<Vector>();
+
+    immuneWallPositions.insert({ -1, -1 });
+    immuneWallPositions.insert({ -1, FIELD_SIZE.y });
+    immuneWallPositions.insert({ FIELD_SIZE.x, -1 });
+    immuneWallPositions.insert({ FIELD_SIZE.x, FIELD_SIZE.y });
+
+    for (auto x = 0; x < FIELD_SIZE.x; x += 1) {
+        wallPositions.insert({ x, -1 });
+        wallPositions.insert({ x, FIELD_SIZE.y });
+    }
+
+    for (auto y = 0; y < FIELD_SIZE.y; y += 1) {
+        wallPositions.insert({ -1, y });
+        wallPositions.insert({ FIELD_SIZE.x, y });
+    }
+
+    auto snakePosition = std::list<Vector>();
+    for (auto i = 0; i < 4; i++) {
+        snakePosition.push_front({ i + 1, FIELD_SIZE.y / 2 });
+    }
+
+#pragma endregion
+
     return Group({
         Cursor(2, 1),
-        Walls(FIELD_SIZE, Color::White, Color::Blue, walls),
+        Walls(wallPositions, immuneWallPositions, Color::White, Color::Blue, walls),
         Cursor(2, 1),
-        Snake(4, FIELD_SIZE, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
+        Snake(snakePosition, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
         Cursor(2, 1),
         Apple(FIELD_SIZE, Color::Red, honeyApple),
         Cursor(2, 1),

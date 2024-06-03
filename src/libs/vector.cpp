@@ -16,6 +16,14 @@ auto Vector::operator!=(const Vector& other) const -> bool {
     return x != other.x || y != other.y;
 }
 
+auto Vector::rotateLeft() const -> Vector {
+    return { -y, x };
+}
+
+auto Vector::rotateRight() const -> Vector {
+    return { y, -x };
+}
+
 auto Vector::zero() -> Vector {
     return { 0, 0 };
 }

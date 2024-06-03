@@ -7,72 +7,70 @@
 using namespace liquid;
 
 auto Walls(
-    const Prop<Vector>& fieldSize,
+    const Prop<std::unordered_set<Vector>>& wallPositions,
+    const Prop<std::unordered_set<Vector>>& immuneWallPositions,
     const Prop<Color>& wallColor,
     const Prop<Color>& gateColor,
     Ref<WallsRef>& ref
 ) -> Element {
-    auto positions = std::vector<Vector>();
-
-    for (auto x = 0; x < fieldSize->x; x += 1) {
-        positions.push_back(Vector { x, -1 });
-        positions.push_back(Vector { x, fieldSize->y });
-    }
-
-    for (auto y = 0; y < fieldSize->y; y += 1) {
-        positions.push_back(Vector { -1, y });
-        positions.push_back(Vector { fieldSize->x, y });
-    }
-
-    auto createGate = [=]() -> Gate {
-        auto index = random(0, positions.size() - 1);
-        auto pos = positions[index];
-
-        if (pos.x == -1) {
-            return { pos, Vector::right() };
-        } else if (pos.x == fieldSize->x) {
-            return { pos, Vector::left() };
-        } else if (pos.y == -1) {
-            return { pos, Vector::down() };
-        } else {
-            return { pos, Vector::up() };
-        }
+    auto createGate = [=]() {
+        auto index = random(0, wallPositions->size() - 1);
+        auto iterator = wallPositions->begin();
+        std::advance(iterator, index);
+        return *iterator;
     };
 
     auto blueGate = createGate();
     auto orangeGate = createGate();
-    while (blueGate.position == orangeGate.position) {
+    while (blueGate == orangeGate) {
         orangeGate = createGate();
     }
 
-    auto getGate = [=](const Vector& pos) -> std::optional<Gate> {
-        if (pos == blueGate.position) {
-            return orangeGate;
-        }
-
-        if (pos == orangeGate.position) {
-            return blueGate;
-        }
-
-        return std::nullopt;
+    auto isOverlap = [=](const Vector& pos) -> bool {
+        return (
+            wallPositions->find(pos) != wallPositions->end() ||
+            immuneWallPositions->find(pos) != immuneWallPositions->end()
+        );
     };
 
-    *ref = { getGate };
+    auto getGate = [=](const Transform& transform) -> std::optional<Transform> {
+        auto wallExists = [=](const Vector& pos) {
+            return isOverlap(pos) || pos.x < -1 || pos.x > 23 || pos.y < -1 || pos.y > 23;
+        };
+
+        auto gateTransform = [=](const Vector& gate) -> Transform {
+            if (!wallExists(gate + transform.direction)) {
+                return { gate, transform.direction };
+            } else if (!wallExists(gate + transform.direction.rotateRight())) {
+                return { gate, transform.direction.rotateRight() };
+            } else if (!wallExists(gate + transform.direction.rotateLeft())) {
+                return { gate, transform.direction.rotateLeft() };
+            } else {
+                return { gate, transform.direction.rotateRight().rotateRight() };
+            }
+        };
+
+        if (transform.position == blueGate) {
+            return gateTransform(orangeGate);
+        } else if (transform.position == orangeGate) {
+            return gateTransform(blueGate);
+        } else {
+            return std::nullopt;
+        }
+    };
+
+    *ref = { isOverlap, getGate };
 
     return Group({
-        Cursor(-2, -1),
-        Text("■", wallColor),
-        Cursor(-2, fieldSize->y),
-        Text("■", wallColor),
-        Cursor(fieldSize->x * 2, -1),
-        Text("■", wallColor),
-        Cursor(fieldSize->x * 2, fieldSize->y),
-        Text("■", wallColor),
+        EACH(*immuneWallPositions, pos, _) {
+            Cursor(pos.x * 2, pos.y),
+            Text("■", wallColor),
+        } END_EACH,
 
-        EACH(positions, pos, _) {
+        EACH(*wallPositions, pos, _) {
             Cursor(pos.x * 2, pos.y),
 
-            WHEN(pos == blueGate.position || pos == orangeGate.position) {
+            WHEN(pos == blueGate || pos == orangeGate) {
                 Text("■", gateColor),
             } OTHERWISE {
                 Text("■", wallColor),

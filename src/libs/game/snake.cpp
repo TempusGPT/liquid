@@ -7,21 +7,16 @@
 using namespace liquid;
 
 auto Snake(
-    const Prop<int>& initialLength,
-    const Prop<Vector>& fieldSize,
+    const Prop<std::list<Vector>>& initialPosition,
     const Prop<Color>& color,
-    const Prop<std::function<Vector(Vector)>>& onMove,
+    const Prop<std::function<Vector(Transform)>>& onMove,
     const Prop<std::function<void()>>& onDeath,
     Ref<SnakeRef>& ref
 ) -> Element {
     auto effect = Effect();
     auto direction = State(Vector::right());
     auto directionQueue = Ref<std::queue<Vector>>();
-
-    auto position = State<std::list<Vector>>();
-    for (auto i = 0; i < *initialLength; i++) {
-        position->push_front({ i + 1, fieldSize->y / 2 });
-    }
+    auto position = State(*initialPosition);
 
     auto currentDirection = [=]() mutable {
         if (!directionQueue->empty()) {
@@ -30,12 +25,6 @@ auto Snake(
         }
 
         return *direction;
-    };
-
-    auto isOutOfField = [=]() {
-        auto headPos = position->front();
-        auto [width, height] = *fieldSize;
-        return headPos.x < 0 || headPos.x >= width || headPos.y < 0 || headPos.y >= height;
     };
 
     auto isSuicide = [=]() {
@@ -66,14 +55,15 @@ auto Snake(
 
     effect([=]() {
         auto id = setInterval(100, [=]() mutable {
-            auto head = (*onMove)(position->front() + currentDirection());
+            auto dir = currentDirection();
+            auto newHead = (*onMove)({ position->front() + dir, dir });
+
             position->pop_back();
-            position->push_front(head);
+            position->push_front(newHead);
             position = *position;
 
-            if (isOutOfField() || isSuicide()) {
+            if (isSuicide()) {
                 (*onDeath)();
-                return;
             }
         });
 

@@ -13,6 +13,9 @@ struct Vector {
     auto operator==(const Vector& other) const -> bool;
     auto operator!=(const Vector& other) const -> bool;
 
+    auto rotateLeft() const -> Vector;
+    auto rotateRight() const -> Vector;
+
     static auto zero() -> Vector;
     static auto up() -> Vector;
     static auto down() -> Vector;
