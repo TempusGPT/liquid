@@ -5,11 +5,14 @@
 
 #include <list>
 #include <string>
+#include <unordered_set>
 
 struct ParseResult {
-    const std::list<Vector>& snake;
+    std::list<Vector> snake;
+    std::unordered_set<Vector> wall;
+    std::unordered_set<Vector> immuneWall;
 };
 
-ParseResult parse(const std::string& path);
+auto parseStage(const std::string& path) -> ParseResult;
 
 #endif

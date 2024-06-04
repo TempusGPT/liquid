@@ -1,5 +1,6 @@
 #include "PlayPage.hpp"
 #include "libs/game/apple.hpp"
+#include "libs/game/parser.hpp"
 #include "libs/game/snake.hpp"
 #include "libs/game/walls.hpp"
 #include "libs/router.hpp"
@@ -89,41 +90,15 @@ auto PlayPage() -> Element {
         });
     });
 
-#pragma region Temp
-
-    auto wallPositions = std::unordered_set<Vector>();
-    auto immuneWallPositions = std::unordered_set<Vector>();
-
-    immuneWallPositions.insert({ -1, -1 });
-    immuneWallPositions.insert({ -1, FIELD_SIZE.y });
-    immuneWallPositions.insert({ FIELD_SIZE.x, -1 });
-    immuneWallPositions.insert({ FIELD_SIZE.x, FIELD_SIZE.y });
-
-    for (auto x = 0; x < FIELD_SIZE.x; x += 1) {
-        wallPositions.insert({ x, -1 });
-        wallPositions.insert({ x, FIELD_SIZE.y });
-    }
-
-    for (auto y = 0; y < FIELD_SIZE.y; y += 1) {
-        wallPositions.insert({ -1, y });
-        wallPositions.insert({ FIELD_SIZE.x, y });
-    }
-
-    auto snakePosition = std::list<Vector>();
-    for (auto i = 0; i < 4; i++) {
-        snakePosition.push_front({ i + 1, FIELD_SIZE.y / 2 });
-    }
-
-#pragma endregion
+    auto stage = parseStage("./src/assets/tutorial.txt");
 
     return Group({
-        Cursor(2, 1),
-        Walls(wallPositions, immuneWallPositions, Color::White, Color::Blue, walls),
-        Cursor(2, 1),
-        Snake(snakePosition, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
-        Cursor(2, 1),
+        Walls(stage.wall, stage.immuneWall, Color::White, Color::Blue, walls),
+        Cursor(0, 0),
+        Snake(stage.snake, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
+        Cursor(0, 0),
         Apple(FIELD_SIZE, Color::Red, honeyApple),
-        Cursor(2, 1),
+        Cursor(0, 0),
         Apple(FIELD_SIZE, Color::Magenta, poisonedApple),
     });
 }

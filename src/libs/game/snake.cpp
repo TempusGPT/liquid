@@ -7,7 +7,7 @@
 using namespace liquid;
 
 auto Snake(
-    const Prop<std::list<Vector>>& initialPosition,
+    const Prop<std::list<Vector>>& initialPositions,
     const Prop<Color>& color,
     const Prop<std::function<std::optional<Transform>(Transform)>>& onMove,
     const Prop<std::function<void()>>& onDeath,
@@ -16,7 +16,7 @@ auto Snake(
     auto effect = Effect();
     auto direction = State(Vector::right());
     auto directionQueue = Ref<std::queue<Vector>>();
-    auto position = State(*initialPosition);
+    auto positions = State(*initialPositions);
 
     auto currentDirection = [=]() mutable {
         if (!directionQueue->empty()) {
@@ -28,27 +28,27 @@ auto Snake(
     };
 
     auto isSuicide = [=]() {
-        auto set = std::unordered_set(position->begin(), position->end());
-        return set.size() != position->size();
+        auto set = std::unordered_set(positions->begin(), positions->end());
+        return set.size() != positions->size();
     };
 
     auto isOverlap = [=](const Vector& other) {
-        auto pos = *position;
+        auto pos = *positions;
         return std::find(pos.begin(), pos.end(), other) != pos.end();
     };
 
     auto length = [=]() {
-        return position->size();
+        return positions->size();
     };
 
     auto grow = [=]() mutable {
-        position->push_back(position->back());
-        position = *position;
+        positions->push_back(positions->back());
+        positions = *positions;
     };
 
     auto shrink = [=]() mutable {
-        position->pop_back();
-        position = *position;
+        positions->pop_back();
+        positions = *positions;
     };
 
     auto changeDirection = [=](const Vector& dir) mutable {
@@ -60,13 +60,13 @@ auto Snake(
     effect([=]() {
         auto id = setInterval(100, [=]() mutable {
             auto dir = currentDirection();
-            auto pos = position->front() + dir;
+            auto pos = positions->front() + dir;
             auto transform = (*onMove)({ pos, dir });
 
             if (transform) {
-                position->pop_back();
-                position->push_front(transform->position);
-                position = *position;
+                positions->pop_back();
+                positions->push_front(transform->position);
+                positions = *positions;
 
                 direction = transform->direction;
                 while (directionQueue->size() > 1) {
@@ -85,7 +85,7 @@ auto Snake(
     });
 
     return Group({
-        EACH(*position, pos, i) {
+        EACH(*positions, pos, i) {
             Cursor(pos.x * 2, pos.y),
 
             WHEN(i == 0) {
