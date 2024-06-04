@@ -19,29 +19,27 @@ auto PlayPage() -> Element {
     auto honeyApple = Ref<AppleRef>();
     auto poisonedApple = Ref<AppleRef>();
 
-    auto isAppleOverlap = [=]() {
-        return (
-            honeyApple->position() == poisonedApple->position() ||
-            snake->isOverlap(honeyApple->position()) ||
-            snake->isOverlap(poisonedApple->position()) ||
-            walls->isOverlap(honeyApple->position()) ||
-            walls->isOverlap(poisonedApple->position())
-        );
-    };
-
     auto refreshHoneyApple = [=]() {
         do {
             honeyApple->refresh();
-        } while (isAppleOverlap());
+        } while (
+            honeyApple->position() == poisonedApple->position() ||
+            snake->isOverlap(honeyApple->position()) ||
+            walls->isOverlap(honeyApple->position())
+        );
     };
 
     auto refreshPoisonedApple = [=]() {
         do {
             poisonedApple->refresh();
-        } while (isAppleOverlap());
+        } while (
+            honeyApple->position() == poisonedApple->position() ||
+            snake->isOverlap(poisonedApple->position()) ||
+            walls->isOverlap(poisonedApple->position())
+        );
     };
 
-    auto handleSnakeMove = [=](const Transform& transform) {
+    auto handleSnakeMove = [=](const Transform& transform) -> std::optional<Transform> {
         if (transform.position == honeyApple->position()) {
             snake->grow();
             refreshHoneyApple();
@@ -50,15 +48,23 @@ auto PlayPage() -> Element {
         if (transform.position == poisonedApple->position()) {
             snake->shrink();
             refreshPoisonedApple();
+
+            if (snake->length() < 4) {
+                return std::nullopt;
+            }
         }
 
-        auto gate = walls->getGate(transform);
-        if (gate) {
-            snake->changeDirection(gate->direction);
-            return gate->position + gate->direction;
+        if (walls->isOverlap(transform.position)) {
+            auto gate = walls->getGate(transform);
+
+            if (gate) {
+                return Transform { gate->position + gate->direction, gate->direction };
+            } else {
+                return std::nullopt;
+            }
         }
 
-        return transform.position;
+        return transform;
     };
 
     auto handleSnakeDeath = []() {

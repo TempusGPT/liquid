@@ -9,7 +9,7 @@ using namespace liquid;
 auto Snake(
     const Prop<std::list<Vector>>& initialPosition,
     const Prop<Color>& color,
-    const Prop<std::function<Vector(Transform)>>& onMove,
+    const Prop<std::function<std::optional<Transform>(Transform)>>& onMove,
     const Prop<std::function<void()>>& onDeath,
     Ref<SnakeRef>& ref
 ) -> Element {
@@ -32,6 +32,15 @@ auto Snake(
         return set.size() != position->size();
     };
 
+    auto isOverlap = [=](const Vector& other) {
+        auto pos = *position;
+        return std::find(pos.begin(), pos.end(), other) != pos.end();
+    };
+
+    auto length = [=]() {
+        return position->size();
+    };
+
     auto grow = [=]() mutable {
         position->push_back(position->back());
         position = *position;
@@ -42,27 +51,30 @@ auto Snake(
         position = *position;
     };
 
-    auto isOverlap = [=](const Vector& other) {
-        auto pos = *position;
-        return std::find(pos.begin(), pos.end(), other) != pos.end();
-    };
-
     auto changeDirection = [=](const Vector& dir) mutable {
         directionQueue->push(dir);
     };
 
-    *ref = { grow, shrink, changeDirection, isOverlap };
+    *ref = { isOverlap, length, grow, shrink, changeDirection };
 
     effect([=]() {
         auto id = setInterval(100, [=]() mutable {
             auto dir = currentDirection();
-            auto newHead = (*onMove)({ position->front() + dir, dir });
+            auto pos = position->front() + dir;
+            auto transform = (*onMove)({ pos, dir });
 
-            position->pop_back();
-            position->push_front(newHead);
-            position = *position;
+            if (transform) {
+                position->pop_back();
+                position->push_front(transform->position);
+                position = *position;
 
-            if (isSuicide()) {
+                direction = transform->direction;
+                while (directionQueue->size() > 1) {
+                    directionQueue->pop();
+                }
+            }
+
+            if (!transform || isSuicide()) {
                 (*onDeath)();
             }
         });
