@@ -1,5 +1,5 @@
-#ifndef LIBS_GAME_PARSER_HPP
-#define LIBS_GAME_PARSER_HPP
+#ifndef LIBS_GAME_STAGE_HPP
+#define LIBS_GAME_STAGE_HPP
 
 #include "libs/vector.hpp"
 
@@ -7,12 +7,13 @@
 #include <string>
 #include <unordered_set>
 
-struct ParseResult {
+struct Stage {
+public:
     std::list<Vector> snake;
     std::unordered_set<Vector> wall;
     std::unordered_set<Vector> immuneWall;
-};
 
-auto parseStage(const std::string& path) -> ParseResult;
+    Stage(const std::string& path);
+};
 
 #endif

@@ -1,19 +1,22 @@
 #include "PlayPage.hpp"
 #include "libs/game/apple.hpp"
-#include "libs/game/parser.hpp"
 #include "libs/game/snake.hpp"
+#include "libs/game/stage.hpp"
 #include "libs/game/walls.hpp"
 #include "libs/router.hpp"
 #include "libs/vector.hpp"
-#include <list>
+
+#include <fstream>
+#include <string>
 
 using namespace liquid;
 
-constexpr Vector FIELD_SIZE = { 23, 23 };
+constexpr Vector FIELD_SIZE = { 25, 25 };
 
 auto PlayPage() -> Element {
     auto input = Input();
     auto effect = Effect();
+    auto stage = Stage("tutorial");
 
     auto walls = Ref<WallsRef>();
     auto snake = Ref<SnakeRef>();
@@ -89,8 +92,6 @@ auto PlayPage() -> Element {
             refreshPoisonedApple();
         });
     });
-
-    auto stage = parseStage("./src/assets/tutorial.txt");
 
     return Group({
         Walls(stage.wall, stage.immuneWall, Color::White, Color::Blue, walls),
