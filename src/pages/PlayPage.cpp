@@ -1,5 +1,6 @@
 #include "PlayPage.hpp"
 #include "libs/game/apple.hpp"
+#include "libs/game/mission.hpp"
 #include "libs/game/snake.hpp"
 #include "libs/game/stage.hpp"
 #include "libs/game/walls.hpp"
@@ -22,6 +23,7 @@ auto PlayPage() -> Element {
     auto snake = Ref<SnakeRef>();
     auto honeyApple = Ref<AppleRef>();
     auto poisonedApple = Ref<AppleRef>();
+    auto mission = Ref<MissionRef>();
 
     auto refreshHoneyApple = [=]() {
         do {
@@ -46,11 +48,13 @@ auto PlayPage() -> Element {
     auto handleSnakeMove = [=](const Transform& transform) -> std::optional<Transform> {
         if (transform.position == honeyApple->position()) {
             snake->grow();
+            mission->eatHoneyApple();
             refreshHoneyApple();
         }
 
         if (transform.position == poisonedApple->position()) {
             snake->shrink();
+            mission->eatPoisonedApple();
             refreshPoisonedApple();
 
             if (snake->length() < 4) {
@@ -62,6 +66,7 @@ auto PlayPage() -> Element {
             auto gate = walls->getGate(transform);
 
             if (gate) {
+                mission->enterGate();
                 return Transform { gate->position + gate->direction, gate->direction };
             } else {
                 return std::nullopt;
@@ -101,5 +106,7 @@ auto PlayPage() -> Element {
         Apple(FIELD_SIZE, Color::Red, honeyApple),
         Cursor(0, 0),
         Apple(FIELD_SIZE, Color::Magenta, poisonedApple),
+        Cursor(FIELD_SIZE.x * 2, 0),
+        Mission(stage.snake.size(), mission),
     });
 }
