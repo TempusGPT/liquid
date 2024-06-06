@@ -22,14 +22,14 @@ auto PlayPage() -> Element {
     auto walls = Ref<WallsRef>();
     auto snake = Ref<SnakeRef>();
     auto honeyApple = Ref<AppleRef>();
-    auto poisonedApple = Ref<AppleRef>();
+    auto poisonApple = Ref<AppleRef>();
     auto mission = Ref<MissionRef>();
 
     auto refreshHoneyApple = [=]() {
         do {
             honeyApple->refresh();
         } while (
-            honeyApple->position() == poisonedApple->position() ||
+            honeyApple->position() == poisonApple->position() ||
             snake->isOverlap(honeyApple->position()) ||
             walls->isOverlap(honeyApple->position())
         );
@@ -37,11 +37,11 @@ auto PlayPage() -> Element {
 
     auto refreshPoisonedApple = [=]() {
         do {
-            poisonedApple->refresh();
+            poisonApple->refresh();
         } while (
-            honeyApple->position() == poisonedApple->position() ||
-            snake->isOverlap(poisonedApple->position()) ||
-            walls->isOverlap(poisonedApple->position())
+            honeyApple->position() == poisonApple->position() ||
+            snake->isOverlap(poisonApple->position()) ||
+            walls->isOverlap(poisonApple->position())
         );
     };
 
@@ -52,9 +52,9 @@ auto PlayPage() -> Element {
             refreshHoneyApple();
         }
 
-        if (transform.position == poisonedApple->position()) {
+        if (transform.position == poisonApple->position()) {
             snake->shrink();
-            mission->eatPoisonedApple();
+            mission->eatPoisonApple();
             refreshPoisonedApple();
 
             if (snake->length() < 4) {
@@ -78,6 +78,10 @@ auto PlayPage() -> Element {
 
     auto handleSnakeDeath = []() {
         navigate("/");
+    };
+
+    auto handleMissionComplete = []() {
+        beep();
     };
 
     auto changeDirection = [&](const Vector& direction) {
@@ -105,8 +109,17 @@ auto PlayPage() -> Element {
         Cursor(0, 0),
         Apple(FIELD_SIZE, Color::Red, honeyApple),
         Cursor(0, 0),
-        Apple(FIELD_SIZE, Color::Magenta, poisonedApple),
+        Apple(FIELD_SIZE, Color::Magenta, poisonApple),
+
         Cursor(FIELD_SIZE.x * 2, 0),
-        Mission(stage.snake.size(), mission),
+        Mission(
+            static_cast<int>(stage.snake.size()),
+            5,
+            1,
+            1,
+            1,
+            handleMissionComplete,
+            mission
+        ),
     });
 }

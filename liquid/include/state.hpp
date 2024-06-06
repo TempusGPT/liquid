@@ -70,7 +70,7 @@ namespace liquid {
     template <typename T>
     auto untrack(const State<T>& state) -> T {
         detail::track = false;
-        auto value = state();
+        auto value = *state;
         detail::track = true;
         return value;
     }
