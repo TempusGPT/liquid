@@ -31,6 +31,7 @@ auto PlayPage() -> Element {
     auto goldenApple = Ref<AppleRef>();
     auto honeyAppleRefreshId = Ref(0);
     auto poisonAppleRefreshId = Ref(0);
+    auto goldenAppleRefreshId = Ref(0);
 
     auto refreshHoneyApple = [=]() {
         do {
@@ -89,6 +90,7 @@ auto PlayPage() -> Element {
 
             if (transform.position == goldenApple->position()) {
                 exitOpen = true;
+                clearTimer(*goldenAppleRefreshId);
             }
 
             return transform;
@@ -153,10 +155,12 @@ auto PlayPage() -> Element {
 
         *honeyAppleRefreshId = setInterval(REFRESH_INTERVAL, refreshHoneyApple);
         *poisonAppleRefreshId = setInterval(REFRESH_INTERVAL, refreshPoisonedApple);
+        *goldenAppleRefreshId = setInterval(REFRESH_INTERVAL, refreshGoldenApple);
 
         return [=]() {
             clearTimer(*honeyAppleRefreshId);
             clearTimer(*poisonAppleRefreshId);
+            clearTimer(*goldenAppleRefreshId);
         };
     });
 
