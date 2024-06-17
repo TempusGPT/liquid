@@ -45,34 +45,38 @@ auto PlayPage() -> Element {
     };
 
     auto handleSnakeMove = [=](const Transform& transform) -> std::optional<Transform> {
-        if (transform.position == honeyApple->position()) {
-            snake->grow();
-            refreshHoneyApple();
-            score::eatHoneyApple();
-        }
-
-        if (transform.position == poisonApple->position()) {
-            snake->shrink();
-            refreshPoisonedApple();
-            score::eatPoisonApple();
-
-            if (snake->length() < 4) {
-                return std::nullopt;
+        auto checkApple = [=](const Transform& transform) -> std::optional<Transform> {
+            if (transform.position == honeyApple->position()) {
+                snake->grow();
+                refreshHoneyApple();
+                score::eatHoneyApple();
             }
-        }
+
+            if (transform.position == poisonApple->position()) {
+                snake->shrink();
+                refreshPoisonedApple();
+                score::eatPoisonApple();
+
+                if (snake->length() < 4) {
+                    return std::nullopt;
+                }
+            }
+
+            return transform;
+        };
 
         if (walls->isOverlap(transform.position)) {
             auto gate = walls->getGate(transform);
 
             if (gate) {
                 score::enterGate();
-                return Transform { gate->position + gate->direction, gate->direction };
+                return checkApple({ gate->position + gate->direction, gate->direction });
             } else {
                 return std::nullopt;
             }
         }
 
-        return transform;
+        return checkApple(transform);
     };
 
     auto handleSnakeDeath = []() {

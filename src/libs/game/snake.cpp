@@ -94,8 +94,5 @@ auto Snake(
                 Text("○", color),
             } END_WHEN,
         } END_EACH,
-
-        Cursor(0, 0),
-        Text(GET("(%0%, %1%)"_f % positions->front().x % positions->front().y)),
     });
 }
