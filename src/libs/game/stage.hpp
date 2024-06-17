@@ -14,7 +14,6 @@ public:
     std::unordered_set<Vector> wall;
     std::unordered_set<Vector> immuneWall;
 
-    Stage();
     Stage(const std::string& path);
 };
 

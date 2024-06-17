@@ -13,8 +13,8 @@ namespace stage {
         "finale",
     };
 
-    auto currentIndex = 0;
-    auto currentValue = Stage(std::string(STAGES[currentIndex]));
+    static auto currentIndex = 0;
+    static auto currentValue = Stage(std::string(STAGES[currentIndex]));
 
     auto current() -> Stage {
         return currentValue;
@@ -36,11 +36,11 @@ namespace stage {
 }
 
 namespace score {
-    auto lengthState = State<int>();
-    auto maxLengthState = State<int>();
-    auto honeyAppleState = State<int>();
-    auto poisonAppleState = State<int>();
-    auto gateState = State<int>();
+    static auto lengthState = State<int>();
+    static auto maxLengthState = State<int>();
+    static auto honeyAppleState = State<int>();
+    static auto poisonAppleState = State<int>();
+    static auto gateState = State<int>();
 
     auto length() -> int {
         return *lengthState;

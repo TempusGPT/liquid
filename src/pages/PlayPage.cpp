@@ -13,7 +13,8 @@
 
 using namespace liquid;
 
-constexpr Vector FIELD_SIZE = { 25, 25 };
+constexpr auto FIELD_SIZE = Vector { 25, 25 };
+constexpr auto REFRESH_INTERVAL = 10000;
 
 auto PlayPage() -> Element {
     auto input = Input();

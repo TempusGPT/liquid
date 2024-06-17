@@ -3,8 +3,6 @@
 #include <fstream>
 #include <sstream>
 
-Stage::Stage() {}
-
 Stage::Stage(const std::string& name) : name(name) {
     auto file = std::ifstream("./src/assets/" + name + ".txt");
     auto line = std::string();
