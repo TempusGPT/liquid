@@ -9,6 +9,7 @@
 
 struct Stage {
 public:
+    std::string name;
     std::list<Vector> snake;
     std::unordered_set<Vector> wall;
     std::unordered_set<Vector> immuneWall;

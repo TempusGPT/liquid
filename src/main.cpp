@@ -9,6 +9,7 @@ auto main() -> int {
         { "/", MainPage },
         { "/play", PlayPage },
         { "/result", ResultPage },
+        { "/gameover", ResultPage },
     });
 
     return liquid::render(element, { 80, 25 });

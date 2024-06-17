@@ -3,8 +3,8 @@
 #include <fstream>
 #include <sstream>
 
-Stage::Stage(const std::string& path) {
-    auto file = std::ifstream("./src/assets/" + path + ".txt");
+Stage::Stage(const std::string& name) : name(name) {
+    auto file = std::ifstream("./src/assets/" + name + ".txt");
     auto line = std::string();
 
     for (auto y = 0; std::getline(file, line); y += 1) {
