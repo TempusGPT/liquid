@@ -14,7 +14,7 @@
 using namespace liquid;
 
 constexpr auto FIELD_SIZE = Vector { 25, 25 };
-constexpr auto REFRESH_INTERVAL = 10000;
+constexpr auto REFRESH_INTERVAL = 5000;
 constexpr auto MIN_SNAKE_LENGTH = 3;
 
 auto PlayPage() -> Element {
@@ -25,6 +25,9 @@ auto PlayPage() -> Element {
     auto snake = Ref<SnakeRef>();
     auto honeyApple = Ref<AppleRef>();
     auto poisonApple = Ref<AppleRef>();
+
+    auto honeyAppleRefreshId = Ref(0);
+    auto poisonAppleRefreshId = Ref(0);
 
     auto refreshHoneyApple = [=]() {
         do {
@@ -47,16 +50,20 @@ auto PlayPage() -> Element {
     };
 
     auto handleSnakeMove = [=](const Transform& transform) -> std::optional<Transform> {
-        auto checkApple = [=](const Transform& transform) -> std::optional<Transform> {
+        auto checkApple = [=](const Transform& transform) mutable -> std::optional<Transform> {
             if (transform.position == honeyApple->position()) {
                 snake->grow();
                 refreshHoneyApple();
+                clearTimer(*honeyAppleRefreshId);
+                *honeyAppleRefreshId = setInterval(REFRESH_INTERVAL, refreshHoneyApple);
                 score::eatHoneyApple();
             }
 
             if (transform.position == poisonApple->position()) {
                 snake->shrink();
                 refreshPoisonedApple();
+                clearTimer(*poisonAppleRefreshId);
+                *poisonAppleRefreshId = setInterval(REFRESH_INTERVAL, refreshPoisonedApple);
                 score::eatPoisonApple();
 
                 if (snake->length() < MIN_SNAKE_LENGTH) {
@@ -107,11 +114,19 @@ auto PlayPage() -> Element {
     input({ Key::LeftArrow }, changeDirection(Vector::left()));
     input({ Key::RightArrow }, changeDirection(Vector::right()));
 
-    effect([=]() {
+    effect([=]() mutable {
         untrack([=]() {
             refreshHoneyApple();
             refreshPoisonedApple();
         });
+
+        *honeyAppleRefreshId = setInterval(REFRESH_INTERVAL, refreshHoneyApple);
+        *poisonAppleRefreshId = setInterval(REFRESH_INTERVAL, refreshPoisonedApple);
+
+        return [=]() {
+            clearTimer(*honeyAppleRefreshId);
+            clearTimer(*poisonAppleRefreshId);
+        };
     });
 
     return Group({
