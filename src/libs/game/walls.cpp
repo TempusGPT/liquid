@@ -7,6 +7,7 @@
 using namespace liquid;
 
 auto Walls(
+    const Prop<Vector>& fieldSize,
     const Prop<std::unordered_set<Vector>>& wallPositions,
     const Prop<std::unordered_set<Vector>>& immuneWallPositions,
     const Prop<Color>& wallColor,
@@ -34,16 +35,22 @@ auto Walls(
     };
 
     auto getGate = [=](const Transform& transform) -> std::optional<Transform> {
-        auto wallExists = [=](const Vector& pos) {
-            return isOverlap(pos) || pos.x < -1 || pos.x > 23 || pos.y < -1 || pos.y > 23;
+        auto canExitTo = [=](const Vector& pos) {
+            return (
+                !isOverlap(pos) &&
+                pos.x >= 0 &&
+                pos.x < fieldSize->x &&
+                pos.y >= 0 &&
+                pos.y < fieldSize->y
+            );
         };
 
         auto gateTransform = [=](const Vector& gate) -> Transform {
-            if (!wallExists(gate + transform.direction)) {
+            if (canExitTo(gate + transform.direction)) {
                 return { gate, transform.direction };
-            } else if (!wallExists(gate + transform.direction.rotateRight())) {
+            } else if (canExitTo(gate + transform.direction.rotateRight())) {
                 return { gate, transform.direction.rotateRight() };
-            } else if (!wallExists(gate + transform.direction.rotateLeft())) {
+            } else if (canExitTo(gate + transform.direction.rotateLeft())) {
                 return { gate, transform.direction.rotateLeft() };
             } else {
                 return { gate, transform.direction.rotateRight().rotateRight() };

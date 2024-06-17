@@ -105,7 +105,7 @@ auto PlayPage() -> Element {
     });
 
     return Group({
-        Walls(stage.wall, stage.immuneWall, Color::White, Color::Blue, walls),
+        Walls(FIELD_SIZE, stage.wall, stage.immuneWall, Color::White, Color::Blue, walls),
         Cursor(0, 0),
         Snake(stage.snake, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
         Cursor(0, 0),

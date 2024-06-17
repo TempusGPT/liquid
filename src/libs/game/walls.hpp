@@ -15,6 +15,7 @@ struct WallsRef {
 };
 
 auto Walls(
+    const liquid::Prop<Vector>& fieldSize,
     const liquid::Prop<std::unordered_set<Vector>>& wallPositions,
     const liquid::Prop<std::unordered_set<Vector>>& immuneWallPositions,
     const liquid::Prop<liquid::Color>& wallColor,
