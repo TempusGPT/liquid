@@ -1,6 +1,6 @@
 IWWWWWWWWWWWWWWWWWWWWWWWI
 W                       W
-W   WWWWWWWWWWWWWWWWW   W
+W                       W
 W                       W
 W   W   W W   W W   W   W
 W   W WW  WW WW W   W   W
@@ -8,11 +8,11 @@ W   WW    W W W W   W   W
 W   W WW  W W W W   W   W
 W   W   W W W W  WWW    W
 W                       W
-W   WWWWWWWWWWWWWWWWW   W
+W                       W
 W                       W
 W        SSSS           W
 W                       W
-W   WWWWWWWWWWWWWWWWW   W
+W                       W
 W                       W
 W    WWWW   W     W     W
 W   W       W     W     W
@@ -20,6 +20,6 @@ W   W     WWIWW WWIWW   W
 W   W       W     W     W
 W    WWWW   W     W     W
 W                       W
-W   WWWWWWWWWWWWWWWWW   W
+W                       W
 W                       W
 IWWWWWWWWWWWWWWWWWWWWWWWI
