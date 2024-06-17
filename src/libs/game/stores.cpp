@@ -7,10 +7,10 @@ using namespace liquid;
 
 namespace stage {
     constexpr auto STAGES = std::array<std::string_view, 4> {
-        "tutorial",
-        "alpha",
-        "beta",
-        "finale",
+        "Tutorial",
+        "Alpha",
+        "Beta",
+        "Finale",
     };
 
     static auto currentIndex = 0;
