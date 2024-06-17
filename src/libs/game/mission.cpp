@@ -12,7 +12,8 @@ auto Mission(
     const Prop<int>& targetHoneyApple,
     const Prop<int>& targetPoisonApple,
     const Prop<int>& targetGate,
-    const Prop<std::function<void()>>& onComplete
+    const Prop<std::function<void()>>& onComplete,
+    Ref<MissionRef>& ref
 ) -> Element {
     auto effect = Effect();
 
@@ -21,8 +22,14 @@ auto Mission(
     auto poisonAppleDone = Memo<bool>(GET(score::poisonApple() >= *targetPoisonApple));
     auto gateDone = Memo<bool>(GET(score::gate() >= *targetGate));
 
+    auto isComplete = [=]() {
+        return *maxLengthDone && *honeyAppleDone && *poisonAppleDone && *gateDone;
+    };
+
+    *ref = { isComplete };
+
     effect([=]() {
-        if (*maxLengthDone && *honeyAppleDone && *poisonAppleDone && *gateDone) {
+        if (isComplete() && score::exit()) {
             (*onComplete)();
         }
     });

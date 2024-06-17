@@ -11,6 +11,8 @@ auto Walls(
     const Prop<std::unordered_set<Vector>>& immuneWallPositions,
     const Prop<Color>& wallColor,
     const Prop<Color>& gateColor,
+    const Prop<Color>& exitColor,
+    const Prop<bool>& exitGateOpen,
     Ref<WallsRef>& ref
 ) -> Element {
     auto createGate = [=]() {
@@ -20,11 +22,21 @@ auto Walls(
         return *iterator;
     };
 
+    auto exitGate = createGate();
+
     auto blueGate = createGate();
+    while (blueGate == exitGate) {
+        blueGate = createGate();
+    }
+
     auto orangeGate = createGate();
-    while (blueGate == orangeGate) {
+    while (orangeGate == exitGate || orangeGate == blueGate) {
         orangeGate = createGate();
     }
+
+    auto isExit = [=](const Vector& pos) -> bool {
+        return pos == exitGate;
+    };
 
     auto isOverlap = [=](const Vector& pos) -> bool {
         return (
@@ -65,7 +77,7 @@ auto Walls(
         }
     };
 
-    *ref = { isOverlap, getGate };
+    *ref = { isExit, isOverlap, getGate };
 
     return Group({
         EACH(*immuneWallPositions, pos, _) {
@@ -76,7 +88,9 @@ auto Walls(
         EACH(*wallPositions, pos, _) {
             Cursor(pos.x * 2, pos.y),
 
-            WHEN(pos == blueGate || pos == orangeGate) {
+            WHEN(*exitGateOpen && pos == exitGate) {
+                Text("■", exitColor),
+            } OR(pos == blueGate || pos == orangeGate) {
                 Text("■", gateColor),
             } OTHERWISE {
                 Text("■", wallColor),

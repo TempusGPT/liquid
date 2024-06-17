@@ -45,6 +45,7 @@ namespace score {
     static auto honeyAppleState = State<int>();
     static auto poisonAppleState = State<int>();
     static auto gateState = State<int>();
+    static auto exitState = State<bool>();
 
     auto length() -> int {
         return *lengthState;
@@ -66,12 +67,17 @@ namespace score {
         return *gateState;
     }
 
+    auto exit() -> bool {
+        return *exitState;
+    }
+
     auto initialize() -> void {
         lengthState = ::stage::currentValue.snake.size();
         maxLengthState = ::stage::currentValue.snake.size();
         honeyAppleState = 0;
         poisonAppleState = 0;
         gateState = 0;
+        exitState = false;
     }
 
     auto eatHoneyApple() -> void {
@@ -87,5 +93,9 @@ namespace score {
 
     auto enterGate() -> void {
         gateState = *gateState + 1;
+    }
+
+    auto enterExit() -> void {
+        exitState = true;
     }
 }

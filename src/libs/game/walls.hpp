@@ -10,6 +10,7 @@
 #include <set>
 
 struct WallsRef {
+    std::function<bool(Vector)> isExit;
     std::function<bool(Vector)> isOverlap;
     std::function<std::optional<Transform>(Transform)> getGate;
 };
@@ -20,6 +21,8 @@ auto Walls(
     const liquid::Prop<std::unordered_set<Vector>>& immuneWallPositions,
     const liquid::Prop<liquid::Color>& wallColor,
     const liquid::Prop<liquid::Color>& gateColor,
+    const liquid::Prop<liquid::Color>& exitColor,
+    const liquid::Prop<bool>& exitGateOpen,
     liquid::Ref<WallsRef>& ref
 ) -> liquid::Element;
 
