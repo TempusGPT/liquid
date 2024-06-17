@@ -73,8 +73,14 @@ auto MainPage() -> Element {
             Text("독", Color::Magenta, Color::Black),
             Text(" 아이템을 먹으면 몸의 길이가 1 감소합니다.", Color::White, Color::Black),
         }),
+        Cursor(2, 17),
+        Group({
+            Text("- ", Color::White, Color::Black),
+            Text("황금", Color::Yellow, Color::Black),
+            Text(" 아이템을 먹으면 탈출 게이트가 열립니다.", Color::White, Color::Black),
+        }),
 
-        Cursor(0, 18),
+        Cursor(0, 19),
         Text("그 외", Color::Yellow, Color::Black),
         Cursor(2, 20),
         Group({
@@ -86,9 +92,9 @@ auto MainPage() -> Element {
         Cursor(2, 21),
         Group({
             Text("- ", Color::White, Color::Black),
-            Text("오른쪽의 스코어 보드에 나타나는", Color::White, Color::Black),
-            Text(" 미션", Color::Yellow, Color::Black),
-            Text("을 클리어하세요!", Color::White, Color::Black),
+            Text("모든 미션을 클리어하고", Color::White, Color::Black),
+            Text(" 탈출", Color::Yellow, Color::Black),
+            Text(" 게이트로 탈출하세요!", Color::White, Color::Black),
         }),
 
         Cursor(0, 23),

@@ -193,10 +193,5 @@ auto PlayPage() -> Element {
 
         Cursor(FIELD_SIZE.x * 2, 0),
         Mission(5, 1, 1, 1, handleMissionComplete, mission),
-
-        Cursor(FIELD_SIZE.x * 2, 20),
-        Text(GET("Exit Open: %0%"_f % *exitOpen)),
-        Cursor(FIELD_SIZE.x * 2, 21),
-        Text(GET("Exit Entered: %0%"_f % score::exit())),
     });
 }
