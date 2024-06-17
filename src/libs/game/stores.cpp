@@ -16,11 +16,11 @@ namespace stage {
     auto currentIndex = 0;
     auto currentValue = Stage(std::string(STAGES[currentIndex]));
 
-    auto current() -> Stage& {
+    auto current() -> Stage {
         return currentValue;
     }
 
-    auto next() -> void {
+    auto moveNext() -> void {
         currentIndex += 1;
         currentValue = Stage(std::string(STAGES[currentIndex]));
     }
@@ -28,6 +28,10 @@ namespace stage {
     auto reset() -> void {
         currentIndex = 0;
         currentValue = Stage(std::string(STAGES[currentIndex]));
+    }
+
+    auto isLast() -> bool {
+        return currentIndex == STAGES.size() - 1;
     }
 }
 

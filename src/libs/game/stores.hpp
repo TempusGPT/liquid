@@ -19,9 +19,10 @@ namespace score {
 }
 
 namespace stage {
-    auto current() -> Stage&;
-    auto next() -> void;
+    auto current() -> Stage;
+    auto moveNext() -> void;
     auto reset() -> void;
+    auto isLast() -> bool;
 }
 
 #endif

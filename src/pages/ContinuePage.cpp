@@ -8,7 +8,7 @@ auto ContinuePage() -> Element {
     auto input = Input();
 
     input({ Key::Enter }, []() {
-        stage::next();
+        stage::moveNext();
         navigate("/play");
     });
 

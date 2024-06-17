@@ -84,7 +84,11 @@ auto PlayPage() -> Element {
     };
 
     auto handleMissionComplete = []() {
-        navigate("/continue");
+        if (stage::isLast()) {
+            navigate("/ending");
+        } else {
+            navigate("/continue");
+        }
     };
 
     auto changeDirection = [&](const Vector& direction) {
