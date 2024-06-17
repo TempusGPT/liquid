@@ -15,6 +15,7 @@ using namespace liquid;
 
 constexpr auto FIELD_SIZE = Vector { 25, 25 };
 constexpr auto REFRESH_INTERVAL = 10000;
+constexpr auto MIN_SNAKE_LENGTH = 3;
 
 auto PlayPage() -> Element {
     auto input = Input();
@@ -58,7 +59,7 @@ auto PlayPage() -> Element {
                 refreshPoisonedApple();
                 score::eatPoisonApple();
 
-                if (snake->length() < 4) {
+                if (snake->length() < MIN_SNAKE_LENGTH) {
                     return std::nullopt;
                 }
             }
