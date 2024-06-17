@@ -14,7 +14,7 @@
 using namespace liquid;
 
 constexpr auto FIELD_SIZE = Vector { 25, 25 };
-constexpr auto REFRESH_INTERVAL = 5000;
+constexpr auto REFRESH_INTERVAL = 10000;
 constexpr auto MIN_SNAKE_LENGTH = 3;
 
 auto PlayPage() -> Element {
@@ -132,12 +132,20 @@ auto PlayPage() -> Element {
     return Group({
         Walls(FIELD_SIZE, stage.wall, stage.immuneWall, Color::White, Color::Blue, walls),
         Cursor(0, 0),
-        Snake(stage.snake, Color::Cyan, handleSnakeMove, handleSnakeDeath, snake),
-        Cursor(0, 0),
         Apple(FIELD_SIZE, Color::Red, honeyApple),
         Cursor(0, 0),
         Apple(FIELD_SIZE, Color::Magenta, poisonApple),
         Cursor(FIELD_SIZE.x * 2, 0),
         Mission(5, 1, 1, 1, handleMissionComplete),
+
+        Cursor(0, 0),
+        Snake(
+            stage.snake,
+            stage::interval(),
+            Color::Cyan,
+            handleSnakeMove,
+            handleSnakeDeath,
+            snake
+        ),
     });
 }

@@ -20,6 +20,10 @@ namespace stage {
         return currentValue;
     }
 
+    auto interval() -> int {
+        return currentIndex == 0 ? 150 : 100;
+    }
+
     auto moveNext() -> void {
         currentIndex += 1;
         currentValue = Stage(std::string(STAGES[currentIndex]));

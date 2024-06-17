@@ -8,6 +8,7 @@ using namespace liquid;
 
 auto Snake(
     const Prop<std::list<Vector>>& initialPositions,
+    const Prop<int>& moveInterval,
     const Prop<Color>& color,
     const Prop<std::function<std::optional<Transform>(Transform)>>& onMove,
     const Prop<std::function<void()>>& onDeath,
@@ -58,7 +59,7 @@ auto Snake(
     *ref = { isOverlap, length, grow, shrink, changeDirection };
 
     effect([=]() {
-        auto id = setInterval(100, [=]() mutable {
+        auto id = setInterval(*moveInterval, [=]() mutable {
             auto dir = currentDirection();
             auto pos = positions->front() + dir;
             auto transform = (*onMove)({ pos, dir });

@@ -20,6 +20,7 @@ namespace score {
 
 namespace stage {
     auto current() -> Stage;
+    auto interval() -> int;
     auto moveNext() -> void;
     auto reset() -> void;
     auto isLast() -> bool;

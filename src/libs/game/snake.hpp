@@ -18,6 +18,7 @@ struct SnakeRef {
 
 auto Snake(
     const liquid::Prop<std::list<Vector>>& initialPosition,
+    const liquid::Prop<int>& moveInterval,
     const liquid::Prop<liquid::Color>& color,
     const liquid::Prop<std::function<std::optional<Transform>(Transform)>>& onMove,
     const liquid::Prop<std::function<void()>>& onDeath,
