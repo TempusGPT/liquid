@@ -25,7 +25,7 @@ auto MainPage() -> Element {
         Cursor(2, 4),
         Group({
             Text("- ", Color::White, Color::Black),
-            Text("방향키( ⭠ ⭡ ⭢ ⭣)", Color::Red, Color::Black),
+            Text("방향키(← ↑ → ↓)", Color::Red, Color::Black),
             Text("를 이용하여 방향을 바꿔보세요!", Color::White, Color::Black),
         }),
 
@@ -86,13 +86,9 @@ auto MainPage() -> Element {
         Cursor(2, 21),
         Group({
             Text("- ", Color::White, Color::Black),
-            Text("최대한 오랜 시간 동안", Color::White, Color::Black),
-            Text(" 게이트", Color::Blue, Color::Black),
-            Text("와", Color::White, Color::Black),
-            Text(" 성장 아이템", Color::Red, Color::Black),
-            Text("을 통해 높은", Color::White, Color::Black),
-            Text(" 점수", Color::Yellow, Color::Black),
-            Text("를 획득 하세요!", Color::White, Color::Black),
+            Text("오른쪽의 스코어 보드에 나타나는", Color::White, Color::Black),
+            Text(" 미션", Color::Yellow, Color::Black),
+            Text("을 클리어하세요!", Color::White, Color::Black),
         }),
 
         Cursor(0, 23),
