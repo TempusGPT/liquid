@@ -80,7 +80,7 @@ auto PlayPage() -> Element {
     };
 
     auto handleMissionComplete = []() {
-        navigate("/result");
+        navigate("/continue");
     };
 
     auto changeDirection = [&](const Vector& direction) {
@@ -90,6 +90,8 @@ auto PlayPage() -> Element {
     };
 
     auto stage = stage::current();
+    score::initialize();
+
     input({ Key::UpArrow }, changeDirection(Vector::up()));
     input({ Key::DownArrow }, changeDirection(Vector::down()));
     input({ Key::LeftArrow }, changeDirection(Vector::left()));

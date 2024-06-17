@@ -1,15 +1,16 @@
 #include "libs/router.hpp"
 #include "liquid.hpp"
+#include "pages/ContinuePage.hpp"
+#include "pages/GameOverPage.hpp"
 #include "pages/MainPage.hpp"
 #include "pages/PlayPage.hpp"
-#include "pages/ResultPage.hpp"
 
 auto main() -> int {
     auto element = Router({
         { "/", MainPage },
         { "/play", PlayPage },
-        { "/result", ResultPage },
-        { "/gameover", ResultPage },
+        { "/continue", ContinuePage },
+        { "/gameover", GameOverPage },
     });
 
     return liquid::render(element, { 80, 25 });

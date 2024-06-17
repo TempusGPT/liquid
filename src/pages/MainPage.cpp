@@ -1,6 +1,5 @@
 #include "MainPage.hpp"
 #include "libs/router.hpp"
-#include <ncurses.h>
 
 using namespace liquid;
 

@@ -5,12 +5,6 @@
 
 #include <string>
 
-namespace stage {
-    auto current() -> Stage&;
-    auto next() -> void;
-    auto reset() -> void;
-}
-
 namespace score {
     auto length() -> int;
     auto maxLength() -> int;
@@ -18,9 +12,16 @@ namespace score {
     auto poisonApple() -> int;
     auto gate() -> int;
 
+    auto initialize() -> void;
     auto eatHoneyApple() -> void;
     auto eatPoisonApple() -> void;
     auto enterGate() -> void;
+}
+
+namespace stage {
+    auto current() -> Stage&;
+    auto next() -> void;
+    auto reset() -> void;
 }
 
 #endif

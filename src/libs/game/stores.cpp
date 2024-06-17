@@ -58,9 +58,12 @@ namespace score {
         return *gateState;
     }
 
-    auto initializeLength(int length) -> void {
-        lengthState = length;
-        maxLengthState = length;
+    auto initialize() -> void {
+        lengthState = ::stage::currentValue.snake.size();
+        maxLengthState = ::stage::currentValue.snake.size();
+        honeyAppleState = 0;
+        poisonAppleState = 0;
+        gateState = 0;
     }
 
     auto eatHoneyApple() -> void {

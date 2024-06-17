@@ -6,6 +6,7 @@
 #include "transform.hpp"
 
 #include <list>
+#include <optional>
 
 struct SnakeRef {
     std::function<bool(Vector)> isOverlap;
